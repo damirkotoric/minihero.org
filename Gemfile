@@ -8,6 +8,10 @@ gem 'wdm', '~> 0.1.0', platforms: [:mswin, :mingw]
 # Windows does not come with time zone data
 gem 'tzinfo-data', platforms: [:mswin, :mingw, :jruby]
 
-# Middleman Gems
-gem 'middleman', '>= 4.0.0'
-gem 'middleman-livereload'
+gem 'middleman'
+gem "middleman-livereload"
+gem "middleman-favicon-maker"
+gem 'middleman-deploy', git: 'https://github.com/middleman-contrib/middleman-deploy', branch: 'master'
+gem "sass"
+gem "breakpoint"
+gem "susy"

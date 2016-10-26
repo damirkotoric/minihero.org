@@ -1,0 +1,16 @@
+// Breakpoints
+$default-only: max-width 639px, 0
+$breakpoint-1: 640px, 6
+$breakpoint-2: 1024px, 12
+$breakpoint-3: 1200px, 12
+$breakpoint-4: 1600px, 12
+
+.is-visible-tablet-and-above
+  display: none
+  +susy-breakpoint($breakpoint-1...)
+    display: block
+
+.is-visible-desktop-and-above
+  display: none
+  +susy-breakpoint($breakpoint-2...)
+    display: block

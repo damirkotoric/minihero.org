@@ -1,1 +1,3 @@
-// This is where it all goes :)
+$(document).ready(function(){
+  $(".hero__video").fitVids();
+});

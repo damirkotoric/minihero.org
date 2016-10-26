@@ -1,0 +1,38 @@
+@import "breakpoint"
+@import "susy"
+@import "utilities/reset"
+@import "utilities/susy-config"
+@import "utilities/responsive"
+@import "utilities/animation"
+@import "utilities/colors"
+@import "utilities/helpers"
+
+@import "modules/hero"
+@import "modules/button"
+@import "modules/button-group"
+
+*, *:before, *:after
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+
+html
+  color: $black
+  font-family: "Avenir", "Helvetica Neue", Helvetica, sans-serif
+  font-size: 16px
+  font-weight: 300
+  +susy-breakpoint($breakpoint-2...)
+    font-size: 20px
+    font-weight: 100
+
+h1, h2, h3, h4, h5, h6
+  line-height: 1.4
+
+p
+  line-height: 1.4
+  margin: 20px 0
+
+a
+  font-weight: 400
+  text-decoration: none
+  &:hover
+    text-decoration: underline
