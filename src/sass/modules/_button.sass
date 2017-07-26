@@ -1,0 +1,23 @@
+.button
+  font-size: 1.3rem
+  font-weight: 600
+  min-width: 300px
+  padding: 19px 20px 21px
+  text-align: center
+  text-decoration: none
+
+  &.--primary
+    background: $primary
+    border-radius: 10px
+    color: white
+    transition: box-shadow 0.5s
+    &:hover
+      box-shadow: 0 0 10px rgba($primary, 0.8)
+    &:active
+      box-shadow: inset 0 2px 15px rgba(black, 0.4)
+      transition: 0.1s
+
+  &.--secondary
+    background: $secondary
+    border-radius: 10px
+    color: white

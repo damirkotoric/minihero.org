@@ -3,7 +3,8 @@ const router = express.Router()
 
 // GET /
 router.get('/', function(req, res, next) {
-  return res.render('index', { title: 'Home' })
+  var maximumHeroNumber = 6
+  return res.render('index', { showHeroIndex: Math.floor(Math.random() * (maximumHeroNumber - 0 + 1)) + 0 })
 })
 
 module.exports = router

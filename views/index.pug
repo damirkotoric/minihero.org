@@ -5,5 +5,34 @@ block vars
 
 
 block content
-  h1
-    | Yo man! Let's build Minihero.
+  div.intro
+    img.intro__logo(src='images/minihero.svg' alt='Minihero')
+    h1 Supercharge your karma with minute acts of heroism.
+    p Minihero connects milennial armchair heros who "like, wanna give back to the world and stuff”. Minihero is “Über, but for like, helping others and giving back to the world”.
+    a.button.--primary(href='/map') Check out Minihero
+    p.intro__scribble
+      img(src='images/arrow-curved.svg' alt='')
+      | It's 100% chakra healing 🙏🏼
+  div.gallery
+    li(class=(showHeroIndex === 0 ? '--active' : ''))
+      p.gallery__credits Use Minihero to easily volunteer at a nearby soup kitchen. #[br] Image courtesy of #[a(href='https://www.fema.gov/media-library/assets/images/65842' target='_blank') FEMA] in New Jersey.
+      img(src='images/hero-soup-kitchen.jpg' alt='')
+    li(class=(showHeroIndex === 1 ? '--active' : ''))
+      p.gallery__credits Use Minihero to organise planting of greenery in your neighbourhood. Image courtesy of #[a(href='https://www.ogdencity.com/448/Volunteer-Opportunities' target='_blank') Ogden City] in Utah.
+      img(src='images/hero-planting-greenery.jpg' alt='')
+    li(class=(showHeroIndex === 2 ? '--active' : ''))
+      p.gallery__credits Use Minihero to organise trash collection at your local beach. #[br] Image courtesy of #[a(href='http://www.adangseadivers.com/trash-hero/' target='_blank') Trash Hero] in Thailand.
+      img(src='images/hero-trash.jpg' alt='')
+    li(class=(showHeroIndex === 3 ? '--active' : ''))
+      p.gallery__credits Use Minihero to put a smile on the face of elderly people. #[br] Image courtesy of #[a(href='http://cplauo.org/cpla-community-service-at-holly-residential-care-center/' target='_blank') CPLAUO] in Oregon.
+      img(src='images/hero-help-elderly.jpg' alt='')
+    li(class=(showHeroIndex === 4 ? '--active' : ''))
+      p.gallery__credits Use Minihero to do good in your community. #[br] Image courtesy of #[a(href='https://news.abbvie.com/news/abbvie-teams-up-with-leading-nonprofit-organizations-to-give-back-to-underserved-local-communities.htm' target='_blank') AbbVie] in Chicago.
+      img(src='images/hero-playground-construction.jpg' alt='')
+    li(class=(showHeroIndex === 5 ? '--active' : ''))
+      p.gallery__credits Use Minihero to organise national park clean-ups near you.#[br] Image courtesy of #[a(href='http://www.ksby.com/story/31746134/volunteers-clean-up-montana-de-oro-state-park-for-earth-day' target='_blank') KSBY] in Califronia.
+      img(src='images/hero-national-park-cleanup.jpg' alt='')
+    li(class=(showHeroIndex === 6 ? '--active' : ''))
+      p.gallery__credits Use Minihero to find nearby animal shelters in need of help. Image courtesy of #[a(href='http://www.animalsheltercostarica.org/ahppa-volunteer-dorothe-bertens/' target='_blank') AHPPA animal shelter] in Costa Rica.
+      img(src='images/hero-animal-shelter.jpg' alt='')
+  
