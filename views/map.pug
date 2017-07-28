@@ -1,0 +1,62 @@
+extends layout
+
+block vars
+  - var title= "Supercharge your karma with minute acts of heroism"
+
+block content
+  .map#map
+  img.map__logo(src='/img/minihero-white.svg' alt='Minihero')
+  
+  .map__sidebar
+    .quests
+      .quests__new
+        span Got a blissful idea for the good of humankind?
+        a.button(href='/quest/new') Create a Quest
+      .quests__my
+        label My Minihero quests
+        ul
+          li
+            a.quest.--preview(href='#')
+              img.avatar.--current(src='/img/temp-damir.jpg')
+              .quest__meta
+                h2
+                  | Occupy Wall Street 2.0
+                span
+                  | by Damir Kotorić
+      .quests__nearby
+        label Nearby Minihero quests
+        ul
+          li
+            a.quest.--preview(href='#')
+              img.avatar(src='/img/temp-tim.jpg')
+              .quest__meta
+                h2
+                  | Volunteer at the dog shelter
+                span
+                  | by Tim Hansen
+          li
+            a.quest.--preview(href='#')
+              img.avatar(src='/img/temp-anne.jpg')
+              .quest__meta
+                h2
+                  | Help us out at the food shelter
+                span
+                  | by Anne Van den Berg
+          li
+            a.quest.--preview(href='#')
+              img.avatar(src='/img/temp-peter.jpg')
+              .quest__meta
+                h2
+                  | Clean up our neighbourhood
+                span
+                  | by Peter Carlssen
+          li
+            a.quest.--preview(href='#')
+              img.avatar(src='/img/temp-yasmin.jpg')
+              .quest__meta
+                h2
+                  | Plant trees by the river
+                span
+                  | by Yasmin Meijer
+  
+  script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyA4vKjKRLNIZ829rfFvz9m_-OFhiORB5Q8&callback=initMap', async='', defer='')
