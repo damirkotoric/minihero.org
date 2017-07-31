@@ -1,26 +1,51 @@
 .map
-  height: 60%
+  position: fixed
+  left: 0
+  top: 0
+  height: 100%
   width: 100%
-  @media screen and (min-width: $breakpoint3)
-    height: 100%
+
+.map__container
+  height: 100%
+  width: 100%
+  top: 0
+  left: 0
+
+.map__pins
+  a
+    display: block
+    position: absolute
+    z-index: 1
+    &::after
+      background-image: url('../img/spotlight.svg')
+      background-position: 0 100%
+      background-repeat: no-repeat
+      background-size: 45px
+      display: block
+      content: ''
+      position: absolute
+      bottom: 0
+      left: 0
+      height: 50px
+      width: 50px
+      z-index: 0
+
+  .avatar.--small
+    box-shadow: 0 0 5px rgba(black, 0.7)
+    border-color: rgba(white, 0.8)
+    border-width: 2px
+    position: absolute
+    bottom: 23px
+    left: 24px
+    z-index: 1
+
+  .avatar.--current
+    border-color: white
 
 .map__logo
   position: absolute
   left: 1rem
   top: 1rem
   height: 15px
-  @media screen and (min-width: $breakpoint3)
+  @media screen and (min-width: $breakpoint2)
     height: 20px
-
-.map__sidebar
-  background: rgba(white, 0.98)
-  min-height: 300px
-  position: absolute
-  top: 60vh
-  width: 100%
-  @media screen and (min-width: $breakpoint3)
-    box-shadow: 0 2px 4px rgba(black, 0.4)
-    right: 1rem
-    top: 1rem
-    width: 30%
-    max-width: 600px

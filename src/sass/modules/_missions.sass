@@ -1,10 +1,10 @@
-.quests
+.missions
   label
     display: block
-    opacity: 0.5
+    margin: 0
     padding: 1.5rem 1.5rem 0.5rem 1.5rem
 
-.quests__new
+.missions__new
   align-items: center
   border-bottom: 1px solid rgba(black, 0.1)
   display: flex
@@ -15,7 +15,12 @@
     line-height: 1.4
     margin-right: 1rem
 
-.quests__my
+.missions__my, .missions__nearby
+  .mission__header
+    &:hover
+      background: rgba(black, 0.03)
+
+.missions__my
   border-bottom: 1px solid rgba(black, 0.1)
   padding-bottom: 1rem
 
@@ -24,5 +29,5 @@
 
   li
 
-.quests__nearby
+.missions__nearby
   padding-bottom: 1rem

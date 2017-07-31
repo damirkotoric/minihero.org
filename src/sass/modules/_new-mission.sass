@@ -1,0 +1,30 @@
+.new-mission
+  padding: 1.5rem
+
+.new-mission__form
+  span
+    &.--default
+      display: block
+    &.--error
+      display: none
+  .error
+    input, textarea
+      background-color: rgba(red, 0.1)
+      border-color: red
+    span
+      color: red
+      &.--default
+        display: none
+      &.--error
+        display: block
+
+.new-mission__actions
+  align-items: center
+  border-top: 1px solid rgba(black, 0.1)
+  display: flex
+  justify-content: space-between
+  padding: 1.5rem 0
+
+  span
+    margin-right: 1rem
+    line-height: 1.2

@@ -3,12 +3,17 @@
 @import "utilities/animation"
 
 @import "modules/button"
+@import "modules/modal"
+@import "modules/panel"
 @import "modules/intro"
 @import "modules/gallery"
 @import "modules/map"
-@import "modules/quests"
-@import "modules/quest"
+@import "modules/missions"
+@import "modules/mission"
 @import "modules/avatar"
+@import "modules/back"
+@import "modules/spinner"
+@import "modules/new-mission"
 
 *, *:before, *:after
   -moz-box-sizing: border-box
@@ -17,11 +22,11 @@
 html
   font-family: Montserrat, sans-serif
   -webkit-font-smoothing: antialiased
-  font-size: 13px
+  font-size: 12px
   @media screen and (min-width: $breakpoint1)
     font-size: 14px
-  @media screen and (min-width: $breakpoint4)
-    font-size: 16px
+  @media screen and (min-width: $breakpoint3)
+    font-size: 15px
 
 h1
   font-size: 1.3rem
@@ -29,5 +34,52 @@ h1
   line-height: 1.6
   margin-bottom: 1.5rem
 
+h2
+  font-size: 1.2rem
+  line-height: 1.2
+
 p
   line-height: 1.6
+  margin: 1rem 0
+
+  a
+    color: $primary
+    font-weight: 600
+    opacity: 0.8
+    text-decoration: none
+    &:hover
+      opacity: 1
+    &:active
+      opacity: 0.8
+
+
+br
+  display: block
+  height: 100px
+  width: 100%
+
+label
+  color: rgba(black, 0.5)
+  display: flex
+  flex-direction: column
+  margin: 3rem 0
+
+  input, textarea
+    display: block
+    margin-top: 0.5rem
+
+  textarea
+    min-height: 150px
+
+  span
+    font-size: 0.8rem
+    margin-top: 0.5rem
+    text-align: right
+
+
+input, textarea
+  border: 1px solid rgba(black, 0.3)
+  font-size: 1rem
+  font-family: Montserrat, sans-serif
+  -webkit-font-smoothing: antialiased
+  padding: 1rem

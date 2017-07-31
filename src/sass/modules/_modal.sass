@@ -1,0 +1,35 @@
+.modal
+  align-items: center
+  background: rgba(white, 0.95)
+  display: flex
+  justify-content: center
+  padding: 2rem
+  width: 100%
+  height: 100%
+  text-align: center
+
+  h1
+    margin-top: 2rem
+    margin-bottom: 0.5rem
+
+  p
+    color: rgba(black, 0.6)
+
+  i
+    font-size: 8rem
+
+  .button
+    margin-top: 2rem
+
+  &.--overlay
+    position: absolute
+    top: 0
+    left: 0
+
+  &.--success
+    h1
+      color: $primary
+
+  &.--error
+    h1
+      color: red
