@@ -20,7 +20,7 @@ gulp.task('sass', function() {
 // Watch
 gulp.task('watch', function() {
   gulp.watch('src/sass/**/*.sass', ['sass'])
-  gulp.watch('public/images/_favicon_template.png', ['favicon'])
+  gulp.watch('public/img/_favicon_template.png', ['favicon'])
   gulp.watch('views/**/*.pug', function () {
     livereload.reload()
   })
@@ -38,8 +38,8 @@ gulp.task('js', function () {
 
 // Generate favicon
 gulp.task('favicon', function () {
-    return gulp.src('src/images/_favicon_template.png').pipe(favicons({
-        path: 'images/'
+    return gulp.src('src/img/_favicon_template.png').pipe(favicons({
+        path: 'img/'
     }))
     .on('error', gutil.log)
     .pipe(gulp.dest('./public'))

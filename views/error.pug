@@ -1,3 +1,18 @@
-h1
-  | Aww Shiznit!
-p= message
+extends layout
+
+block vars
+  if status == 404
+    - var title= "404"
+  else
+    - var title= "Error"
+
+block content
+  if status == 404
+    .error.--not-found
+      img(src='/img/enso.svg' alt='Nothingness.')
+      p Nothingness. #[a(href='/map') Go to Minihero starting page.]
+  else
+    .error
+      p #[a(href='https://www.theatlantic.com/health/archive/2014/06/the-dark-knight-of-the-souls/372766/' target='_blank') The Dark Night of the Soul] has begotten the Minihero server. The following chakra is blocked: 
+      p "#{message}"
+      p #[a(href='/map') Go to Minihero starting page.]

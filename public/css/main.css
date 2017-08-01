@@ -455,6 +455,18 @@ table {
     margin-right: 1rem;
     line-height: 1.2; }
 
+.error {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center; }
+  .error.--not-found img {
+    width: 300px; }
+  .error.--not-found p {
+    bottom: 0;
+    position: absolute; }
+
 *, *:before, *:after {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
