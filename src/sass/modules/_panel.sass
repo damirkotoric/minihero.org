@@ -1,17 +1,6 @@
 .panel
-  position: absolute
-  top: 80vh
-  width: 100%
-  @media screen and (min-width: $breakpoint2)
-    right: 1rem
-    top: 1rem
-    width: 40%
-    max-width: 600px
-  @media screen and (min-width: $breakpoint3)
-    width: 30%
-
-.panel__block
   background: rgba(white, 0.98)
+  display: none
   margin-bottom: .5rem
   min-height: 300px
   @media screen and (min-width: $breakpoint1)
@@ -20,6 +9,19 @@
     box-shadow: 0 2px 4px rgba(black, 0.4)
     margin: 0 0 1rem 0
 
+  &.--visible
+    display: block
+
   &#mission-created
     i
       animation: drop 0.5s
+
+  &#matching-location
+    img
+      margin-top: 1rem
+
+  &#matched-location
+    color: $primary
+
+    i
+      font-size: 10rem

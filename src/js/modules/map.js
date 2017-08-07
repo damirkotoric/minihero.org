@@ -2,8 +2,8 @@
 
 const Helper = require('../utilities/helper')
 
-exports.init = function() {
-  var map = document.getElementById('map__container')
+var map
+function drawMap() {
   if (map) {
     // Create the map with no initial style specified.
     // It therefore has default styling.
@@ -391,4 +391,13 @@ var styles = {
         ]
     }
   ]
-};
+}
+
+exports.init = function() {
+  map = document.getElementById('map__container')
+  if (map) {
+    drawMap()
+  } else {
+    console.log("Error: No map element in HTML")
+  }
+}

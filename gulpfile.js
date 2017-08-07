@@ -4,9 +4,10 @@ const gulp = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
     concat = require('gulp-concat'),
-    browserify = require('gulp-browserify'),
     favicons = require('gulp-favicons'),
-    livereload = require('gulp-livereload')
+    livereload = require('gulp-livereload'),
+    browserify = require('browserify'),
+    source = require('vinyl-source-stream')
 
 // Compile SASS
 gulp.task('sass', function() {
@@ -28,13 +29,13 @@ gulp.task('watch', function() {
 })
 
 // Compile JS
-gulp.task('js', function () {
-  return gulp.src(['./src/js/main.js'])
-   .pipe(browserify())
-  //  .pipe(uglify())
-   .pipe(gulp.dest('./public/js'))
-   .pipe(livereload())
-});
+gulp.task('js', function() {
+    return browserify({ entries: ["./src/js/main.js"] })
+        .bundle()
+        .pipe(source('main.js'))
+        .pipe(gulp.dest('./public/js'))
+        .pipe(livereload())
+})
 
 // Generate favicon
 gulp.task('favicon', function () {

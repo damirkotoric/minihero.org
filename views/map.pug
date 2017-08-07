@@ -4,7 +4,7 @@ block vars
   - var title= "Supercharge your karma with minute acts of heroism"
 
 block content
-  .map
+  .map(data-turbolinks-permanent)
     .map__pins
       a(href='', style='left: 200px; top: 200px;')
         img.avatar.--small.--current(src='/img/temp-damir.jpg')
@@ -23,15 +23,80 @@ block content
     .map__container#map__container
     img.map__logo(src='/img/minihero-white.svg' alt='Minihero')
   
-  .panel
-    //- .panel__block#empty
-    //-   .modal
-    //-     div
-    //-       img(src='/img/gandhi.svg' alt='')
-    //-       h1 Be the change you want to see in the world.
-    //-       p Currently there are no Minihero missions near you, but you can kick things off by creating one yourself. Below are some examples of missions you might find on Minihero.
+  .sidebar
+    // Onboarding
+    .panel#location-access-needed
+      .modal
+        div
+          img(src='/img/location-unknown.svg' alt='')
+          h1 Where in the world are you?
+          p To show nearby missions, Minihero needs to match your location. Rest assured that your exact location will never be shared with anyone! #nocreepystuff
+          a.button.--expand#allow-location-access(href='') Allow location access
+    .panel#location-access-denied
+      .modal
+        div
+          img(src='/img/location-unknown.svg' alt='')
+          h1 No locations access = no party
+          p Minihero works by showing you missions that are happening nearby. Since you already denied location access, you'll need to go into your browser settings to enable access. Sucks, I know, but #[a(href='http://www.wikihow.com/Enable-Location-Services-on-Google-Chrome' target='_blank') here's a little guide to help you].
+    .panel#matching-location
+      .modal
+        div
+          img.spinner(src='img/icon-near_me.svg' alt='')
+          h1 Matching your location.
+          p Breathe mindfully for a moment.
+    .panel#matched-location
+      .modal
+        div
+          i.material-icons check
+          h1 Found ya!
+          p You're good to go. Happy Miniheroing.
+          a.button.--secondary.--expand(data-panel-close href='') Dismiss
+    .panel#signup
+      .modal
+        div
+          img(src='/img/supercharged-karma.svg' alt='')
+          h1 Let's get you supercharging your karma!
+          a.button.--expand(href='') Continue with Facebook
+          p Minihero will never ever post on your Facebook timeline, or embarass you in any other way in front of your "friends" on Facebook.
+    .panel#synching-account
+      .modal
+        div
+          i.material-icons.spinner sync
+          h1 Synchronising chakras...
+          p Breathe deep into your solar plexus.
+    .panel#welcome
+      .modal
+        div
+          img.avatar.--large(src='/img/temp-damir.jpg' alt='')
+          h1 Namaste Damir 🙏
+          p Welcome to a new world.
+          p A world where you can do good, in your own time, without having to commit to anything — you 21st century hero, you.
+          p You've joined a community of people completely maxing out their karma with small, convenient acts of heroism. Welcome to you new home!
+          a.button.--expand(href='') Continue to house rules
+    .panel#house-rules
+      .modal
+        div
+          h1 House rule #1: Don't be a douchebag.
+          p You've joined an enlightened commune of heros. Or, at the very least, decent people taking time away from focusing on themselves to give back to their community.
+          p Be good to your fellow humans.
+          a.button.--expand(href='') I promise not to be a douchebag
+    .panel#terms-of-use
+      .modal
+        div
+          h1 Excellent! That's it for the house rules.
+          p One last thing. Please read #[a(href='/terms') the terms of use].
+          p If you can't be bothered reading legalese, here's a summary:
+          p You take full responsibility for your safety and you don't hold Minihero accountable for douchebags you may encounter. Having said that, we pledge to ban douchebags faster than you can say "no douchebags".
+          a.button.--expand(href='') I accept the terms of use. Let me in!
+  
+    .panel#empty
+      .modal
+        div
+          img(src='/img/gandhi.svg' alt='')
+          h1 Be the change you want to see in the world.
+          p Currently there are no Minihero missions near you, but you can kick things off by creating one yourself. Below are some examples of missions you might find on Minihero.
     
-    .panel__block#welcome
+    .panel#welcome
       .modal
         div
           img(src='/img/minihero-m.svg' alt='')
@@ -40,7 +105,7 @@ block content
           p
             a(href='/signin') Sign in via Facebook
     
-    .panel__block#missions
+    .panel.--visible#missions
       .missions
         .missions__new
           span Got a blissful idea for the good of humankind?
@@ -116,133 +181,88 @@ block content
                   span
                     | by Keanu Reeves
     
-    //- .panel__block#mission
-    //-   .mission
-    //-     .back
-    //-       a(href='')
-    //-         i.material-icons arrow_back
-    //-         | Show all missions
-    //-     .mission__header
-    //-       img.avatar.--current(src='/img/temp-damir.jpg')
-    //-       div
-    //-         h2
-    //-           | Football with refugees
-    //-         span
-    //-           | 16 joined, created by Damir Kotorić
-    //-     .mission__participants
-    //-       img.avatar.--small(src='/img/temp-yasmin.jpg')
-    //-       img.avatar.--small(src='/img/temp-peter.jpg')
-    //-       img.avatar.--small(src='/img/temp-tim.jpg')
-    //-       img.avatar.--small(src='/img/temp-1.jpg')
-    //-       img.avatar.--small(src='/img/temp-2.jpg')
-    //-       img.avatar.--small(src='/img/temp-3.jpg')
-    //-       img.avatar.--small(src='/img/temp-4.jpg')
-    //-       img.avatar.--small(src='/img/temp-5.jpg')
-    //-       img.avatar.--small(src='/img/temp-angelina.jpg')
-    //-       img.avatar.--small(src='/img/temp-jim.jpg')
-    //-       img.avatar.--small(src='/img/temp-keanu.jpg')
-    //-       img.avatar.--small(src='/img/temp-cesar.jpg')
-    //-       img.avatar.--small(src='/img/temp-ellen.jpg')
-    //-       img.avatar.--small(src='/img/temp-gordon.jpg')
-    //-       img.avatar.--small(src='/img/temp-ibra.jpg')
-    //-       img.avatar.--small(src='/img/temp-zidane.jpg')
-    //-     .mission__description
-    //-       p Let's get some football happening. Locals, refugees, men, women, all welcome. See you on Monday at 18:00h.
-    //-     .mission__meta
-    //-       div
-    //-         i.material-icons location_on
-    //-         | Join the mission to reveal the exact location.
-    //-     .mission__actions
-    //-       span Want to take part?
-    //-       a.button(href='') Join Mission
-    //-       //- span Change your mind?
-    //-       //- a.button.--secondary(href='') Leave Mission
-    //-     //- .modal.--overlay
-    //-       //- div
-    //-       //-   img(src='/img/supercharged-karma-orange.svg' alt='')
-    //-       //-   h1 Supercharging karma...
-    //-       //- div
-    //-       //-   img(src='/img/happy-buddha.svg' alt='')
-    //-       //-   h1 Karma successfully supercharged!
-    //-       //-   p 
-    //-       //-     | Now, brave Minihero, complete your mission.
-    //-       //- div
-    //-       //-   img(src='/img/childs-pose.svg' alt='')
-    //-       //-   h1 Error supercharging your karma!
-    //-       //-   p Take five deep breaths and try again.
+    .panel#mission
+      .mission
+        .back
+          a(href='')
+            i.material-icons arrow_back
+            | Show all missions
+        .mission__header
+          img.avatar.--current(src='/img/temp-damir.jpg')
+          div
+            h2
+              | Football with refugees
+            span
+              | 16 joined, created by Damir Kotorić
+        .mission__participants
+          img.avatar.--small(src='/img/temp-yasmin.jpg')
+          img.avatar.--small(src='/img/temp-peter.jpg')
+          img.avatar.--small(src='/img/temp-tim.jpg')
+          img.avatar.--small(src='/img/temp-1.jpg')
+          img.avatar.--small(src='/img/temp-2.jpg')
+          img.avatar.--small(src='/img/temp-3.jpg')
+          img.avatar.--small(src='/img/temp-4.jpg')
+          img.avatar.--small(src='/img/temp-5.jpg')
+          img.avatar.--small(src='/img/temp-angelina.jpg')
+          img.avatar.--small(src='/img/temp-jim.jpg')
+          img.avatar.--small(src='/img/temp-keanu.jpg')
+          img.avatar.--small(src='/img/temp-cesar.jpg')
+          img.avatar.--small(src='/img/temp-ellen.jpg')
+          img.avatar.--small(src='/img/temp-gordon.jpg')
+          img.avatar.--small(src='/img/temp-ibra.jpg')
+          img.avatar.--small(src='/img/temp-zidane.jpg')
+        .mission__description
+          p Let's get some football happening. Locals, refugees, men, women, all welcome. See you on Monday at 18:00h.
+        .mission__meta
+          div
+            i.material-icons location_on
+            | Join the mission to reveal the exact location.
+        .mission__actions
+          span Want to take part?
+          a.button(href='') Join Mission
+          //- span Change your mind?
+          //- a.button.--secondary(href='') Leave Mission
+        //- .modal.--overlay
+          //- div
+          //-   img(src='/img/supercharged-karma-orange.svg' alt='')
+          //-   h1 Supercharging karma...
+          //- div
+          //-   img(src='/img/happy-buddha.svg' alt='')
+          //-   h1 Karma successfully supercharged!
+          //-   p 
+          //-     | Now, brave Minihero, complete your mission.
+          //- div
+          //-   img(src='/img/childs-pose.svg' alt='')
+          //-   h1 Error supercharging your karma!
+          //-   p Take five deep breaths and try again.
     
-    //- .panel__block
-    //-   .new-mission
-    //-     div.new-mission__form
-    //-       h1 🎉 Let's plan the mission!
-    //-       label Give your mission a short and witty title
-    //-         input(type='text' name='mission_title' placeholder='Title of mission')
-    //-         span.--default 100 characters left
-    //-         span.--error 20 characters too many
-    //-       label Where should people meet?
-    //-         input(type='text' name='mission_location' placeholder='Find a place by address or name')
-    //-         span.--default Choose a safe and easily accessible location
-    //-         span.--error Sorry, that location wasn't found
-    //-       label So, what's the plan? Tell people about this mission.
-    //-         textarea(placeholder='What day and time will the mission start? How will other Miniheros recognise you? What other things should people know?')
-    //-         span.--default 200 characters left
-    //-         span.--error Give a little more info. 30 characters to go.
-    //-     div.new-mission__actions
-    //-       span 
-    //-         | 
-    //-       a.button(href='') Create Mission
+    .panel#new-mission
+      .new-mission
+        div.new-mission__form
+          h1 🎉 Let's plan the mission!
+          label Give your mission a short and witty title
+            input(type='text' name='mission_title' placeholder='Title of mission')
+            span.--default 100 characters left
+            span.--error 20 characters too many
+          label Where should people meet?
+            input(type='text' name='mission_location' placeholder='Find a place by address or name')
+            span.--default Choose a safe and easily accessible location
+            span.--error Sorry, that location wasn't found
+          label So, what's the plan? Tell people about this mission.
+            textarea(placeholder='What day and time will the mission start? How will other Miniheros recognise you? What other things should people know?')
+            span.--default 200 characters left
+            span.--error Give a little more info. 30 characters to go.
+        div.new-mission__actions
+          span 
+            | 
+          a.button(href='') Create Mission
     
-    //- .panel__block#mission-created
-    //-   .modal
-    //-     div
-    //-       img(src='/img/location.svg' alt='')
-    //-       h1 Mission Created
-    //-       p You'll get an email on damirkotoric@gmail.com when people join your mission. Good work getting the idea out there!
-    //-       a.button.--expand(href='') Awesome! Go me.
-    //- 
-    //- .panel__block#onboarding
-      //- .modal#location-access-needed
-      //-   div
-      //-     img(src='/img/location-unknown.svg' alt='')
-      //-     h1 Where in the world are you?
-      //-     p To show nearby Minihero missions we need to match your current location. Rest assured that your exact location will never be shared with anyone! #nocreepystuff
-      //-     a.button.--expand(href='') Allow location access
-      //- .modal#matching-location
-      //-   div
-      //-     i.material-icons.spinner near_me
-      //-     h1 Matching your location.
-      //-     p Breathe mindfully for a moment.
-      //- .modal#signup
-      //-   div
-      //-     img(src='/img/supercharged-karma.svg' alt='')
-      //-     h1 Let's get you supercharging your karma!
-      //-     a.button.--expand(href='') Continue with Facebook
-      //-     p Minihero will never ever post on your Facebook timeline, or embarass you in any other way in front of your "friends" on Facebook.
-      //- .modal#synching-account
-      //-   div
-      //-     i.material-icons.spinner sync
-      //-     h1 Synchronising chakras...
-      //-     p Breathe deep into your solar plexus.
-      //- .modal#welcome
-      //-   div
-      //-     img.avatar.--large(src='/img/temp-damir.jpg' alt='')
-      //-     h1 Namaste Damir 🙏
-      //-     p Welcome to a new world.
-      //-     p A world where you can do good, in your own time, without having to commit to anything — you 21st century hero, you.
-      //-     p You've joined a community of people completely maxing out their karma with small, convenient acts of heroism. Welcome to you new home!
-      //-     a.button.--expand(href='') Continue to house rules
-      //- .modal#house-rules
-      //-   div
-      //-     h1 House rule #1: Don't be a douchebag.
-      //-     p You've joined an enlightened commune of heros. Or, at the very least, decent people taking time away from focusing on themselves to give back to their community.
-      //-     p Be good to your fellow humans.
-      //-     a.button.--expand(href='') I promise not to be a douchebag
-      //- .modal#terms-of-use
-      //-   div
-      //-     h1 Excellent! That's it for the house rules.
-      //-     p One last thing. Please read #[a(href='/terms') the terms of use].
-      //-     p If you can't be bothered reading legalese, here's a summary:
-      //-     p You take full responsibility for your safety and you don't hold Minihero accountable for douchebags you may encounter. Having said that, we pledge to ban douchebags faster than you can say "no douchebags".
-      //-     a.button.--expand(href='') I accept the terms of use. Let me in!
+    .panel#mission-created
+      .modal
+        div
+          img(src='/img/location.svg' alt='')
+          h1 Mission Created
+          p You'll get an email on damirkotoric@gmail.com when people join your mission. Good work getting the idea out there!
+          a.button.--expand(href='') Awesome! Go me.
   
   script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyA4vKjKRLNIZ829rfFvz9m_-OFhiORB5Q8&callback=initMap', async='', defer='')
