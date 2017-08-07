@@ -78,14 +78,12 @@ exports.init = function() {
 
 const Helper = require('../utilities/helper')
 
-var map
-function drawMap() {
-  if (map) {
-    // Create the map with no initial style specified.
-    // It therefore has default styling.
-    map = new google.maps.Map(map, {
-      center: {lat: 52.3628317, lng: 4.908374},
-      zoom: 13,
+var miniheroMap
+exports.drawMap = function(latitude = 52.3628317, longitude = 4.908374) {
+  if (miniheroMap) {
+    miniheroMap = new google.maps.Map(miniheroMap, {
+      center: {lat: latitude, lng: longitude},
+      zoom: 12,
       mapTypeControl: false,
       maxZoom: 15,
       streetViewControl: false,
@@ -95,7 +93,7 @@ function drawMap() {
       disableDoubleClickZoom: true,
       fullscreenControl: false
     })
-    map.setOptions({styles: styles['minihero']});
+    miniheroMap.setOptions({styles: styles['minihero']});
   }
 }
 
@@ -138,7 +136,7 @@ var styles = {
                 "lightness": 40
             },
             {
-                "visibility": "off"
+                "visibility": "on"
             }
         ]
     },
@@ -470,12 +468,16 @@ var styles = {
 }
 
 exports.init = function() {
-  map = document.getElementById('map__container')
-  if (map) {
-    drawMap()
+  miniheroMap = document.getElementById('map__container')
+  if (miniheroMap) {
+    this.drawMap()
   } else {
     console.log("Error: No map element in HTML")
   }
+}
+
+exports.moveToPosition = function(latitude, longitude) {
+  miniheroMap.panTo({ lat: latitude, lng: longitude })
 }
 
 },{"../utilities/helper":6}],5:[function(require,module,exports){
@@ -537,6 +539,10 @@ exports.closest = function(el, selector) {
 }
 
 },{}],7:[function(require,module,exports){
+'use strict'
+
+const map = require('../modules/map')
+
 var userLocation
 
 function getLocation(e) {
@@ -566,6 +572,7 @@ function displayPosition(position) {
   hidePanel('matching-location')
   showPanel('matched-location')
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
+  map.moveToPosition(position.coords.latitude, position.coords.longitude)
 }
 
 function displayError(error) {
@@ -578,21 +585,22 @@ function displayError(error) {
   if (error.code == 1) {
     hidePanel('location-access-needed')
     showPanel('location-access-denied')
+  } else if (error.code == 2) {
+    hidePanel('matching-location')
+    showPanel('location-unavailable')
   }
 }
 
 exports.init = function() {
+  document.getElementById('allow-location-access').addEventListener('click', getLocation)
+  document.getElementById('retry-location-access').addEventListener('click', getLocation)
   if (userLocation) {
     // show the user's position
     displayPosition()
   } else {
     // get the user's location, then return it
     showPanel('location-access-needed')
-    var locationAccessButton = document.getElementById('allow-location-access')
-    if (locationAccessButton) {
-      locationAccessButton.addEventListener('click', getLocation)
-    }
   }
 }
 
-},{}]},{},[2]);
+},{"../modules/map":4}]},{},[2]);

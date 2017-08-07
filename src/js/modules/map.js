@@ -2,14 +2,12 @@
 
 const Helper = require('../utilities/helper')
 
-var map
-function drawMap() {
-  if (map) {
-    // Create the map with no initial style specified.
-    // It therefore has default styling.
-    map = new google.maps.Map(map, {
-      center: {lat: 52.3628317, lng: 4.908374},
-      zoom: 13,
+var miniheroMap
+exports.drawMap = function(latitude = 52.3628317, longitude = 4.908374) {
+  if (miniheroMap) {
+    miniheroMap = new google.maps.Map(miniheroMap, {
+      center: {lat: latitude, lng: longitude},
+      zoom: 12,
       mapTypeControl: false,
       maxZoom: 15,
       streetViewControl: false,
@@ -19,7 +17,7 @@ function drawMap() {
       disableDoubleClickZoom: true,
       fullscreenControl: false
     })
-    map.setOptions({styles: styles['minihero']});
+    miniheroMap.setOptions({styles: styles['minihero']});
   }
 }
 
@@ -62,7 +60,7 @@ var styles = {
                 "lightness": 40
             },
             {
-                "visibility": "off"
+                "visibility": "on"
             }
         ]
     },
@@ -394,10 +392,14 @@ var styles = {
 }
 
 exports.init = function() {
-  map = document.getElementById('map__container')
-  if (map) {
-    drawMap()
+  miniheroMap = document.getElementById('map__container')
+  if (miniheroMap) {
+    this.drawMap()
   } else {
     console.log("Error: No map element in HTML")
   }
+}
+
+exports.moveToPosition = function(latitude, longitude) {
+  miniheroMap.panTo({ lat: latitude, lng: longitude })
 }

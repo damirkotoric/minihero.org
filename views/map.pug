@@ -42,15 +42,22 @@ block content
       .modal
         div
           img.spinner(src='img/icon-near_me.svg' alt='')
-          h1 Matching your location.
-          p Breathe mindfully for a moment.
+          h1 Breathe mindfully.
+          p Matching your location...
     .panel#matched-location
       .modal
         div
-          i.material-icons check
+          img(src='/img/icon-check-orange.svg' alt='')
           h1 Found ya!
           p You're good to go. Happy Miniheroing.
           a.button.--secondary.--expand(data-panel-close href='') Dismiss
+    .panel#location-unavailable
+      .modal
+        div
+          img(src='/img/icon-error.svg' alt='')
+          h1 Location chakra blocked.
+          p Something something server error. Do a Vinyasa flow and try again.
+          a.button.--secondary.--expand#retry-location-access(href='') Try again
     .panel#signup
       .modal
         div
@@ -61,7 +68,7 @@ block content
     .panel#synching-account
       .modal
         div
-          i.material-icons.spinner sync
+          img.spinner(src='/img/icon-spinner.svg' alt='')
           h1 Synchronising chakras...
           p Breathe deep into your solar plexus.
     .panel#welcome

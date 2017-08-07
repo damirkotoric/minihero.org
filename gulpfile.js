@@ -31,15 +31,17 @@ gulp.task('watch', function() {
 // Compile JS
 gulp.task('js', function() {
     return browserify({ entries: ["./src/js/main.js"] })
-        .bundle()
-        .pipe(source('main.js'))
-        .pipe(gulp.dest('./public/js'))
-        .pipe(livereload())
+    .on('error', gutil.log)
+    .bundle()
+    .pipe(source('main.js'))
+    .pipe(gulp.dest('./public/js'))
+    .pipe(livereload())
 })
 
 // Generate favicon
 gulp.task('favicon', function () {
-    return gulp.src('src/img/_favicon_template.png').pipe(favicons({
+    return gulp.src('src/img/_favicon_template.png')
+    .pipe(favicons({
         path: 'img/'
     }))
     .on('error', gutil.log)

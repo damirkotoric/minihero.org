@@ -1,3 +1,7 @@
+'use strict'
+
+const map = require('../modules/map')
+
 var userLocation
 
 function getLocation(e) {
@@ -27,6 +31,7 @@ function displayPosition(position) {
   hidePanel('matching-location')
   showPanel('matched-location')
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
+  map.moveToPosition(position.coords.latitude, position.coords.longitude)
 }
 
 function displayError(error) {
@@ -39,19 +44,20 @@ function displayError(error) {
   if (error.code == 1) {
     hidePanel('location-access-needed')
     showPanel('location-access-denied')
+  } else if (error.code == 2) {
+    hidePanel('matching-location')
+    showPanel('location-unavailable')
   }
 }
 
 exports.init = function() {
+  document.getElementById('allow-location-access').addEventListener('click', getLocation)
+  document.getElementById('retry-location-access').addEventListener('click', getLocation)
   if (userLocation) {
     // show the user's position
     displayPosition()
   } else {
     // get the user's location, then return it
     showPanel('location-access-needed')
-    var locationAccessButton = document.getElementById('allow-location-access')
-    if (locationAccessButton) {
-      locationAccessButton.addEventListener('click', getLocation)
-    }
   }
 }
