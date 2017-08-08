@@ -79,23 +79,51 @@ exports.init = function() {
 const Helper = require('../utilities/helper')
 
 var miniheroMap
-exports.drawMap = function(latitude = 52.3628317, longitude = 4.908374) {
-  if (miniheroMap) {
-    miniheroMap = new google.maps.Map(miniheroMap, {
-      center: {lat: latitude, lng: longitude},
-      zoom: 13,
-      mapTypeControl: false,
-      maxZoom: 15,
-      streetViewControl: false,
-      zoomControl: false,
-      backgroundColor: '#444444',
-      scrollwheel: false,
-      disableDoubleClickZoom: true,
-      fullscreenControl: false
-    })
-    miniheroMap.setOptions({styles: styles['minihero']})
-  }
-}
+var defaultLatitude = 52.36550
+var defaultLongitude = 4.908374
+var overlay
+var defaultMarkers = [
+  {
+    'offsetLatitude': 0.003,
+    'offsetLongitude': 0.02,
+    'avatar': '/img/temp-cesar.jpg'
+  },
+  {
+    'offsetLatitude': 0.03,
+    'offsetLongitude': 0.02,
+    'avatar': '/img/temp-gordon.jpg'
+  },
+  {
+    'offsetLatitude': 0.02,
+    'offsetLongitude': -0.03,
+    'avatar': '/img/temp-ellen.jpg'
+  },
+  {
+    'offsetLatitude': -0.03,
+    'offsetLongitude': -0.05,
+    'avatar': '/img/temp-jim.jpg'
+  },
+  {
+    'offsetLatitude': -0.02,
+    'offsetLongitude': -0.02,
+    'avatar': '/img/temp-angelina.jpg'
+  },
+  {
+    'offsetLatitude': -0.01,
+    'offsetLongitude': 0.01,
+    'avatar': '/img/temp-ibra.jpg'
+  },
+  {
+    'offsetLatitude': -0.005,
+    'offsetLongitude': -0.05,
+    'avatar': '/img/temp-jack.jpg'
+  },
+  {
+    'offsetLatitude': 0.01,
+    'offsetLongitude': -0.06,
+    'avatar': '/img/temp-keanu.jpg'
+  },
+]
 
 var styles = {
   default: null,
@@ -467,21 +495,144 @@ var styles = {
   ]
 }
 
+exports.drawMap = function(latitude = defaultLatitude, longitude = defaultLongitude, markers = defaultMarkers) {
+  if (miniheroMap) {
+    // draw map
+    miniheroMap = new google.maps.Map(miniheroMap, {
+      center: {lat: latitude, lng: longitude},
+      zoom: 13,
+      mapTypeControl: false,
+      maxZoom: 15,
+      streetViewControl: false,
+      zoomControl: false,
+      backgroundColor: '#444444',
+      scrollwheel: false,
+      disableDoubleClickZoom: true,
+      fullscreenControl: false,
+      clickableIcons: false
+    })
+    // set theme
+    miniheroMap.setOptions({styles: styles['minihero']})
+    // add markers
+    Array.prototype.forEach.call(markers, function(marker, i) {
+      overlay = new CustomMarker(
+        new google.maps.LatLng(defaultLatitude + marker.offsetLatitude, defaultLongitude + marker.offsetLongitude),
+        miniheroMap,
+        { avatar: marker.avatar }
+      )
+    })
+  }
+}
+
 exports.init = function() {
   miniheroMap = document.getElementById('map__container')
   if (miniheroMap) {
+    // Custom marker implementation from https://humaan.com/blog/custom-html-markers-google-maps/
+    CustomMarker.prototype = new google.maps.OverlayView()
+    CustomMarker.prototype.draw = function() {
+    	var self = this;
+    	var div = this.div;
+    	if (!div) {
+    		div = this.div = document.createElement('div');
+        var avatar = document.createElement('img')
+        avatar.className = 'avatar --small'
+        avatar.src = self.args.avatar
+        div.appendChild(avatar)
+    		div.className = 'map__pin';
+    		if (typeof(self.args.marker_id) !== 'undefined') {
+    			div.dataset.marker_id = self.args.marker_id;
+    		}
+    		google.maps.event.addDomListener(div, "click", function(event) {
+    			google.maps.event.trigger(self, "click");
+    		});
+    		var panes = this.getPanes();
+    		panes.overlayImage.appendChild(div);
+    	}
+    	var point = this.getProjection().fromLatLngToDivPixel(this.latlng);
+    	if (point) {
+    		div.style.left = point.x + 'px';
+    		div.style.top = point.y + 'px';
+    	}
+    };
+    CustomMarker.prototype.remove = function() {
+    	if (this.div) {
+    		this.div.parentNode.removeChild(this.div);
+    		this.div = null;
+    	}
+    };
+    CustomMarker.prototype.getPosition = function() {
+    	return this.latlng;
+    };
+
+    // User marker implementation
+    UserMarker.prototype = new google.maps.OverlayView()
+    UserMarker.prototype.draw = function() {
+      var self = this
+      var div = this.div
+      if (!div) {
+        div = this.div = document.createElement('div')
+        div.className = 'map__user'
+      }
+      google.maps.event.addDomListener(div, 'click', function(event) {
+        google.maps.event.trigger(self, 'click');
+      })
+      var panes = this.getPanes()
+      panes.overlayImage.appendChild(div)
+      var point = this.getProjection().fromLatLngToDivPixel(this.latlng)
+      if (point) {
+    		div.style.left = point.x + 'px';
+    		div.style.top = point.y + 'px';
+    	}
+    }
+    UserMarker.prototype.remove = function() {
+    	if (this.div) {
+    		this.div.parentNode.removeChild(this.div)
+    		this.div = null
+    	}
+    }
+    UserMarker.prototype.getPosition = function() {
+    	return this.latlng
+    }
+
+    // Draw the map
     this.drawMap()
   } else {
     console.log("Error: No map element in HTML")
   }
 }
 
+function CustomMarker(latlng, map, args) {
+	this.latlng = latlng;
+	this.args = args;
+	this.setMap(map);
+}
+
+function UserMarker(latlng, map, args) {
+	this.latlng = latlng;
+	this.args = args;
+	this.setMap(map);
+}
+
 exports.setUserPosition = function(latitude, longitude) {
   miniheroMap.panTo({ lat: latitude, lng: longitude })
 
-  var marker = new google.maps.Marker({
-    position: {lat: latitude, lng: longitude},
-    map: miniheroMap
+  // var marker = new google.maps.Marker({
+  //   position: {lat: latitude, lng: longitude},
+  //   map: miniheroMap
+  // })
+
+  overlay = new UserMarker(
+    new google.maps.LatLng(latitude, longitude),
+    miniheroMap
+  )
+
+  // add markers
+  Array.prototype.forEach.call(defaultMarkers, function(marker, i) {
+    overlay = new CustomMarker(
+      new google.maps.LatLng(latitude + marker.offsetLatitude, longitude + marker.offsetLongitude),
+      miniheroMap,
+      { avatar: marker.avatar }
+    )
   })
 }
 
@@ -557,6 +708,7 @@ function getLocation(e) {
   if (navigator.geolocation) {
     hidePanel('location-access-needed')
     hidePanel('location-access-denied')
+    hidePanel('location-unavailable')
     showPanel('matching-location')
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(

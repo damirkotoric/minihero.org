@@ -11,6 +11,7 @@ function getLocation(e) {
   if (navigator.geolocation) {
     hidePanel('location-access-needed')
     hidePanel('location-access-denied')
+    hidePanel('location-unavailable')
     showPanel('matching-location')
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(

@@ -12,24 +12,23 @@
   top: 0
   left: 0
 
-.map__pins
-  a
+.map__pin
+  display: block
+  position: absolute
+  z-index: 1
+  &::after
+    background-image: url('../img/spotlight.svg')
+    background-position: 0 100%
+    background-repeat: no-repeat
+    background-size: 45px
     display: block
+    content: ''
     position: absolute
-    z-index: 1
-    &::after
-      background-image: url('../img/spotlight.svg')
-      background-position: 0 100%
-      background-repeat: no-repeat
-      background-size: 45px
-      display: block
-      content: ''
-      position: absolute
-      bottom: 0
-      left: 0
-      height: 50px
-      width: 50px
-      z-index: 0
+    bottom: 0
+    left: 0
+    height: 50px
+    width: 50px
+    z-index: 0
 
   .avatar.--small
     box-shadow: 0 0 5px rgba(black, 0.7)
@@ -50,3 +49,24 @@
   height: 15px
   @media screen and (min-width: $breakpoint2)
     height: 20px
+
+.map__user
+  position: absolute
+  background: white
+  border-radius: 50%
+  display: flex
+  align-items: center
+  justify-content: center
+  height: 20px
+  width: 20px
+  box-shadow: 0 0 5px rgba(black, 0.5)
+  transform: translate(-50%, -50%)
+  &::after
+    background: $secondary
+    height: 16px
+    width: 16px
+    animation: user-marker-after 3s infinite
+    border-radius: 50%
+    content: ''
+    display: block
+    transform: translate(-50% -50%)
