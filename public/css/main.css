@@ -173,10 +173,8 @@ table {
     animation: drop 0.5s; }
   .panel#matching-location img {
     margin-top: 1.5rem; }
-  .panel#matched-location {
-    color: #E46300; }
-    .panel#matched-location i {
-      font-size: 10rem; }
+  .panel#matched-location i {
+    font-size: 10rem; }
 
 .intro {
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.6);

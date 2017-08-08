@@ -31,7 +31,7 @@ function displayPosition(position) {
   hidePanel('matching-location')
   showPanel('matched-location')
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
-  map.moveToPosition(position.coords.latitude, position.coords.longitude)
+  map.setUserPosition(position.coords.latitude, position.coords.longitude)
 }
 
 function displayError(error) {

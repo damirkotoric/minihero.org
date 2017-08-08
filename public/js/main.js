@@ -83,7 +83,7 @@ exports.drawMap = function(latitude = 52.3628317, longitude = 4.908374) {
   if (miniheroMap) {
     miniheroMap = new google.maps.Map(miniheroMap, {
       center: {lat: latitude, lng: longitude},
-      zoom: 12,
+      zoom: 13,
       mapTypeControl: false,
       maxZoom: 15,
       streetViewControl: false,
@@ -93,7 +93,7 @@ exports.drawMap = function(latitude = 52.3628317, longitude = 4.908374) {
       disableDoubleClickZoom: true,
       fullscreenControl: false
     })
-    miniheroMap.setOptions({styles: styles['minihero']});
+    miniheroMap.setOptions({styles: styles['minihero']})
   }
 }
 
@@ -476,8 +476,13 @@ exports.init = function() {
   }
 }
 
-exports.moveToPosition = function(latitude, longitude) {
+exports.setUserPosition = function(latitude, longitude) {
   miniheroMap.panTo({ lat: latitude, lng: longitude })
+
+  var marker = new google.maps.Marker({
+    position: {lat: latitude, lng: longitude},
+    map: miniheroMap
+  })
 }
 
 },{"../utilities/helper":6}],5:[function(require,module,exports){
@@ -572,7 +577,7 @@ function displayPosition(position) {
   hidePanel('matching-location')
   showPanel('matched-location')
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
-  map.moveToPosition(position.coords.latitude, position.coords.longitude)
+  map.setUserPosition(position.coords.latitude, position.coords.longitude)
 }
 
 function displayError(error) {

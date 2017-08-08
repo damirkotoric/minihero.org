@@ -47,7 +47,7 @@ block content
     .panel#matched-location
       .modal
         div
-          img(src='/img/icon-check-orange.svg' alt='')
+          img(src='/img/icon-check.svg' alt='')
           h1 Found ya!
           p You're good to go. Happy Miniheroing.
           a.button.--secondary.--expand(data-panel-close href='') Dismiss
@@ -117,17 +117,17 @@ block content
         .missions__new
           span Got a blissful idea for the good of humankind?
           a.button(href='/missions/new') Create a Mission
-        .missions__my
-          label My Minihero missions
-          ul
-            li
-              a.mission__header(href='#')
-                img.avatar.--current(src='/img/temp-damir.jpg')
-                div
-                  h2
-                    | Football for refugees
-                  span
-                    | by Damir Kotorić
+        //- .missions__my
+        //-   label My Minihero missions
+        //-   ul
+        //-     li
+        //-       a.mission__header(href='#')
+        //-         img.avatar.--current(src='/img/temp-damir.jpg')
+        //-         div
+        //-           h2
+        //-             | Football for refugees
+        //-           span
+        //-             | by Damir Kotorić
         .missions__nearby
           label Nearby Minihero missions
           ul
@@ -168,15 +168,23 @@ block content
                 img.avatar(src='/img/temp-angelina.jpg')
                 div
                   h2
-                    | Plant trees by the river
+                    | Help new immigrants settle in
                   span
                     | by Angelina Jolie
+            li
+              a.mission__header(href='#')
+                img.avatar(src='/img/temp-ibra.jpg')
+                div
+                  h2
+                    | Football for Syrian refugees
+                  span
+                    | by Zlatan Ibrahimović
             li
               a.mission__header(href='#')
                 img.avatar(src='/img/temp-jack.jpg')
                 div
                   h2
-                    | Rock for love and togetherness
+                    | Rock for peace and luuuv 🤘
                   span
                     | by Jack Black
             li
