@@ -1,6 +1,7 @@
 'use strict'
 
 const map = require('../modules/map')
+const panel = require('../modules/panel')
 
 var userLocation
 
@@ -9,10 +10,10 @@ function getLocation(e) {
     e.preventDefault()
   }
   if (navigator.geolocation) {
-    hidePanel('location-access-needed')
-    hidePanel('location-access-denied')
-    hidePanel('location-unavailable')
-    showPanel('matching-location')
+    panel.hidePanel('location-access-needed')
+    panel.hidePanel('location-access-denied')
+    panel.hidePanel('location-unavailable')
+    panel.showPanel('matching-location')
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(
       displayPosition,
@@ -29,8 +30,8 @@ function displayPosition(position) {
   if (!userLocation) {
     userLocation = position
   }
-  hidePanel('matching-location')
-  showPanel('matched-location')
+  panel.hidePanel('matching-location')
+  panel.showPanel('matched-location')
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
   map.setUserPosition(position.coords.latitude, position.coords.longitude)
 }
@@ -43,11 +44,13 @@ function displayError(error) {
   }
   console.log("Location Access Error: " + errors[error.code])
   if (error.code == 1) {
-    hidePanel('location-access-needed')
-    showPanel('location-access-denied')
+    panel.hidePanel('location-access-needed')
+    panel.hidePanel('matching-location')
+    panel.showPanel('location-access-denied')
   } else if (error.code == 2) {
-    hidePanel('matching-location')
-    showPanel('location-unavailable')
+    panel.hidePanel('location-access-needed')
+    panel.hidePanel('matching-location')
+    panel.showPanel('location-unavailable')
   }
 }
 
@@ -59,6 +62,6 @@ exports.init = function() {
     displayPosition()
   } else {
     // get the user's location, then return it
-    showPanel('location-access-needed')
+    panel.showPanel('location-access-needed')
   }
 }

@@ -39,3 +39,10 @@ exports.closest = function(el, selector) {
 
     return null;
 }
+
+exports.once = function(target, type, listener) {
+  target.addEventListener(type, function fn(event) {
+    target.removeEventListener(type, fn)
+    listener(event)
+  })
+}

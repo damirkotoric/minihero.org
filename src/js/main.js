@@ -28,13 +28,3 @@ function initMap() {
   map.init()
   panel.init()
 }
-
-window.showPanel = showPanel
-function showPanel(elementId) {
-  Helper.addClass(document.getElementById(elementId), '--visible')
-}
-
-window.hidePanel = hidePanel
-function hidePanel(elementId) {
-  Helper.removeClass(document.getElementById(elementId), '--visible')
-}

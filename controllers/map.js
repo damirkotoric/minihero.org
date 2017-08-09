@@ -3,7 +3,7 @@ const router = express.Router()
 const mid = require('../middlewares')
 
 // GET /map
-router.get('/', mid.getLocation, function(req, res, next) {
+router.get('/', mid.redirectToHTTPS, function(req, res, next) {
   return res.render('map')
 })
 
