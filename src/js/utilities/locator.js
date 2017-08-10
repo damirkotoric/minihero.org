@@ -1,9 +1,8 @@
 'use strict'
 
+const Helper = require('../utilities/helper')
 const map = require('../modules/map')
 const panel = require('../modules/panel')
-
-var userLocation
 
 function getLocation(e) {
   if (e) {
@@ -13,10 +12,13 @@ function getLocation(e) {
     panel.hidePanel('location-access-needed')
     panel.hidePanel('location-access-denied')
     panel.hidePanel('location-unavailable')
-    panel.showPanel('matching-location')
+    // Don't show the sidebar locator panels for repeat users
+    if (!getLocationCookie()) {
+      panel.showPanel('matching-location')
+    }
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(
-      displayPosition,
+      displayUserPosition,
       displayError,
       { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 }
     )
@@ -26,13 +28,14 @@ function getLocation(e) {
   }
 }
 
-function displayPosition(position) {
-  if (!userLocation) {
-    userLocation = position
+function displayUserPosition(position) {
+  // Don't show the sidebar locator panels for repeat users
+  if (!getLocationCookie()) {
+    panel.hidePanel('matching-location')
+    panel.showPanel('matched-location')
   }
-  panel.hidePanel('matching-location')
-  panel.showPanel('matched-location')
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
+  setLocationCookie(position.coords.latitude, position.coords.longitude)
   map.setUserPosition(position.coords.latitude, position.coords.longitude)
 }
 
@@ -54,14 +57,31 @@ function displayError(error) {
   }
 }
 
+function setLocationCookie(latitude, longitude) {
+  document.cookie = "latitude=" + latitude
+  document.cookie = "longitude=" + longitude
+}
+exports.setLocationCookie = setLocationCookie
+
+function getLocationCookie() {
+  var cookieLatitude = Number(Helper.getCookie('latitude'))
+  var cookieLongitude = Number(Helper.getCookie('longitude'))
+  if (cookieLatitude && cookieLongitude) {
+    return {latitude: cookieLatitude, longitude: cookieLongitude}
+  } else {
+    return false
+  }
+}
+exports.getLocationCookie = getLocationCookie
+
 exports.init = function() {
   document.getElementById('allow-location-access').addEventListener('click', getLocation)
   document.getElementById('retry-location-access').addEventListener('click', getLocation)
-  if (userLocation) {
-    // show the user's position
-    displayPosition()
+  if (getLocationCookie()) {
+    // User has a location cookie already set
+    // Get their location again in case the user moved
+    getLocation()
   } else {
-    // get the user's location, then return it
     panel.showPanel('location-access-needed')
   }
 }

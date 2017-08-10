@@ -3,8 +3,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const session = require('express-session')
-const MongoStore = require('connect-mongo')(session) // Helps store sessions in a database so we don't crash the server by storing them in server RAM
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -13,6 +11,16 @@ const port = process.env.PORT || 3000
 // const db = mongoose.connection
 // // mongo error
 // db.on('error', console.error.bind(console, 'connection error: '))
+
+// // use sessions for tracking logins
+// app.use(session({
+//   secret: 'Minihero FTW!',
+//   maxAge: null,
+//   resave: true, // force session to be saved in the sessions store whether anything changed in the request or not
+//   store: new MongoStore({
+//     mongooseConnection: db
+//   })
+// }))
 
 // parse incoming requests
 app.use(bodyParser.json())

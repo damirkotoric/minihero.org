@@ -1,25 +1,26 @@
 'use strict'
 
 const Helper = require('../utilities/helper')
+const Locator = require('../utilities/locator')
 
 var miniheroMap
-var defaultLatitude = 52.36550
-var defaultLongitude = 4.908374
-var overlay
-var defaultMarkers = [
+var latitude = 52.370216
+var longitude = 4.895168
+var overlays = []
+var sampleMarkers = [
   {
     'offsetLatitude': 0.003,
-    'offsetLongitude': 0.02,
+    'offsetLongitude': 0.024,
     'avatar': '/img/temp-cesar.jpg'
   },
   {
-    'offsetLatitude': 0.03,
-    'offsetLongitude': 0.02,
+    'offsetLatitude': 0.02,
+    'offsetLongitude': 0.015,
     'avatar': '/img/temp-gordon.jpg'
   },
   {
     'offsetLatitude': 0.02,
-    'offsetLongitude': -0.03,
+    'offsetLongitude': -0.04,
     'avatar': '/img/temp-ellen.jpg'
   },
   {
@@ -419,7 +420,15 @@ var styles = {
   ]
 }
 
-exports.drawMap = function(latitude = defaultLatitude, longitude = defaultLongitude, markers = defaultMarkers) {
+exports.drawMap = function() {
+  // Check if user has location cookie set,
+  // and if so update the default location
+  var cookieLocation = Locator.getLocationCookie()
+  if (cookieLocation) {
+    latitude = cookieLocation.latitude
+    longitude = cookieLocation.longitude
+  }
+
   if (miniheroMap) {
     // draw map
     miniheroMap = new google.maps.Map(miniheroMap, {
@@ -437,14 +446,9 @@ exports.drawMap = function(latitude = defaultLatitude, longitude = defaultLongit
     })
     // set theme
     miniheroMap.setOptions({styles: styles['minihero']})
-    // add markers
-    Array.prototype.forEach.call(markers, function(marker, i) {
-      overlay = new CustomMarker(
-        new google.maps.LatLng(defaultLatitude + marker.offsetLatitude, defaultLongitude + marker.offsetLongitude),
-        miniheroMap,
-        { avatar: marker.avatar }
-      )
-    })
+    addSampleMarkers()
+    window.onresize = panMapToCenter
+    panMapToCenter()
   }
 }
 
@@ -537,25 +541,43 @@ function UserMarker(latlng, map, args) {
 	this.setMap(map);
 }
 
-exports.setUserPosition = function(latitude, longitude) {
-  miniheroMap.panTo({ lat: latitude, lng: longitude })
-
-  // var marker = new google.maps.Marker({
-  //   position: {lat: latitude, lng: longitude},
-  //   map: miniheroMap
-  // })
-
-  overlay = new UserMarker(
-    new google.maps.LatLng(latitude, longitude),
-    miniheroMap
-  )
-
+function addSampleMarkers() {
   // add markers
-  Array.prototype.forEach.call(defaultMarkers, function(marker, i) {
-    overlay = new CustomMarker(
+  Array.prototype.forEach.call(sampleMarkers, function(marker, i) {
+    var overlay = new CustomMarker(
       new google.maps.LatLng(latitude + marker.offsetLatitude, longitude + marker.offsetLongitude),
       miniheroMap,
       { avatar: marker.avatar }
     )
+    overlays.push(overlay)
   })
+}
+
+function clearSampleMarkers() {
+  while(overlays[0]) {
+    overlays.pop().setMap(null)
+  }
+}
+
+exports.setUserPosition = function(lat, lng) {
+  new UserMarker(
+    new google.maps.LatLng(lat, lng),
+    miniheroMap
+  )
+  // Redraw the sample markers
+  clearSampleMarkers()
+  latitude = lat
+  longitude = lng
+  addSampleMarkers(lat, lng)
+  panMapToCenter()
+}
+
+function panMapToCenter(event) {
+  if (window.innerWidth < 900) {
+    miniheroMap.setCenter({lat: latitude, lng: longitude})
+    miniheroMap.panBy(0, 50)
+  } else if (window.innerWidth >= 900) {
+    miniheroMap.setCenter({lat: latitude, lng: longitude})
+    miniheroMap.panBy(150, 0)
+  }
 }

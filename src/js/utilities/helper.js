@@ -46,3 +46,11 @@ exports.once = function(target, type, listener) {
     listener(event)
   })
 }
+
+// https://stackoverflow.com/questions/4825683/how-do-i-create-and-read-a-value-from-cookie
+exports.getCookie = function(name) {
+  return document.cookie.split('; ').reduce((r, v) => {
+    const parts = v.split('=')
+    return parts[0] === name ? decodeURIComponent(parts[1]) : r
+  }, '')
+}

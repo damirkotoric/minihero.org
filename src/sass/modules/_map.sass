@@ -13,6 +13,7 @@
   left: 0
 
 .map__pin
+  animation: pin 30s infinite linear
   display: block
   position: absolute
   z-index: 1
@@ -30,6 +31,9 @@
     width: 50px
     z-index: 0
 
+  .avatar
+    animation: pin-avatar 30s infinite linear
+
   .avatar.--small
     box-shadow: 0 0 5px rgba(black, 0.7)
     border-color: rgba(white, 0.8)
@@ -41,6 +45,14 @@
 
   .avatar.--current
     border-color: white
+
+// Randomly animate each pin
+@for $i from 1 through 100
+  .map__pin:nth-child(#{$i})
+    $delay: random(15)
+    animation-delay: -$delay + s
+    .avatar
+      animation-delay: -$delay + s
 
 .map__logo
   position: absolute

@@ -67,25 +67,26 @@ exports.init = function() {
 'use strict'
 
 const Helper = require('../utilities/helper')
+const Locator = require('../utilities/locator')
 
 var miniheroMap
-var defaultLatitude = 52.36550
-var defaultLongitude = 4.908374
-var overlay
-var defaultMarkers = [
+var latitude = 52.370216
+var longitude = 4.895168
+var overlays = []
+var sampleMarkers = [
   {
     'offsetLatitude': 0.003,
-    'offsetLongitude': 0.02,
+    'offsetLongitude': 0.024,
     'avatar': '/img/temp-cesar.jpg'
   },
   {
-    'offsetLatitude': 0.03,
-    'offsetLongitude': 0.02,
+    'offsetLatitude': 0.02,
+    'offsetLongitude': 0.015,
     'avatar': '/img/temp-gordon.jpg'
   },
   {
     'offsetLatitude': 0.02,
-    'offsetLongitude': -0.03,
+    'offsetLongitude': -0.04,
     'avatar': '/img/temp-ellen.jpg'
   },
   {
@@ -485,7 +486,15 @@ var styles = {
   ]
 }
 
-exports.drawMap = function(latitude = defaultLatitude, longitude = defaultLongitude, markers = defaultMarkers) {
+exports.drawMap = function() {
+  // Check if user has location cookie set,
+  // and if so update the default location
+  var cookieLocation = Locator.getLocationCookie()
+  if (cookieLocation) {
+    latitude = cookieLocation.latitude
+    longitude = cookieLocation.longitude
+  }
+
   if (miniheroMap) {
     // draw map
     miniheroMap = new google.maps.Map(miniheroMap, {
@@ -503,14 +512,9 @@ exports.drawMap = function(latitude = defaultLatitude, longitude = defaultLongit
     })
     // set theme
     miniheroMap.setOptions({styles: styles['minihero']})
-    // add markers
-    Array.prototype.forEach.call(markers, function(marker, i) {
-      overlay = new CustomMarker(
-        new google.maps.LatLng(defaultLatitude + marker.offsetLatitude, defaultLongitude + marker.offsetLongitude),
-        miniheroMap,
-        { avatar: marker.avatar }
-      )
-    })
+    addSampleMarkers()
+    window.onresize = panMapToCenter
+    panMapToCenter()
   }
 }
 
@@ -603,30 +607,48 @@ function UserMarker(latlng, map, args) {
 	this.setMap(map);
 }
 
-exports.setUserPosition = function(latitude, longitude) {
-  miniheroMap.panTo({ lat: latitude, lng: longitude })
-
-  // var marker = new google.maps.Marker({
-  //   position: {lat: latitude, lng: longitude},
-  //   map: miniheroMap
-  // })
-
-  overlay = new UserMarker(
-    new google.maps.LatLng(latitude, longitude),
-    miniheroMap
-  )
-
+function addSampleMarkers() {
   // add markers
-  Array.prototype.forEach.call(defaultMarkers, function(marker, i) {
-    overlay = new CustomMarker(
+  Array.prototype.forEach.call(sampleMarkers, function(marker, i) {
+    var overlay = new CustomMarker(
       new google.maps.LatLng(latitude + marker.offsetLatitude, longitude + marker.offsetLongitude),
       miniheroMap,
       { avatar: marker.avatar }
     )
+    overlays.push(overlay)
   })
 }
 
-},{"../utilities/helper":6}],5:[function(require,module,exports){
+function clearSampleMarkers() {
+  while(overlays[0]) {
+    overlays.pop().setMap(null)
+  }
+}
+
+exports.setUserPosition = function(lat, lng) {
+  new UserMarker(
+    new google.maps.LatLng(lat, lng),
+    miniheroMap
+  )
+  // Redraw the sample markers
+  clearSampleMarkers()
+  latitude = lat
+  longitude = lng
+  addSampleMarkers(lat, lng)
+  panMapToCenter()
+}
+
+function panMapToCenter(event) {
+  if (window.innerWidth < 900) {
+    miniheroMap.setCenter({lat: latitude, lng: longitude})
+    miniheroMap.panBy(0, 50)
+  } else if (window.innerWidth >= 900) {
+    miniheroMap.setCenter({lat: latitude, lng: longitude})
+    miniheroMap.panBy(150, 0)
+  }
+}
+
+},{"../utilities/helper":6,"../utilities/locator":7}],5:[function(require,module,exports){
 'use strict'
 
 const Helper = require('../utilities/helper')
@@ -704,13 +726,20 @@ exports.once = function(target, type, listener) {
   })
 }
 
+// https://stackoverflow.com/questions/4825683/how-do-i-create-and-read-a-value-from-cookie
+exports.getCookie = function(name) {
+  return document.cookie.split('; ').reduce((r, v) => {
+    const parts = v.split('=')
+    return parts[0] === name ? decodeURIComponent(parts[1]) : r
+  }, '')
+}
+
 },{}],7:[function(require,module,exports){
 'use strict'
 
+const Helper = require('../utilities/helper')
 const map = require('../modules/map')
 const panel = require('../modules/panel')
-
-var userLocation
 
 function getLocation(e) {
   if (e) {
@@ -720,10 +749,13 @@ function getLocation(e) {
     panel.hidePanel('location-access-needed')
     panel.hidePanel('location-access-denied')
     panel.hidePanel('location-unavailable')
-    panel.showPanel('matching-location')
+    // Don't show the sidebar locator panels for repeat users
+    if (!getLocationCookie()) {
+      panel.showPanel('matching-location')
+    }
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(
-      displayPosition,
+      displayUserPosition,
       displayError,
       { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 }
     )
@@ -733,13 +765,14 @@ function getLocation(e) {
   }
 }
 
-function displayPosition(position) {
-  if (!userLocation) {
-    userLocation = position
+function displayUserPosition(position) {
+  // Don't show the sidebar locator panels for repeat users
+  if (!getLocationCookie()) {
+    panel.hidePanel('matching-location')
+    panel.showPanel('matched-location')
   }
-  panel.hidePanel('matching-location')
-  panel.showPanel('matched-location')
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
+  setLocationCookie(position.coords.latitude, position.coords.longitude)
   map.setUserPosition(position.coords.latitude, position.coords.longitude)
 }
 
@@ -761,16 +794,33 @@ function displayError(error) {
   }
 }
 
+function setLocationCookie(latitude, longitude) {
+  document.cookie = "latitude=" + latitude
+  document.cookie = "longitude=" + longitude
+}
+exports.setLocationCookie = setLocationCookie
+
+function getLocationCookie() {
+  var cookieLatitude = Number(Helper.getCookie('latitude'))
+  var cookieLongitude = Number(Helper.getCookie('longitude'))
+  if (cookieLatitude && cookieLongitude) {
+    return {latitude: cookieLatitude, longitude: cookieLongitude}
+  } else {
+    return false
+  }
+}
+exports.getLocationCookie = getLocationCookie
+
 exports.init = function() {
   document.getElementById('allow-location-access').addEventListener('click', getLocation)
   document.getElementById('retry-location-access').addEventListener('click', getLocation)
-  if (userLocation) {
-    // show the user's position
-    displayPosition()
+  if (getLocationCookie()) {
+    // User has a location cookie already set
+    // Get their location again in case the user moved
+    getLocation()
   } else {
-    // get the user's location, then return it
     panel.showPanel('location-access-needed')
   }
 }
 
-},{"../modules/map":4,"../modules/panel":5}]},{},[2]);
+},{"../modules/map":4,"../modules/panel":5,"../utilities/helper":6}]},{},[2]);
