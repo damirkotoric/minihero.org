@@ -11,6 +11,7 @@ return t.dispatch("turbolinks:before-render",{data:{newBody:e}})},r.prototype.no
 const gallery = require('./modules/gallery')
 const map = require('./modules/map')
 const panel = require('./modules/panel')
+const mission = require('./modules/mission')
 const Turbolinks = require('turbolinks')
 const Locator = require('./utilities/locator')
 const Helper = require('./utilities/helper')
@@ -35,9 +36,10 @@ function initMap() {
   Locator.init()
   map.init()
   panel.init()
+  mission.init()
 }
 
-},{"./modules/gallery":3,"./modules/map":4,"./modules/panel":5,"./utilities/helper":6,"./utilities/locator":7,"turbolinks":1}],3:[function(require,module,exports){
+},{"./modules/gallery":3,"./modules/map":4,"./modules/mission":5,"./modules/panel":6,"./utilities/helper":7,"./utilities/locator":8,"turbolinks":1}],3:[function(require,module,exports){
 'use strict'
 
 const Helper = require('../utilities/helper')
@@ -63,9 +65,10 @@ exports.init = function() {
   }
 }
 
-},{"../utilities/helper":6}],4:[function(require,module,exports){
+},{"../utilities/helper":7}],4:[function(require,module,exports){
 'use strict'
 
+const panel = require('./panel.js')
 const Helper = require('../utilities/helper')
 const Locator = require('../utilities/locator')
 
@@ -540,7 +543,13 @@ exports.init = function() {
     			google.maps.event.trigger(self, "click");
     		});
     		var panes = this.getPanes();
-    		panes.overlayImage.appendChild(div);
+    		panes.overlayMouseTarget.appendChild(div);
+        var me = this;
+        google.maps.event.addDomListener(div, 'click', function() {
+          google.maps.event.trigger(me, 'click');
+          panel.hideAllPanels()
+          panel.showPanel('mission'+div.getAttribute('data-marker_id'))
+        })
     	}
     	var point = this.getProjection().fromLatLngToDivPixel(this.latlng);
     	if (point) {
@@ -613,7 +622,10 @@ function addSampleMarkers() {
     var overlay = new CustomMarker(
       new google.maps.LatLng(latitude + marker.offsetLatitude, longitude + marker.offsetLongitude),
       miniheroMap,
-      { avatar: marker.avatar }
+      {
+        marker_id: i+1,
+        avatar: marker.avatar
+      }
     )
     overlays.push(overlay)
   })
@@ -648,12 +660,72 @@ function panMapToCenter(event) {
   }
 }
 
-},{"../utilities/helper":6,"../utilities/locator":7}],5:[function(require,module,exports){
+},{"../utilities/helper":7,"../utilities/locator":8,"./panel.js":6}],5:[function(require,module,exports){
+'use strict'
+
+const panel = require('../modules/panel')
+const Helper = require('../utilities/helper')
+
+exports.init = function() {
+  var missionOpenLinks = document.querySelectorAll('a.mission__header')
+  Array.prototype.forEach.call(missionOpenLinks, function(el, i) {
+    el.addEventListener('click', openMission)
+  })
+  var missionCloseLinks = document.querySelectorAll('a[data-mission-close]')
+  Array.prototype.forEach.call(missionCloseLinks, function(el, i) {
+    el.addEventListener('click', closeMission)
+  })
+  var missionJoinLinks = document.querySelectorAll('a[data-mission-join]')
+  Array.prototype.forEach.call(missionJoinLinks, function(el, i) {
+    el.addEventListener('click', joinMission)
+  })
+  document.querySelector('a[data-mission-create]').addEventListener('click', showMissionCreationForm)
+  document.querySelector('a[data-mission-create-send]').addEventListener('click', createMission)
+}
+
+function openMission(e) {
+  e.preventDefault()
+  panel.hidePanel('missions')
+  var href = e.currentTarget.getAttribute('href')
+  var missionIndex = Number(href.substring(href.lastIndexOf('/') + 1))
+  panel.showPanel('mission' + missionIndex)
+}
+
+function closeMission(e) {
+  e.preventDefault()
+  panel.hideAllPanels()
+  panel.showPanel('missions')
+}
+
+function joinMission(e) {
+  e.preventDefault()
+  // Check authentication
+
+  // Mark user as joined
+
+  Helper.addClass(e.currentTarget.closest('.mission'), '--joining')
+}
+
+function showMissionCreationForm(e) {
+  e.preventDefault()
+  panel.hideAllPanels()
+  panel.showPanel('mission-new')
+}
+
+function createMission(e) {
+  e.preventDefault()
+}
+
+},{"../modules/panel":6,"../utilities/helper":7}],6:[function(require,module,exports){
 'use strict'
 
 const Helper = require('../utilities/helper')
 
 exports.init = function() {
+  document.querySelector('.sidebar__preloader').addEventListener('transitionend', function (e) {
+    Helper.addClass(e.target, '--hidden')
+  }, false)
+  Helper.addClass(document.querySelector('.sidebar'), '--ready')
   document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
 }
 
@@ -676,7 +748,15 @@ function hidePanel(elementId) {
 }
 exports.hidePanel = hidePanel
 
-},{"../utilities/helper":6}],6:[function(require,module,exports){
+function hideAllPanels() {
+  var panels = document.querySelectorAll('.panel')
+  Array.prototype.forEach.call(panels, function(el, i){
+    Helper.removeClass(el, '--visible')
+  })
+}
+exports.hideAllPanels = hideAllPanels
+
+},{"../utilities/helper":7}],7:[function(require,module,exports){
 'use strict'
 
 exports.removeClass = function(el, className) {
@@ -734,7 +814,7 @@ exports.getCookie = function(name) {
   }, '')
 }
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict'
 
 const Helper = require('../utilities/helper')
@@ -751,7 +831,7 @@ function getLocation(e) {
     panel.hidePanel('location-unavailable')
     // Don't show the sidebar locator panels for repeat users
     if (!getLocationCookie()) {
-      panel.showPanel('matching-location')
+      panel.showPanel('location-matching')
     }
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(
@@ -768,8 +848,8 @@ function getLocation(e) {
 function displayUserPosition(position) {
   // Don't show the sidebar locator panels for repeat users
   if (!getLocationCookie()) {
-    panel.hidePanel('matching-location')
-    panel.showPanel('matched-location')
+    panel.hidePanel('location-matching')
+    panel.showPanel('location-matched')
   }
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
   setLocationCookie(position.coords.latitude, position.coords.longitude)
@@ -785,11 +865,11 @@ function displayError(error) {
   console.log("Location Access Error: " + errors[error.code])
   if (error.code == 1) {
     panel.hidePanel('location-access-needed')
-    panel.hidePanel('matching-location')
+    panel.hidePanel('location-matching')
     panel.showPanel('location-access-denied')
   } else if (error.code == 2) {
     panel.hidePanel('location-access-needed')
-    panel.hidePanel('matching-location')
+    panel.hidePanel('location-matching')
     panel.showPanel('location-unavailable')
   }
 }
@@ -823,4 +903,4 @@ exports.init = function() {
   }
 }
 
-},{"../modules/map":4,"../modules/panel":5,"../utilities/helper":6}]},{},[2]);
+},{"../modules/map":4,"../modules/panel":6,"../utilities/helper":7}]},{},[2]);

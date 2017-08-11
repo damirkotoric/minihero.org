@@ -1,5 +1,6 @@
 'use strict'
 
+const panel = require('./panel.js')
 const Helper = require('../utilities/helper')
 const Locator = require('../utilities/locator')
 
@@ -474,7 +475,13 @@ exports.init = function() {
     			google.maps.event.trigger(self, "click");
     		});
     		var panes = this.getPanes();
-    		panes.overlayImage.appendChild(div);
+    		panes.overlayMouseTarget.appendChild(div);
+        var me = this;
+        google.maps.event.addDomListener(div, 'click', function() {
+          google.maps.event.trigger(me, 'click');
+          panel.hideAllPanels()
+          panel.showPanel('mission'+div.getAttribute('data-marker_id'))
+        })
     	}
     	var point = this.getProjection().fromLatLngToDivPixel(this.latlng);
     	if (point) {
@@ -547,7 +554,10 @@ function addSampleMarkers() {
     var overlay = new CustomMarker(
       new google.maps.LatLng(latitude + marker.offsetLatitude, longitude + marker.offsetLongitude),
       miniheroMap,
-      { avatar: marker.avatar }
+      {
+        marker_id: i+1,
+        avatar: marker.avatar
+      }
     )
     overlays.push(overlay)
   })

@@ -1,0 +1,24 @@
+.panel#mission-new
+  .new-mission
+    .back
+      a(href='/map' data-mission-close)
+        i.material-icons arrow_back
+        | Show all missions
+    div.new-mission__form
+      h1 🎉 Let's plan your mission!
+      label Give your mission a short and witty title
+        input(type='text' name='mission_title' placeholder='Title of mission')
+        span.--default 100 characters left
+        span.--error 20 characters too many
+      label Where should people meet?
+        input(type='text' name='mission_location' placeholder='Find a place by address or name')
+        span.--default Choose a safe and easily accessible location
+        span.--error Sorry, that location wasn't found
+      label So, what's the plan? Tell people about this mission.
+        textarea(placeholder='What day and time will the mission start? How will other Miniheros recognise you? What other things should people know?')
+        span.--default 200 characters left
+        span.--error Give a little more info. 30 characters to go.
+    div.new-mission__actions
+      span 
+        | 
+      a.button(href='/missions/new' data-mission-create-send) Create Mission

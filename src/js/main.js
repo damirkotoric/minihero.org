@@ -3,6 +3,7 @@
 const gallery = require('./modules/gallery')
 const map = require('./modules/map')
 const panel = require('./modules/panel')
+const mission = require('./modules/mission')
 const Turbolinks = require('turbolinks')
 const Locator = require('./utilities/locator')
 const Helper = require('./utilities/helper')
@@ -27,4 +28,5 @@ function initMap() {
   Locator.init()
   map.init()
   panel.init()
+  mission.init()
 }

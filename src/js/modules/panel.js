@@ -3,6 +3,10 @@
 const Helper = require('../utilities/helper')
 
 exports.init = function() {
+  document.querySelector('.sidebar__preloader').addEventListener('transitionend', function (e) {
+    Helper.addClass(e.target, '--hidden')
+  }, false)
+  Helper.addClass(document.querySelector('.sidebar'), '--ready')
   document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
 }
 
@@ -24,3 +28,11 @@ function hidePanel(elementId) {
   Helper.removeClass(document.getElementById(elementId), '--visible')
 }
 exports.hidePanel = hidePanel
+
+function hideAllPanels() {
+  var panels = document.querySelectorAll('.panel')
+  Array.prototype.forEach.call(panels, function(el, i){
+    Helper.removeClass(el, '--visible')
+  })
+}
+exports.hideAllPanels = hideAllPanels

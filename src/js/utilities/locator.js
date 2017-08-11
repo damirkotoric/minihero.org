@@ -14,7 +14,7 @@ function getLocation(e) {
     panel.hidePanel('location-unavailable')
     // Don't show the sidebar locator panels for repeat users
     if (!getLocationCookie()) {
-      panel.showPanel('matching-location')
+      panel.showPanel('location-matching')
     }
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(
@@ -31,8 +31,8 @@ function getLocation(e) {
 function displayUserPosition(position) {
   // Don't show the sidebar locator panels for repeat users
   if (!getLocationCookie()) {
-    panel.hidePanel('matching-location')
-    panel.showPanel('matched-location')
+    panel.hidePanel('location-matching')
+    panel.showPanel('location-matched')
   }
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
   setLocationCookie(position.coords.latitude, position.coords.longitude)
@@ -48,11 +48,11 @@ function displayError(error) {
   console.log("Location Access Error: " + errors[error.code])
   if (error.code == 1) {
     panel.hidePanel('location-access-needed')
-    panel.hidePanel('matching-location')
+    panel.hidePanel('location-matching')
     panel.showPanel('location-access-denied')
   } else if (error.code == 2) {
     panel.hidePanel('location-access-needed')
-    panel.hidePanel('matching-location')
+    panel.hidePanel('location-matching')
     panel.showPanel('location-unavailable')
   }
 }
