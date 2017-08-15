@@ -19,7 +19,7 @@ var isAuthenticated = function (req, res, next) {
 module.exports = function(passport){
 
   // GET /
-  router.get('/', mid.redirectToHTTPS, function(req, res, next) {
+  router.get('/', function(req, res, next) {
     var maximumGallerySliders = 6
     return res.render('index', { showHeroIndex: Math.floor(Math.random() * (maximumGallerySliders - 0 + 1)) + 0 })
   })
@@ -38,12 +38,12 @@ module.exports = function(passport){
   )
 
 	// GET /legalese
-  router.get('/legalese', mid.redirectToHTTPS, function(req, res, next) {
+  router.get('/legalese', function(req, res, next) {
     return res.render('legalese')
   })
 
 	// POST /agree
-	router.post('/agree', mid.redirectToHTTPS, function(req, res, next) {
+	router.post('/agree', function(req, res, next) {
 		if (req.user) {
 			User.update(
 				{
