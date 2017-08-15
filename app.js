@@ -3,24 +3,38 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const passport = require('passport')
+const session = require('express-session')
+var MongoStore = require('connect-mongo')(session) // Helps store sessions in a database so we don't crash the server by storing them in server RAM
+const flash = require('connect-flash')
+const cookieParser = require('cookie-parser')
+const config = require('./config')
+
 const app = express()
-const port = process.env.PORT || 3000
+const port = config.server.port
 
-// // mongodb connection
-// mongoose.connect('mongodb://localhost:27017/minihero')
-// const db = mongoose.connection
-// // mongo error
-// db.on('error', console.error.bind(console, 'connection error: '))
+// mongodb connection
+mongoose.connect(config.server.dbUrl)
+const db = mongoose.connection
+// mongo error
+db.on('error', console.error.bind(console, 'connection error: '))
 
-// // use sessions for tracking logins
-// app.use(session({
-//   secret: 'Minihero FTW!',
-//   maxAge: null,
-//   resave: true, // force session to be saved in the sessions store whether anything changed in the request or not
-//   store: new MongoStore({
-//     mongooseConnection: db
-//   })
-// }))
+// Easily access and set cookies
+app.use(cookieParser())
+
+// use sessions for tracking logins
+app.use(session({
+  secret: config.server.sessionSecret,
+  maxAge: null,
+  resave: true, // force session to be saved in the sessions store whether anything changed in the request or not
+  saveUninitialized: true,
+  store: new MongoStore({
+    mongooseConnection: db
+  })
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 // parse incoming requests
 app.use(bodyParser.json())
@@ -33,8 +47,16 @@ app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'pug')
 app.set('views', __dirname + '/views')
 
+// Using the flash middleware provided by connect-flash to store messages in session
+// and displaying in templates
+app.use(flash())
+
+// Initialize Passport
+const initPassport = require('./controllers/passport/init')
+initPassport(passport)
+
 // include routes
-const routes = require('./controllers/index')
+const routes = require('./controllers/index')(passport)
 app.use('/', routes)
 
 // catch 404 and forward to error handler
@@ -56,5 +78,5 @@ app.use(function(err, req, res, next) {
 })
 
 app.listen(port, function() {
-  console.log('Express app listening on port 3000')
+  console.log('Express app listening on port ' + config.server.port)
 })

@@ -8,11 +8,12 @@ return t.dispatch("turbolinks:before-render",{data:{newBody:e}})},r.prototype.no
 },{}],2:[function(require,module,exports){
 'use strict'
 
+const Turbolinks = require('turbolinks')
 const gallery = require('./modules/gallery')
 const map = require('./modules/map')
 const panel = require('./modules/panel')
 const mission = require('./modules/mission')
-const Turbolinks = require('turbolinks')
+const onboarding = require('./modules/onboarding')
 const Locator = require('./utilities/locator')
 const Helper = require('./utilities/helper')
 
@@ -37,9 +38,10 @@ function initMap() {
   map.init()
   panel.init()
   mission.init()
+  onboarding.init()
 }
 
-},{"./modules/gallery":3,"./modules/map":4,"./modules/mission":5,"./modules/panel":6,"./utilities/helper":7,"./utilities/locator":8,"turbolinks":1}],3:[function(require,module,exports){
+},{"./modules/gallery":3,"./modules/map":4,"./modules/mission":5,"./modules/onboarding":6,"./modules/panel":7,"./utilities/helper":8,"./utilities/locator":9,"turbolinks":1}],3:[function(require,module,exports){
 'use strict'
 
 const Helper = require('../utilities/helper')
@@ -65,7 +67,7 @@ exports.init = function() {
   }
 }
 
-},{"../utilities/helper":7}],4:[function(require,module,exports){
+},{"../utilities/helper":8}],4:[function(require,module,exports){
 'use strict'
 
 const panel = require('./panel.js')
@@ -547,7 +549,7 @@ exports.init = function() {
         var me = this;
         google.maps.event.addDomListener(div, 'click', function() {
           google.maps.event.trigger(me, 'click');
-          panel.hideAllPanels()
+          panel.hidePanelsContaining('mission')
           panel.showPanel('mission'+div.getAttribute('data-marker_id'))
         })
     	}
@@ -660,7 +662,7 @@ function panMapToCenter(event) {
   }
 }
 
-},{"../utilities/helper":7,"../utilities/locator":8,"./panel.js":6}],5:[function(require,module,exports){
+},{"../utilities/helper":8,"../utilities/locator":9,"./panel.js":7}],5:[function(require,module,exports){
 'use strict'
 
 const panel = require('../modules/panel')
@@ -693,22 +695,24 @@ function openMission(e) {
 
 function closeMission(e) {
   e.preventDefault()
-  panel.hideAllPanels()
+  panel.hidePanelsContaining('mission')
   panel.showPanel('missions')
 }
 
 function joinMission(e) {
   e.preventDefault()
   // Check authentication
-
-  // Mark user as joined
-
-  Helper.addClass(e.currentTarget.closest('.mission'), '--joining')
+  if (document.body.classList.contains('user-logged-in')) {
+    // Join user to mission
+    Helper.addClass(e.currentTarget.closest('.mission'), '--joining')
+  } else {
+    window.location = '/login/facebook'
+  }
 }
 
 function showMissionCreationForm(e) {
   e.preventDefault()
-  panel.hideAllPanels()
+  panel.hidePanelsContaining('mission')
   panel.showPanel('mission-new')
 }
 
@@ -716,7 +720,78 @@ function createMission(e) {
   e.preventDefault()
 }
 
-},{"../modules/panel":6,"../utilities/helper":7}],6:[function(require,module,exports){
+},{"../modules/panel":7,"../utilities/helper":8}],6:[function(require,module,exports){
+'use strict'
+
+const panel = require('./panel')
+const locator = require('../utilities/locator')
+const Helper = require('../utilities/helper')
+
+exports.init = function() {
+  // https://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
+  if (window.location.hash == '#_=_') {
+    window.location.hash = ''
+    history.pushState('', document.title, window.location.pathname)
+  }
+
+  var linkToHouseRules = document.getElementById('link-to-house-rules')
+  if (linkToHouseRules) {
+    linkToHouseRules.addEventListener('click', function(e) {
+      e.preventDefault()
+      panel.hidePanel('onboarding-synched')
+      panel.showPanel('onboarding-house-rules')
+    })
+  }
+
+  var linkToTerms = document.getElementById('link-to-terms')
+  if (linkToTerms) {
+    linkToTerms.addEventListener('click', function(e) {
+      e.preventDefault()
+      panel.hidePanel('onboarding-house-rules')
+      panel.showPanel('onboarding-terms')
+    })
+  }
+
+  var linkToAgree = document.getElementById('link-to-agree')
+  if (linkToAgree) {
+    linkToAgree.addEventListener('click', function(e) {
+      e.preventDefault()
+      if (!e.currentTarget.classList.contains('--loading')) {
+        Helper.addClass(e.currentTarget, '--loading')
+        agreeToTerms(e.currentTarget)
+      }
+    })
+  }
+}
+
+function agreeToTerms(button) {
+  var request = new XMLHttpRequest()
+  request.open('POST', '/agree', true)
+  request.onload = function() {
+    Helper.removeClass(button, '--loading')
+    if (request.status >= 200 && request.status < 400) {
+      // Success!
+      Helper.removeClass(document.body, 'onboarding')
+      panel.hidePanel('onboarding-terms')
+      panel.showPanel('onboarding-done')
+    } else {
+      // We reached our target server, but it returned an error
+      console.log('server error')
+    }
+  }
+  request.onerror = function() {
+    // There was a connection error of some sort
+    console.log('connection error')
+  }
+  request.send()
+}
+
+exports.start = function(step = 'onboarding-welcome') {
+  Helper.addClass(document.body, 'onboarding')
+  panel.showPanel(step)
+}
+
+},{"../utilities/helper":8,"../utilities/locator":9,"./panel":7}],7:[function(require,module,exports){
 'use strict'
 
 const Helper = require('../utilities/helper')
@@ -726,7 +801,9 @@ exports.init = function() {
     Helper.addClass(e.target, '--hidden')
   }, false)
   Helper.addClass(document.querySelector('.sidebar'), '--ready')
-  document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
+  if (document.querySelector('[data-panel-close]')) {
+    document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
+  }
 }
 
 function closePanel(e) {
@@ -748,29 +825,39 @@ function hidePanel(elementId) {
 }
 exports.hidePanel = hidePanel
 
-function hideAllPanels() {
+function hidePanelsContaining(keyword) {
   var panels = document.querySelectorAll('.panel')
   Array.prototype.forEach.call(panels, function(el, i){
-    Helper.removeClass(el, '--visible')
+    if (el.getAttribute('id').includes(keyword)) {
+      Helper.removeClass(el, '--visible')
+    }
   })
 }
-exports.hideAllPanels = hideAllPanels
+exports.hidePanelsContaining = hidePanelsContaining
 
-},{"../utilities/helper":7}],7:[function(require,module,exports){
+},{"../utilities/helper":8}],8:[function(require,module,exports){
 'use strict'
 
 exports.removeClass = function(el, className) {
-  if (el.classList)
-    el.classList.remove(className);
-  else
-    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+  if (el) {
+    if (el.classList)
+      el.classList.remove(className);
+    else
+      el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+  } else {
+    console.log('Element not found.')
+  }
 }
 
 exports.addClass = function(el, className) {
-  if (el.classList)
-    el.classList.add(className);
-  else
-    el.className += ' ' + className;
+  if (el) {
+    if (el.classList)
+      el.classList.add(className);
+    else
+      el.className += ' ' + className;
+  } else {
+    console.log('Element not found.')
+  }
 }
 
 exports.closest = function(el, selector) {
@@ -814,12 +901,13 @@ exports.getCookie = function(name) {
   }, '')
 }
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict'
 
 const Helper = require('../utilities/helper')
 const map = require('../modules/map')
 const panel = require('../modules/panel')
+const onboarding = require('../modules/onboarding')
 
 function getLocation(e) {
   if (e) {
@@ -832,6 +920,9 @@ function getLocation(e) {
     // Don't show the sidebar locator panels for repeat users
     if (!getLocationCookie()) {
       panel.showPanel('location-matching')
+    } else {
+      // Location is set in cookie
+      showOnboardingIfNotSignedIn()
     }
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(
@@ -846,14 +937,27 @@ function getLocation(e) {
 }
 
 function displayUserPosition(position) {
+  Helper.addClass(document.body, 'user-allowed-location')
   // Don't show the sidebar locator panels for repeat users
   if (!getLocationCookie()) {
     panel.hidePanel('location-matching')
     panel.showPanel('location-matched')
+    showOnboardingIfNotSignedIn()
   }
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
   setLocationCookie(position.coords.latitude, position.coords.longitude)
   map.setUserPosition(position.coords.latitude, position.coords.longitude)
+}
+
+function showOnboardingIfNotSignedIn() {
+  if (!document.body.classList.contains('user-logged-in')) {
+    // if not a user
+    onboarding.start('onboarding-location-matched')
+  }
+  if (document.body.classList.contains('user-logged-in') && !document.body.classList.contains('user-agreed-terms')) {
+    // if user but not agreed to terms
+    onboarding.start('onboarding-synched')
+  }
 }
 
 function displayError(error) {
@@ -895,6 +999,7 @@ exports.init = function() {
   document.getElementById('allow-location-access').addEventListener('click', getLocation)
   document.getElementById('retry-location-access').addEventListener('click', getLocation)
   if (getLocationCookie()) {
+    Helper.addClass(document.body, 'user-allowed-location')
     // User has a location cookie already set
     // Get their location again in case the user moved
     getLocation()
@@ -903,4 +1008,4 @@ exports.init = function() {
   }
 }
 
-},{"../modules/map":4,"../modules/panel":6,"../utilities/helper":7}]},{},[2]);
+},{"../modules/map":4,"../modules/onboarding":6,"../modules/panel":7,"../utilities/helper":8}]},{},[2]);

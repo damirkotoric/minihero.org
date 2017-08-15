@@ -1,10 +1,11 @@
 'use strict'
 
+const Turbolinks = require('turbolinks')
 const gallery = require('./modules/gallery')
 const map = require('./modules/map')
 const panel = require('./modules/panel')
 const mission = require('./modules/mission')
-const Turbolinks = require('turbolinks')
+const onboarding = require('./modules/onboarding')
 const Locator = require('./utilities/locator')
 const Helper = require('./utilities/helper')
 
@@ -29,4 +30,5 @@ function initMap() {
   map.init()
   panel.init()
   mission.init()
+  onboarding.init()
 }

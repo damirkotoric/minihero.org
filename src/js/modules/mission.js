@@ -30,22 +30,24 @@ function openMission(e) {
 
 function closeMission(e) {
   e.preventDefault()
-  panel.hideAllPanels()
+  panel.hidePanelsContaining('mission')
   panel.showPanel('missions')
 }
 
 function joinMission(e) {
   e.preventDefault()
   // Check authentication
-
-  // Mark user as joined
-
-  Helper.addClass(e.currentTarget.closest('.mission'), '--joining')
+  if (document.body.classList.contains('user-logged-in')) {
+    // Join user to mission
+    Helper.addClass(e.currentTarget.closest('.mission'), '--joining')
+  } else {
+    window.location = '/login/facebook'
+  }
 }
 
 function showMissionCreationForm(e) {
   e.preventDefault()
-  panel.hideAllPanels()
+  panel.hidePanelsContaining('mission')
   panel.showPanel('mission-new')
 }
 

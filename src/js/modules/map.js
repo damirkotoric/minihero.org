@@ -479,7 +479,7 @@ exports.init = function() {
         var me = this;
         google.maps.event.addDomListener(div, 'click', function() {
           google.maps.event.trigger(me, 'click');
-          panel.hideAllPanels()
+          panel.hidePanelsContaining('mission')
           panel.showPanel('mission'+div.getAttribute('data-marker_id'))
         })
     	}

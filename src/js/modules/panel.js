@@ -7,7 +7,9 @@ exports.init = function() {
     Helper.addClass(e.target, '--hidden')
   }, false)
   Helper.addClass(document.querySelector('.sidebar'), '--ready')
-  document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
+  if (document.querySelector('[data-panel-close]')) {
+    document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
+  }
 }
 
 function closePanel(e) {
@@ -29,10 +31,12 @@ function hidePanel(elementId) {
 }
 exports.hidePanel = hidePanel
 
-function hideAllPanels() {
+function hidePanelsContaining(keyword) {
   var panels = document.querySelectorAll('.panel')
   Array.prototype.forEach.call(panels, function(el, i){
-    Helper.removeClass(el, '--visible')
+    if (el.getAttribute('id').includes(keyword)) {
+      Helper.removeClass(el, '--visible')
+    }
   })
 }
-exports.hideAllPanels = hideAllPanels
+exports.hidePanelsContaining = hidePanelsContaining

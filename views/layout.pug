@@ -24,8 +24,13 @@ head
   link(href='https://fonts.googleapis.com/css?family=Montserrat:400,600&subset=latin-ext' rel='stylesheet')
   link(rel='stylesheet' href='/css/main.css')
   script(src='/js/main.js')
+  
+  - var loggedIn= user ? 'user-logged-in' : ''
+  if user
+    - var agreedToTerms= user.agreedToTerms ? 'user-agreed-terms' : ''
 
-  body
+  body(class=loggedIn + ' ' + agreedToTerms)
+      
     block content
 
     script(type='text/javascript').
@@ -36,4 +41,3 @@ head
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-86385304-1', 'auto');
       ga('send', 'pageview');
-    

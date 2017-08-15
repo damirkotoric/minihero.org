@@ -3,6 +3,7 @@
 const Helper = require('../utilities/helper')
 const map = require('../modules/map')
 const panel = require('../modules/panel')
+const onboarding = require('../modules/onboarding')
 
 function getLocation(e) {
   if (e) {
@@ -15,6 +16,9 @@ function getLocation(e) {
     // Don't show the sidebar locator panels for repeat users
     if (!getLocationCookie()) {
       panel.showPanel('location-matching')
+    } else {
+      // Location is set in cookie
+      showOnboardingIfNotSignedIn()
     }
     var timeoutVal = 10 * 1000 * 1000
     navigator.geolocation.getCurrentPosition(
@@ -29,14 +33,27 @@ function getLocation(e) {
 }
 
 function displayUserPosition(position) {
+  Helper.addClass(document.body, 'user-allowed-location')
   // Don't show the sidebar locator panels for repeat users
   if (!getLocationCookie()) {
     panel.hidePanel('location-matching')
     panel.showPanel('location-matched')
+    showOnboardingIfNotSignedIn()
   }
   console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude)
   setLocationCookie(position.coords.latitude, position.coords.longitude)
   map.setUserPosition(position.coords.latitude, position.coords.longitude)
+}
+
+function showOnboardingIfNotSignedIn() {
+  if (!document.body.classList.contains('user-logged-in')) {
+    // if not a user
+    onboarding.start('onboarding-location-matched')
+  }
+  if (document.body.classList.contains('user-logged-in') && !document.body.classList.contains('user-agreed-terms')) {
+    // if user but not agreed to terms
+    onboarding.start('onboarding-synched')
+  }
 }
 
 function displayError(error) {
@@ -78,6 +95,7 @@ exports.init = function() {
   document.getElementById('allow-location-access').addEventListener('click', getLocation)
   document.getElementById('retry-location-access').addEventListener('click', getLocation)
   if (getLocationCookie()) {
+    Helper.addClass(document.body, 'user-allowed-location')
     // User has a location cookie already set
     // Get their location again in case the user moved
     getLocation()

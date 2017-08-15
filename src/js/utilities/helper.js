@@ -1,17 +1,25 @@
 'use strict'
 
 exports.removeClass = function(el, className) {
-  if (el.classList)
-    el.classList.remove(className);
-  else
-    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+  if (el) {
+    if (el.classList)
+      el.classList.remove(className);
+    else
+      el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+  } else {
+    console.log('Element not found.')
+  }
 }
 
 exports.addClass = function(el, className) {
-  if (el.classList)
-    el.classList.add(className);
-  else
-    el.className += ' ' + className;
+  if (el) {
+    if (el.classList)
+      el.classList.add(className);
+    else
+      el.className += ' ' + className;
+  } else {
+    console.log('Element not found.')
+  }
 }
 
 exports.closest = function(el, selector) {

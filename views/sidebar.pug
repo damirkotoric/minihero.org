@@ -2,22 +2,14 @@
   div
     .sidebar__preloader
       div
-      
-    // Onboarding
-    include panels/location-access-needed
-    include panels/location-access-denied
-    include panels/location-matching
-    include panels/location-matched
-    include panels/location-unavailable
-    include panels/onboarding-welcome
-    include panels/onboarding-signup
-    include panels/onboarding-synching
-    include panels/onboarding-synched
-    include panels/onboarding-welcome
-    include panels/onboarding-house-rules
-    include panels/onboarding-terms
-    include panels/missions-empty
+    
+    include panels/location-access
+    include panels/onboarding
+    
     include panels/missions
+    
+    //- no nearby missions
+    include panels/missions-empty
     
     include panels/missions/mission-1
     include panels/missions/mission-2
@@ -33,4 +25,5 @@
   
   .sidebar__footer    
     p
-      a(href='https://twitter.com/@damirkotoric' target='_blank') #[img(src='/img/icon-twitter.svg' alt='')] made by @damirkotoric
+      a(href='https://twitter.com/@damirkotoric' target='_blank') #[img(src='/img/icon-twitter.svg' alt='')] Made by @damirkotoric
+      a(href='/legalese' target="_blank") Legalese

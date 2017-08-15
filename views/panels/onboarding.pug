@@ -1,0 +1,62 @@
+.panel#onboarding-welcome
+  .modal
+    div
+      img(src='/img/minihero-m.svg' alt='')
+      h1 Here's how Minihero works...
+      p People create missions to volunteer in their community. You can join an existing mission or create one of your own.
+      p
+        a(href='/login/facebook') Sign in via Facebook
+
+.panel#onboarding-signup
+  .modal
+    div
+      img(src='/img/supercharged-karma.svg' alt='')
+      h1 Let's get you supercharging your karma!
+      a.button.--expand(href='/login/facebook') Continue with Facebook
+      p Minihero will never ever post on your Facebook timeline, or embarass you in front of your "friends" on Facebook. Promise.
+      
+.panel#onboarding-location-matched
+  .modal
+    div
+      img(src='/img/icon-check.svg' alt='')
+      h1 Found ya!
+      p Now, let's get you set up, so you can join Minihero missions and start working on that karma.
+      a.button.--expand(href='/login/facebook') Sign in via Facebook
+      p Minihero will never ever post on your Facebook timeline, or embarass you in front of your "friends" on Facebook. Promise.
+
+if user && !user.agreedToTerms
+  .panel.--visible#onboarding-synched
+    .modal
+      div
+        img.avatar.--large(src='https://graph.facebook.com/' + user.fb.facebookId + '/picture?type=large' alt='')
+        h1 Namaste #{user.fb.firstName} 🙏
+        p Welcome to a new world.
+        p A world where you can do good, in your own time, without having to commit long term — you 21st century hero, you.
+        p You've joined a community of people completely maxing out their karma with small, convenient acts of heroism. Welcome home.
+        a#link-to-house-rules.button.--expand(href='#house-rules') Continue to house rules
+
+  .panel#onboarding-house-rules
+    .modal
+      div
+        img(src='/img/icon-douchebag.svg' alt='')
+        h1 House rule #1: Don't be a douchebag.
+        p You've joined an enlightened commune of heros. Or, at the very least, decent people taking time away from focusing on themselves to give back to their community.
+        p Be good to your fellow humans.
+        a#link-to-terms.button.--expand(href='#promise') I promise not to be a douchebag
+        
+  .panel#onboarding-terms
+    .modal
+      div
+        h1 Excellent! That's all the house rules.
+        p One last thing. Please read #[a(href='/legalese' target='_blank') the terms of use and privacy policy all-in-one mega legalese doc].
+        p In short, if you can't be bothered with legalese:
+        p You take full responsibility for your safety and you don't hold Minihero accountable for douchebags you may encounter. Having said that, we pledge to ban douchebags very fast.
+        a#link-to-agree.button.--expand(href='/agree') I accept the terms of use. Let me in!
+
+  .panel#onboarding-done
+    .modal
+      div
+        img(src='/img/icon-check.svg' alt='')
+        h1 Chakras fully aligned
+        p You're ready to rock 'n roll. Now you can create and join Minihero Missions. Enjoy! Please keep in mind that Minihero is a brand new product and it's a bit of a ghost town at the moment. But you can help with that by #[a(href='missions/new') creating a Mission!]
+        a.button.--secondary.--expand(href='/map' data-panel-close) Dismiss
