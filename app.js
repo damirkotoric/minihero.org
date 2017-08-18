@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const session = require('express-session')
-var MongoStore = require('connect-mongo')(session) // Helps store sessions in a database so we don't crash the server by storing them in server RAM
+const MongoStore = require('connect-mongo')(session) // Helps store sessions in a database so we don't crash the server by storing them in server RAM
 const flash = require('connect-flash')
 const cookieParser = require('cookie-parser')
 const config = require('./config')
@@ -54,7 +54,7 @@ app.use(flash())
 // https://www.tonyerwin.com/2014/09/redirecting-http-to-https-with-nodejs.html
 app.enable('trust proxy')
 app.use (function (req, res, next) {
-  if (req.secure) {
+  if (req.secure || config.server.env === 'dev') {
     // request was via https, so do no special handling
     next();
   } else {

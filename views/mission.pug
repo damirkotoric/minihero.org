@@ -1,0 +1,53 @@
+extends _map-template
+
+block vars
+  - var title= mission.title
+
+block sidebarContent
+  .panel.--visible(id='mission' data-mission-id=mission.missionId)
+    .mission(data-location-latitude=mission.location.latitude data-location-longitude=mission.location.longitude)
+      .back
+        a(href='/missions')
+          i.material-icons arrow_back
+          | Show all missions near me
+      .mission__header
+        img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + creator.fb.facebookId + '/picture?type=large' alt='')
+        div
+          h2= mission.title
+          if mission.participants.length === 0
+            span created by #{creator.fb.firstName} #{creator.fb.lastName}
+          else
+            span #{mission.participants.length} joined, created by #{creator.fb.firstName} #{creator.fb.lastName}
+      if mission.participants.length > 0
+        .mission__participants
+          each participant in mission.participants
+            img.avatar.--small(src=participant.imageUrl)
+      .mission__description
+        p= mission.description
+      .mission__meta
+        div
+          i.material-icons access_time
+          | #{mission.date}
+        div
+          i.material-icons location_on
+          | Join the Mission to reveal the exact location.
+      .mission__actions
+        div
+          span Want to take part?
+          a.button(href='/missions/'+mission.id+'/join' data-mission-join) Join Mission
+        div
+          span Change your mind?
+          a.button.--secondary(href='/missions/'+mission.id+'/leave' data-mission-leave) Leave Mission
+      .modal.--overlay
+        div.modal__loading
+          img(src='/img/supercharged-karma-orange.svg' alt='')
+          h1 Supercharging your karma...
+        div.modal__success
+          img(src='/img/happy-buddha.svg' alt='')
+          h1 Karma successfully supercharged!
+          p 
+            | Now, brave Minihero, complete your mission.
+        div.modal__error
+          img(src='/img/childs-pose.svg' alt='')
+          h1 Error supercharging your karma!
+          p Take five deep breaths and try again.

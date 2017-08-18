@@ -1,0 +1,105 @@
+extends _map-template
+
+block vars
+  - var title= "Volunteering Missions"
+
+block sidebarContent    
+  .panel.--visible#missions
+    .missions
+      .missions__new
+        span Got a blissful idea for the good of humankind?
+        a.button(href='/mission/new' data-mission-create) Create a Mission
+      //- .missions__my
+      //-   label Minihero missions I created
+      //-   ul
+      //-     li
+      //-       a.mission__header(href='#')
+      //-         img.avatar.--current(src='/img/temp-damir.jpg')
+      //-         div
+      //-           h2
+      //-             | Football for refugees
+      //-           span
+      //-             | by Damir Kotorić
+      .missions__nearby
+        label Below are some sample missions to give you a taste of what's to come on Minihero.
+        ul
+          li
+            a.mission__header(href='/mission/1')
+              img.avatar(src='/img/temp-cesar.jpg')
+              div
+                h2
+                  | Volunteer at the dog shelter
+                span
+                  | by Cesar Milan
+          li
+            a.mission__header(href='/mission/2')
+              img.avatar(src='/img/temp-gordon.jpg')
+              div
+                h2
+                  | Help your local soup kitchen
+                span
+                  | by Gordon Ramsay
+          li
+            a.mission__header(href='/mission/3')
+              img.avatar(src='/img/temp-ellen.jpg')
+              div
+                h2
+                  | Paint the senior people's home
+                span
+                  | by Ellen Degeneres
+          li
+            a.mission__header(href='/mission/4')
+              img.avatar(src='/img/temp-jim.jpg')
+              div
+                h2
+                  | Clean up our neighbourhood
+                span
+                  | by Jim Carrey
+          li
+            a.mission__header(href='/mission/5')
+              img.avatar(src='/img/temp-angelina.jpg')
+              div
+                h2
+                  | Help new immigrants settle in
+                span
+                  | by Angelina Jolie
+          li
+            a.mission__header(href='/mission/6')
+              img.avatar(src='/img/temp-ibra.jpg')
+              div
+                h2
+                  | Football for Syrian refugees
+                span
+                  | by Zlatan Ibrahimović
+          li
+            a.mission__header(href='/mission/7')
+              img.avatar(src='/img/temp-jack.jpg')
+              div
+                h2
+                  | Rock for peace and luuuv 🤘
+                span
+                  | by Jack Black
+          li
+            a.mission__header(href='/mission/8')
+              img.avatar(src='/img/temp-keanu.jpg')
+              div
+                h2
+                  | Let's take a walk together
+                span
+                  | by Keanu Reeves
+      
+  //- no nearby missions
+  //- include partials/missions-empty
+  //- 
+  //- include partials/mission/mission-1
+  //- include partials/mission/mission-2
+  //- include partials/mission/mission-3
+  //- include partials/mission/mission-4
+  //- include partials/mission/mission-5
+  //- include partials/mission/mission-6
+  //- include partials/mission/mission-7
+  //- include partials/mission/mission-8
+  //- 
+  //- include partials/mission
+  //- include partials/mission-new
+  //- include partials/mission-created

@@ -21,7 +21,7 @@ module.exports = function(passport) {
 
     // facebook will send back the tokens and profile
     function(access_token, refresh_token, profile, done) {
-    	console.log('profile', profile)
+    	// console.log('profile', profile)
 
   		// asynchronous
   		process.nextTick(function() {
@@ -49,7 +49,7 @@ module.exports = function(passport) {
             // save our user to the database
             newUser.save(function(err) {
               if (err)
-                  throw err
+                throw err
 
               // if successful, return the new user
               return done(null, newUser)

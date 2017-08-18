@@ -1,4 +1,4 @@
-extends layout
+extends _layout
 
 block vars
   if status == 404
@@ -10,7 +10,7 @@ block content
   if status == 404
     .error.--not-found
       img(src='/img/enso.svg' alt='Nothingness.')
-      p Nothingness. #[a(href='/map') Go to Minihero starting page.]
+      p Nothingness. #[a(href='/missions' data-turbolinks='false') Back to somethingness.]
   else
     .error
       p #[a(href='https://www.theatlantic.com/health/archive/2014/06/the-dark-knight-of-the-souls/372766/' target='_blank') The Dark Night of the Soul] has begotten the Minihero server. The following chakra is blocked: 

@@ -3,12 +3,14 @@
 const Helper = require('../utilities/helper')
 
 exports.init = function() {
-  document.querySelector('.sidebar__preloader').addEventListener('transitionend', function (e) {
-    Helper.addClass(e.target, '--hidden')
-  }, false)
-  Helper.addClass(document.querySelector('.sidebar'), '--ready')
-  if (document.querySelector('[data-panel-close]')) {
-    document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
+  if (document.getElementById('sidebar')) {
+    document.querySelector('.sidebar__preloader').addEventListener('transitionend', function (e) {
+      Helper.addClass(e.target, '--hidden')
+    }, false)
+    Helper.addClass(document.querySelector('.sidebar'), '--ready')
+    if (document.querySelector('[data-panel-close]')) {
+      document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
+    }
   }
 }
 
@@ -33,10 +35,18 @@ exports.hidePanel = hidePanel
 
 function hidePanelsContaining(keyword) {
   var panels = document.querySelectorAll('.panel')
-  Array.prototype.forEach.call(panels, function(el, i){
+  Array.prototype.forEach.call(panels, function(el, i) {
     if (el.getAttribute('id').includes(keyword)) {
       Helper.removeClass(el, '--visible')
     }
   })
 }
 exports.hidePanelsContaining = hidePanelsContaining
+
+function hideVisiblePanels() {
+  var panels = document.querySelectorAll('.panel.--visible')
+  Array.prototype.forEach.call(panels, function(el, i) {
+    Helper.removeClass(el, '--visible')
+  })
+}
+exports.hideVisiblePanels = hideVisiblePanels

@@ -1,4 +1,4 @@
-extends layout
+extends _layout
 
 block vars
   - var title= "Supercharge your karma with minute acts of heroism"
@@ -8,7 +8,7 @@ block content
     img.intro__logo(src='img/minihero.svg' alt='Minihero')
     h1 Supercharge your karma with minute acts of heroism.
     p Minihero connects milennial armchair heros who "like, wanna give back to the world and stuff”. Minihero is “Über, but for like, helping others and giving back to the world”.
-    a.intro__button(href='/map') Check out Minihero
+    a.intro__button(href='/missions' data-turbolinks='false') Check out Minihero
     p.intro__scribble
       img(src='img/arrow-curved.svg' alt='')
       | It's 100% chakra healing 🙏🏼

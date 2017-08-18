@@ -4,10 +4,16 @@ const panel = require('./panel.js')
 const Helper = require('../utilities/helper')
 const Locator = require('../utilities/locator')
 
+var defaultLocation = {
+  // The default location shown to signed out users: Amsterdam!
+  latitude: 52.370216,
+  longitude: 4.895168
+}
+var missionLocation = {}
+var missionPin
+var userLocation = {}
 var miniheroMap
-var latitude = 52.370216
-var longitude = 4.895168
-var overlays = []
+var pins = []
 var sampleMarkers = [
   {
     'offsetLatitude': 0.003,
@@ -426,14 +432,23 @@ exports.drawMap = function() {
   // and if so update the default location
   var cookieLocation = Locator.getLocationCookie()
   if (cookieLocation) {
-    latitude = cookieLocation.latitude
-    longitude = cookieLocation.longitude
+    userLocation.latitude = cookieLocation.latitude
+    userLocation.longitude = cookieLocation.longitude
+  }
+
+  // Check if we're on a mission page with its own geocoordinates.
+  // Mission location takes precedence over user location when
+  // rendering the map.
+  var mission = document.querySelector('.mission')
+  if (mission) {
+    missionLocation.latitude = Number(mission.getAttribute('data-location-latitude'))
+    missionLocation.longitude = Number(mission.getAttribute('data-location-longitude'))
   }
 
   if (miniheroMap) {
     // draw map
     miniheroMap = new google.maps.Map(miniheroMap, {
-      center: {lat: latitude, lng: longitude},
+      center: {lat: missionLocation.latitude || userLocation.latitude, lng: missionLocation.longitude || userLocation.longitude},
       zoom: 13,
       mapTypeControl: false,
       maxZoom: 15,
@@ -448,6 +463,7 @@ exports.drawMap = function() {
     // set theme
     miniheroMap.setOptions({styles: styles['minihero']})
     addSampleMarkers()
+    addMissionMarker()
     window.onresize = panMapToCenter
     panMapToCenter()
   }
@@ -459,45 +475,45 @@ exports.init = function() {
     // Custom marker implementation from https://humaan.com/blog/custom-html-markers-google-maps/
     CustomMarker.prototype = new google.maps.OverlayView()
     CustomMarker.prototype.draw = function() {
-    	var self = this;
-    	var div = this.div;
+    	var self = this
+    	var div = this.div
     	if (!div) {
-    		div = this.div = document.createElement('div');
+    		div = this.div = document.createElement('div')
         var avatar = document.createElement('img')
         avatar.className = 'avatar --small'
         avatar.src = self.args.avatar
         div.appendChild(avatar)
-    		div.className = 'map__pin';
+    		div.className = 'map__pin'
     		if (typeof(self.args.marker_id) !== 'undefined') {
-    			div.dataset.marker_id = self.args.marker_id;
+    			div.dataset.marker_id = self.args.marker_id
     		}
-    		google.maps.event.addDomListener(div, "click", function(event) {
-    			google.maps.event.trigger(self, "click");
-    		});
-    		var panes = this.getPanes();
-    		panes.overlayMouseTarget.appendChild(div);
-        var me = this;
+    		google.maps.event.addDomListener(div, 'click', function(event) {
+    			google.maps.event.trigger(self, 'click')
+    		})
+    		var panes = this.getPanes()
+    		panes.overlayMouseTarget.appendChild(div)
+        var me = this
         google.maps.event.addDomListener(div, 'click', function() {
-          google.maps.event.trigger(me, 'click');
+          google.maps.event.trigger(me, 'click')
           panel.hidePanelsContaining('mission')
           panel.showPanel('mission'+div.getAttribute('data-marker_id'))
         })
     	}
-    	var point = this.getProjection().fromLatLngToDivPixel(this.latlng);
+    	var point = this.getProjection().fromLatLngToDivPixel(this.latlng)
     	if (point) {
-    		div.style.left = point.x + 'px';
-    		div.style.top = point.y + 'px';
+    		div.style.left = point.x + 'px'
+    		div.style.top = point.y + 'px'
     	}
-    };
+    }
     CustomMarker.prototype.remove = function() {
     	if (this.div) {
-    		this.div.parentNode.removeChild(this.div);
-    		this.div = null;
+    		this.div.parentNode.removeChild(this.div)
+    		this.div = null
     	}
-    };
+    }
     CustomMarker.prototype.getPosition = function() {
-    	return this.latlng;
-    };
+    	return this.latlng
+    }
 
     // User marker implementation
     UserMarker.prototype = new google.maps.OverlayView()
@@ -509,14 +525,14 @@ exports.init = function() {
         div.className = 'map__user'
       }
       google.maps.event.addDomListener(div, 'click', function(event) {
-        google.maps.event.trigger(self, 'click');
+        google.maps.event.trigger(self, 'click')
       })
       var panes = this.getPanes()
       panes.overlayImage.appendChild(div)
       var point = this.getProjection().fromLatLngToDivPixel(this.latlng)
       if (point) {
-    		div.style.left = point.x + 'px';
-    		div.style.top = point.y + 'px';
+    		div.style.left = point.x + 'px'
+    		div.style.top = point.y + 'px'
     	}
     }
     UserMarker.prototype.remove = function() {
@@ -537,57 +553,100 @@ exports.init = function() {
 }
 
 function CustomMarker(latlng, map, args) {
-	this.latlng = latlng;
-	this.args = args;
-	this.setMap(map);
+	this.latlng = latlng
+	this.args = args
+	this.setMap(map)
 }
 
 function UserMarker(latlng, map, args) {
-	this.latlng = latlng;
-	this.args = args;
-	this.setMap(map);
+	this.latlng = latlng
+	this.args = args
+	this.setMap(map)
 }
 
 function addSampleMarkers() {
   // add markers
   Array.prototype.forEach.call(sampleMarkers, function(marker, i) {
     var overlay = new CustomMarker(
-      new google.maps.LatLng(latitude + marker.offsetLatitude, longitude + marker.offsetLongitude),
+      new google.maps.LatLng(defaultLocation.latitude + marker.offsetLatitude, defaultLocation.longitude + marker.offsetLongitude),
       miniheroMap,
       {
         marker_id: i+1,
         avatar: marker.avatar
       }
     )
-    overlays.push(overlay)
+    pins.push(overlay)
   })
 }
 
 function clearSampleMarkers() {
-  while(overlays[0]) {
-    overlays.pop().setMap(null)
+  while(pins[0]) {
+    pins.pop().setMap(null)
+  }
+}
+
+function addMissionMarker() {
+  var mission = document.getElementById('mission')
+  if (mission && !missionPin) {
+    var overlay = new CustomMarker(
+      new google.maps.LatLng(missionLocation.latitude, missionLocation.longitude),
+      miniheroMap,
+      {
+        marker_id: mission.getAttribute('data-mission-id'),
+        avatar: document.getElementById('creator-avatar').getAttribute('src')
+      }
+    )
+    missionPin = overlay
   }
 }
 
 exports.setUserPosition = function(lat, lng) {
+  userLocation.latitude = lat
+  userLocation.longitude = lng
   new UserMarker(
     new google.maps.LatLng(lat, lng),
     miniheroMap
   )
   // Redraw the sample markers
   clearSampleMarkers()
-  latitude = lat
-  longitude = lng
   addSampleMarkers(lat, lng)
-  panMapToCenter()
+  if (!missionLocation.latitude) {
+    // Only initiate a pan if the user isn't looking at a mission
+    panMapToCenter()
+  }
 }
 
-function panMapToCenter(event) {
+function panMapToCenter(event = null, latitude = missionLocation.latitude || userLocation.latitude || defaultLocation.latitude, longitude = missionLocation.longitude || userLocation.longitude || defaultLocation.longitude) {
   if (window.innerWidth < 900) {
     miniheroMap.setCenter({lat: latitude, lng: longitude})
     miniheroMap.panBy(0, 50)
   } else if (window.innerWidth >= 900) {
     miniheroMap.setCenter({lat: latitude, lng: longitude})
     miniheroMap.panBy(150, 0)
+  }
+}
+
+exports.updateIfNeeded = function() {
+  if (miniheroMap) {
+    // console.log('about to update')
+    if (document.getElementById('missions')) {
+      if (Locator.getLocationCookie()) {
+        // console.log('show user location')
+        // Show missions around the user location.
+        panMapToCenter(null, userLocation.latitude, userLocation.longitude)
+      } else {
+        // console.log('show default location')
+        // Show missions around the default location.
+        panMapToCenter(null, defaultLocation.latitude, defaultLocation.longitude)
+      }
+    }
+    if (document.getElementById('mission')) {
+      // console.log('show mission location')
+      // Show the mission.
+      addMissionMarker()
+      panMapToCenter(null, missionLocation.latitude, missionLocation.longitude)
+    }
+  } else {
+    // console.log('no miniheroMap defined')
   }
 }

@@ -34,8 +34,8 @@ function getLocation(e) {
 
 function displayUserPosition(position) {
   Helper.addClass(document.body, 'user-allowed-location')
-  // Don't show the sidebar locator panels for repeat users
   if (!getLocationCookie()) {
+    // Only show sidebar locator panels for users without a set location cookie.
     panel.hidePanel('location-matching')
     panel.showPanel('location-matched')
     showOnboardingIfNotSignedIn()

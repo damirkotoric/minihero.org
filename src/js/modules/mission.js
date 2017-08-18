@@ -4,34 +4,20 @@ const panel = require('../modules/panel')
 const Helper = require('../utilities/helper')
 
 exports.init = function() {
-  var missionOpenLinks = document.querySelectorAll('a.mission__header')
-  Array.prototype.forEach.call(missionOpenLinks, function(el, i) {
-    el.addEventListener('click', openMission)
-  })
-  var missionCloseLinks = document.querySelectorAll('a[data-mission-close]')
-  Array.prototype.forEach.call(missionCloseLinks, function(el, i) {
-    el.addEventListener('click', closeMission)
-  })
   var missionJoinLinks = document.querySelectorAll('a[data-mission-join]')
   Array.prototype.forEach.call(missionJoinLinks, function(el, i) {
     el.addEventListener('click', joinMission)
   })
-  document.querySelector('a[data-mission-create]').addEventListener('click', showMissionCreationForm)
-  document.querySelector('a[data-mission-create-send]').addEventListener('click', createMission)
-}
 
-function openMission(e) {
-  e.preventDefault()
-  panel.hidePanel('missions')
-  var href = e.currentTarget.getAttribute('href')
-  var missionIndex = Number(href.substring(href.lastIndexOf('/') + 1))
-  panel.showPanel('mission' + missionIndex)
-}
+  var missionTitle = document.getElementById('mission_title')
+  if (missionTitle) {
+    missionTitle.focus()
+  }
 
-function closeMission(e) {
-  e.preventDefault()
-  panel.hidePanelsContaining('mission')
-  panel.showPanel('missions')
+  var missionCreateSendLink = document.querySelector('a[data-mission-create-send]')
+  if (missionCreateSendLink) {
+    missionCreateSendLink.addEventListener('click', createMission)
+  }
 }
 
 function joinMission(e) {
@@ -45,12 +31,54 @@ function joinMission(e) {
   }
 }
 
-function showMissionCreationForm(e) {
-  e.preventDefault()
-  panel.hidePanelsContaining('mission')
-  panel.showPanel('mission-new')
-}
-
 function createMission(e) {
   e.preventDefault()
+
+  // Check that all form elements have been properly entered
+  var missionTitle = document.getElementById('mission_title')
+  if (missionTitle.value === '') {
+    return
+  }
+  var missionDescription = document.getElementById('mission_description')
+  if (missionDescription.value === '') {
+    return
+  }
+  var missionLocation = document.getElementById('mission_location')
+  if (missionLocation.value === '') {
+    return
+  }
+  var missionDate = document.getElementById('mission_date')
+  if (missionDate.value === '') {
+    return
+  }
+  var missionTime = document.getElementById('mission_time')
+  if (missionTime.selectedIndex === 0) {
+    return
+  }
+
+  // Send AJAX request.
+  Helper.addClass(e.currentTarget, '--loading')
+  var mission = {}
+  mission.title = missionTitle.value.trim()
+  mission.description = missionDescription.value.trim()
+  mission.location = {}
+  mission.location.latitude = 39.0392
+  mission.location.longitude = 125.7625
+  mission.date = missionDate.value.trim() + 'T' + missionTime.value + ':00.000Z'
+
+  var request = new XMLHttpRequest()
+  request.open('POST', '/mission/new', true)
+  request.setRequestHeader('Content-type', 'application/json')
+  request.onload = function() {
+    var createdMission = JSON.parse(request.responseText)
+    // Done
+    if (request.readyState == 4 && request.status == 200) {
+      window.location = '/mission/' + createdMission.missionId
+    }
+  }
+  request.onerror = function() {
+    // There was a connection error of some sort
+    console.log('connection error')
+  }
+  request.send(JSON.stringify(mission))
 }
