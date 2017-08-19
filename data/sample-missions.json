@@ -1,0 +1,348 @@
+{
+  "missions": [
+    {
+      "missionId": "sample-1",
+      "title": "Volunteer at the dog shelter",
+      "description": "Come play with some of the cats, or take some of our puppies for a walk.",
+      "date": "Sunday, September 3 at 10:00",
+      "participants": [
+        {
+          "imageUrl": "/img/temp-yasmin.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-peter.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-tim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-1.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-2.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-3.jpg"
+        }
+      ],
+      "location": {
+        "latitudeOffset": 0.003,
+        "longitudeOffset": 0.024
+      },
+      "creator": {
+        "imageUrl": "/img/temp-cesar.jpg",
+        "fb": {
+          "firstName": "Cesar",
+          "lastName": "Milan"
+        }
+      }
+    },
+    {
+      "missionId": "sample-2",
+      "title": "Help your local soup kitchen",
+      "description": "Come and enjoy being bossed around by yours-truly, and helping those less priviliged.",
+      "date": "Saturday, September 9 at 8:00",
+      "participants": [
+        {
+          "imageUrl": "/img/temp-jim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-zidane.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-tim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-1.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-2.jpg"
+        }
+      ],
+      "location": {
+        "latitudeOffset": 0.02,
+        "longitudeOffset": 0.015
+      },
+      "creator": {
+        "imageUrl": "/img/temp-gordon.jpg",
+        "fb": {
+          "firstName": "Gordon",
+          "lastName": "Ramsay"
+        }
+      }
+    },
+    {
+      "missionId": "sample-3",
+      "title": "Paint the senior people's home",
+      "description": "Okay, so here's how we need your help: We need Miniheros ready to help us paint the senior people's home. The place has received a government grant for an expension that it desperately needs. But, in turn the maintenance budget has been cut, and we need your help to put some warmth back in the place. More than anything it's to show the senior citizens that their community is thinking of them and that we care. So whatcha waiting for? Roll up your sleeves and come along. There will be a free lunch served to all participating Miniheros.",
+      "date": "Sunday, September 10 at 10:00",
+      "participants": [
+        {
+          "imageUrl": "/img/temp-5.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-ibra.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-tim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-1.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-2.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-keanu.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-jack.jpg"
+        }
+      ],
+      "location": {
+        "latitudeOffset": 0.02,
+        "longitudeOffset": -0.04
+      },
+      "creator": {
+        "imageUrl": "/img/temp-ellen.jpg",
+        "fb": {
+          "firstName": "Ellen",
+          "Degeneres": "Degeneres"
+        }
+      }
+    },
+    {
+      "missionId": "sample-4",
+      "title": "Clean up our neighbourhood",
+      "description": "Hoooooowwdyy!!! Would you believe it? Our place needs some cleaning up. Get out of your lazy shorts and help us clean it up! I'll bring the plastic gloves. Feel free to bring a stick, spear or whatever else you have lying around. Much love, Jim 😙",
+      "date": "Wednesday, September 13 at 17:00",
+      "participants": [
+        {
+          "imageUrl": "/img/temp-ibra.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-tim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-1.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-2.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-keanu.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-jack.jpg"
+        }
+      ],
+      "location": {
+        "latitudeOffset": -0.03,
+        "longitudeOffset": -0.05
+      },
+      "creator": {
+        "imageUrl": "/img/temp-jim.jpg",
+        "fb": {
+          "firstName": "Jim",
+          "lastName": "Carrey"
+        }
+      }
+    },
+    {
+      "missionId": "sample-5",
+      "title": "Help new immigrants settle in",
+      "description": "Hello Miniheros! We're hosting a meet-n-greet with newly immigrated families and people who can help them out. You can help people pay bills, explain documents they received and help them with questions they have. It's a pretty casual affair and you can stay as long as you feel like. There's free drinks and snacks provided. There will be a sign at the bottom of the building guiding you to the space where either I or one of my assistants will be waiting to greet you.",
+      "date": "Thursday, September 14 at 19:00",
+      "participants": [
+        {
+          "imageUrl": "/img/temp-tim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-ibra.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-2.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-keanu.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-jack.jpg"
+        }
+      ],
+      "location": {
+        "latitudeOffset": -0.02,
+        "longitudeOffset": -0.02
+      },
+      "creator": {
+        "imageUrl": "/img/temp-angelina.jpg",
+        "fb": {
+          "firstName": "Angelina",
+          "lastName": "Jolie"
+        }
+      }
+    },
+    {
+      "missionId": "sample-6",
+      "title": "Football for Syrian refugees",
+      "description": "Let's get together and play a friendly match to welcome refugees into our community. Everyone welcome. I'll bring the goals and a ball. Just bring your shoes and your best skills. See you there!",
+      "date": "Saturday, September 2 at 11:00",
+      "participants": [
+        {
+          "imageUrl": "/img/temp-yasmin.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-peter.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-tim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-1.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-2.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-3.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-4.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-5.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-angelina.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-jim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-keanu.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-cesar.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-ellen.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-gordon.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-ibra.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-zidane.jpg"
+        }
+      ],
+      "location": {
+        "latitudeOffset": -0.01,
+        "longitudeOffset": 0.01
+      },
+      "creator": {
+        "imageUrl": "/img/temp-ibra.jpg",
+        "fb": {
+          "firstName": "Zlatan",
+          "lastName": "Ibrahimović"
+        }
+      }
+    },
+    {
+      "missionId": "sample-7",
+      "title": "Rock for peace and luuuv 🤘",
+      "description": "Musicians! There's too much tension in the air. Let's clear it up with some music. My band will play a little bit at the start, and then it's open mic night. We need at least 20 musicians to count on making this happen. If you're not a musician that's cool too. Come along and tell everyone about it!",
+      "date": "Saturday, September 2 at 19:00",
+      "participants": [
+        {
+          "imageUrl": "/img/temp-yasmin.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-peter.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-tim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-1.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-2.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-3.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-4.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-5.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-angelina.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-jim.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-keanu.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-cesar.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-ellen.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-gordon.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-ibra.jpg"
+        }
+      ],
+      "location": {
+        "latitudeOffset": -0.005,
+        "longitudeOffset": -0.05
+      },
+      "creator": {
+        "imageUrl": "/img/temp-jack.jpg",
+        "fb": {
+          "firstName": "Jack",
+          "lastName": "Black"
+        }
+      }
+    },
+    {
+      "missionId": "sample-8",
+      "title": "Let's take a walk together",
+      "description": "No huge agenda. Just a little walk between strangers and sharing some stories. We'll just pick any random direction and see where we end up.",
+      "date": "Monday, September 11 at 14:00",
+      "participants": [
+        {
+          "imageUrl": "/img/temp-2.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-3.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-4.jpg"
+        },
+        {
+          "imageUrl": "/img/temp-5.jpg"
+        }
+      ],
+      "location": {
+        "latitudeOffset": 0.01,
+        "longitudeOffset": -0.06
+      },
+      "creator": {
+        "imageUrl": "/img/temp-keanu.jpg",
+        "fb": {
+          "firstName": "Keanu",
+          "lastName": "Reeves"
+        }
+      }
+    }
+  ]
+}
