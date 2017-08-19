@@ -66,10 +66,13 @@ function createMission(e) {
   mission.location.longitude = 125.7625
   mission.date = missionDate.value.trim() + 'T' + missionTime.value + ':00.000Z'
 
+  console.log('mission' + mission)
+
   var request = new XMLHttpRequest()
   request.open('POST', '/mission/new', true)
   request.setRequestHeader('Content-type', 'application/json')
   request.onload = function() {
+    console.log('response text' + request.responseText)
     var createdMission = JSON.parse(request.responseText)
     // Done
     if (request.readyState == 4 && request.status == 200) {

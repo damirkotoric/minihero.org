@@ -15,4 +15,10 @@ config.server = {
   'sessionSecret': 'Minihero FTW!'
 }
 
+config.defaultLocation = {
+  // The default location shown to signed out users on /missions is Amsterdam!
+  latitude: 52.370216,
+  longitude: 4.895168
+}
+
 module.exports = config

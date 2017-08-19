@@ -5723,7 +5723,7 @@ const Helper = require('./utilities/helper')
 
 // Document ready handler
 if (document.attachEvent ? document.readyState === 'complete' : document.readyState !== 'loading') {
-  fn()
+  init()
 } else {
   document.addEventListener('DOMContentLoaded', init)
 }
@@ -5817,62 +5817,24 @@ exports.init = function() {
 },{"../utilities/helper":11}],7:[function(require,module,exports){
 'use strict'
 
+// On the map there are a number of possible states:
+// 1. Location is shared.
+//    1a. If missions nearby user's location, show mission pins around user's location (and don't show sample mission pins).
+//    1b. If no missions nearby user's location, show sample mission pins around user's location.
+// 2. Location not shared.
+//    2a. If missions nearby default location, show mission pins aroud default location (and don't show sample mission pins).
+//    2b. If no missions nearby default location, show sample mission pins around default location.
+// (Whether the user is signed in or not is irrelevant for the map display, because the location is retrieved using cookies.)
+
 const panel = require('./panel.js')
 const Helper = require('../utilities/helper')
 const Locator = require('../utilities/locator')
 
-var defaultLocation = {
-  // The default location shown to signed out users: Amsterdam!
-  latitude: 52.370216,
-  longitude: 4.895168
-}
 var missionLocation = {}
 var missionPin
 var userLocation = {}
 var miniheroMap
 var pins = []
-var sampleMarkers = [
-  {
-    'offsetLatitude': 0.003,
-    'offsetLongitude': 0.024,
-    'avatar': '/img/temp-cesar.jpg'
-  },
-  {
-    'offsetLatitude': 0.02,
-    'offsetLongitude': 0.015,
-    'avatar': '/img/temp-gordon.jpg'
-  },
-  {
-    'offsetLatitude': 0.02,
-    'offsetLongitude': -0.04,
-    'avatar': '/img/temp-ellen.jpg'
-  },
-  {
-    'offsetLatitude': -0.03,
-    'offsetLongitude': -0.05,
-    'avatar': '/img/temp-jim.jpg'
-  },
-  {
-    'offsetLatitude': -0.02,
-    'offsetLongitude': -0.02,
-    'avatar': '/img/temp-angelina.jpg'
-  },
-  {
-    'offsetLatitude': -0.01,
-    'offsetLongitude': 0.01,
-    'avatar': '/img/temp-ibra.jpg'
-  },
-  {
-    'offsetLatitude': -0.005,
-    'offsetLongitude': -0.05,
-    'avatar': '/img/temp-jack.jpg'
-  },
-  {
-    'offsetLatitude': 0.01,
-    'offsetLongitude': -0.06,
-    'avatar': '/img/temp-keanu.jpg'
-  },
-]
 
 var styles = {
   default: null,
@@ -6253,19 +6215,10 @@ exports.drawMap = function() {
     userLocation.longitude = cookieLocation.longitude
   }
 
-  // Check if we're on a mission page with its own geocoordinates.
-  // Mission location takes precedence over user location when
-  // rendering the map.
-  var mission = document.querySelector('.mission')
-  if (mission) {
-    missionLocation.latitude = Number(mission.getAttribute('data-location-latitude'))
-    missionLocation.longitude = Number(mission.getAttribute('data-location-longitude'))
-  }
-
   if (miniheroMap) {
     // draw map
     miniheroMap = new google.maps.Map(miniheroMap, {
-      center: {lat: missionLocation.latitude || userLocation.latitude, lng: missionLocation.longitude || userLocation.longitude},
+      center: {lat: missionLocation.latitude || userLocation.latitude || defaultLocation.latitude, lng: missionLocation.longitude || userLocation.longitude || defaultLocation.longitude},
       zoom: 13,
       mapTypeControl: false,
       maxZoom: 15,
@@ -6312,8 +6265,7 @@ exports.init = function() {
         var me = this
         google.maps.event.addDomListener(div, 'click', function() {
           google.maps.event.trigger(me, 'click')
-          panel.hidePanelsContaining('mission')
-          panel.showPanel('mission'+div.getAttribute('data-marker_id'))
+          window.location = '/mission/sample-' + div.getAttribute('data-marker_id')
         })
     	}
     	var point = this.getProjection().fromLatLngToDivPixel(this.latlng)
@@ -6382,18 +6334,50 @@ function UserMarker(latlng, map, args) {
 }
 
 function addSampleMarkers() {
-  // add markers
-  Array.prototype.forEach.call(sampleMarkers, function(marker, i) {
-    var overlay = new CustomMarker(
-      new google.maps.LatLng(defaultLocation.latitude + marker.offsetLatitude, defaultLocation.longitude + marker.offsetLongitude),
-      miniheroMap,
-      {
-        marker_id: i+1,
-        avatar: marker.avatar
+  var missions = document.getElementById('missions')
+  if (missions) {
+    // Decide if sample markers need to be added.
+    // TODO:
+    // 1. Detect whether there are nearby missions in Node.js.
+    // 2. Pass that information through to the HTML.
+    // 3. Using front-end JS detect whether this information is present.
+    // 4. Code up the if statement below.
+    // 5. Pray for it to work.
+    var nearbyMissions = false
+    if (nearbyMissions) {
+      // Nearby missions. Don't add sample markers.
+      console.log('Nearby missions.')
+      return
+    } else {
+      // No nearby missions. Add sample markers.
+      console.log('No nearby missions.')
+      // First, detect whether to add the sample markers around user's location or default location.
+      var baseLatitude
+      var baseLongitude
+      if (userLocation.latitude) {
+        // Location is shared. Set sample markers around user's location.
+        console.log('user location known')
+        baseLatitude = userLocation.latitude
+        baseLongitude = userLocation.longitude
+      } else {
+        // Location not shared. Set sample markers around default location.
+        console.log('user location unknown')
+        baseLatitude = defaultLocation.latitude
+        baseLongitude = defaultLocation.longitude
       }
-    )
-    pins.push(overlay)
-  })
+      Array.prototype.forEach.call(window.sampleMissions, function(sampleMission, i) {
+        var overlay = new CustomMarker(
+          new google.maps.LatLng(baseLatitude + Number(sampleMission.location.latitudeOffset), baseLongitude + Number(sampleMission.location.longitudeOffset)),
+          miniheroMap,
+          {
+            marker_id: i + 1,
+            avatar: sampleMission.creator.imageUrl
+          }
+        )
+        pins.push(overlay)
+      })
+    }
+  }
 }
 
 function clearSampleMarkers() {
@@ -6426,7 +6410,7 @@ exports.setUserPosition = function(lat, lng) {
   )
   // Redraw the sample markers
   clearSampleMarkers()
-  addSampleMarkers(lat, lng)
+  addSampleMarkers()
   if (!missionLocation.latitude) {
     // Only initiate a pan if the user isn't looking at a mission
     panMapToCenter()
@@ -6444,12 +6428,21 @@ function panMapToCenter(event = null, latitude = missionLocation.latitude || use
 }
 
 exports.updateIfNeeded = function() {
+  // Check if we're on a mission page with its own geocoordinates.
+  // Mission location takes precedence over user location when
+  // rendering the map.
+  var mission = document.querySelector('.mission')
+  if (mission) {
+    missionLocation.latitude = Number(mission.getAttribute('data-location-latitude'))
+    missionLocation.longitude = Number(mission.getAttribute('data-location-longitude'))
+  }
   if (miniheroMap) {
     // console.log('about to update')
     if (document.getElementById('missions')) {
       if (Locator.getLocationCookie()) {
         // console.log('show user location')
         // Show missions around the user location.
+        addSampleMarkers()
         panMapToCenter(null, userLocation.latitude, userLocation.longitude)
       } else {
         // console.log('show default location')
@@ -6464,7 +6457,7 @@ exports.updateIfNeeded = function() {
       panMapToCenter(null, missionLocation.latitude, missionLocation.longitude)
     }
   } else {
-    // console.log('no miniheroMap defined')
+    console.log('no miniheroMap defined')
   }
 }
 
@@ -6537,10 +6530,13 @@ function createMission(e) {
   mission.location.longitude = 125.7625
   mission.date = missionDate.value.trim() + 'T' + missionTime.value + ':00.000Z'
 
+  console.log('mission' + mission)
+
   var request = new XMLHttpRequest()
   request.open('POST', '/mission/new', true)
   request.setRequestHeader('Content-type', 'application/json')
   request.onload = function() {
+    console.log('response text' + request.responseText)
     var createdMission = JSON.parse(request.responseText)
     // Done
     if (request.readyState == 4 && request.status == 200) {

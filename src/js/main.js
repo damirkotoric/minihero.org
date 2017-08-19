@@ -12,7 +12,7 @@ const Helper = require('./utilities/helper')
 
 // Document ready handler
 if (document.attachEvent ? document.readyState === 'complete' : document.readyState !== 'loading') {
-  fn()
+  init()
 } else {
   document.addEventListener('DOMContentLoaded', init)
 }

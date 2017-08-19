@@ -1,7 +1,8 @@
 extends _map-template
 
 block vars
-  - var title= mission.title
+  if mission
+    - var title= mission.title
 
 block sidebarContent
   .panel.--visible(id='mission' data-mission-id=mission.missionId)

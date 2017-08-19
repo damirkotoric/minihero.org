@@ -13,7 +13,8 @@ var UserSchema = new mongoose.Schema({
     longitude: Number
   },
   agreedToTerms: { type: Boolean, default: false },
-  agreedToTermsDate: Date
+  agreedToTermsDate: Date,
+  createdMissionIds: Array
 })
 
 var User = mongoose.model('User', UserSchema)
