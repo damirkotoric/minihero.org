@@ -4,10 +4,6 @@ const Helper = require('../utilities/helper')
 
 exports.init = function() {
   if (document.getElementById('sidebar')) {
-    document.querySelector('.sidebar__preloader').addEventListener('transitionend', function (e) {
-      Helper.addClass(e.target, '--hidden')
-    }, false)
-    Helper.addClass(document.querySelector('.sidebar'), '--ready')
     if (document.querySelector('[data-panel-close]')) {
       document.querySelector('[data-panel-close]').addEventListener('click', closePanel)
     }

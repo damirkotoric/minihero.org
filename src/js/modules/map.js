@@ -1,11 +1,11 @@
 'use strict'
 
 // On the map there are a number of possible states:
-// 1. Location is shared.
+// 1. Location is known.
 //    1a. If missions nearby user's location, show mission pins around user's location (and don't show sample mission pins).
 //    1b. If no missions nearby user's location, show sample mission pins around user's location.
-// 2. Location not shared.
-//    2a. If missions nearby default location, show mission pins aroud default location (and don't show sample mission pins).
+// 2. Location not known.
+//    2a. If missions nearby default location, show mission pins around default location (and don't show sample mission pins).
 //    2b. If no missions nearby default location, show sample mission pins around default location.
 // (Whether the user is signed in or not is irrelevant for the map display, because the location is retrieved using cookies.)
 
@@ -14,10 +14,10 @@ const Helper = require('../utilities/helper')
 const Locator = require('../utilities/locator')
 
 var missionLocation = {}
-var missionPin
 var userLocation = {}
 var miniheroMap
 var pins = []
+var userPin
 
 var styles = {
   default: null,
@@ -448,7 +448,7 @@ exports.init = function() {
         var me = this
         google.maps.event.addDomListener(div, 'click', function() {
           google.maps.event.trigger(me, 'click')
-          window.location = '/mission/sample-' + div.getAttribute('data-marker_id')
+          window.location = '/mission/' + div.getAttribute('data-marker_id')
         })
     	}
     	var point = this.getProjection().fromLatLngToDivPixel(this.latlng)
@@ -519,32 +519,22 @@ function UserMarker(latlng, map, args) {
 function addSampleMarkers() {
   var missions = document.getElementById('missions')
   if (missions) {
-    // Decide if sample markers need to be added.
-    // TODO:
-    // 1. Detect whether there are nearby missions in Node.js.
-    // 2. Pass that information through to the HTML.
-    // 3. Using front-end JS detect whether this information is present.
-    // 4. Code up the if statement below.
-    // 5. Pray for it to work.
+    clearAllMarkers()
     var nearbyMissions = false
     if (nearbyMissions) {
-      // Nearby missions. Don't add sample markers.
-      console.log('Nearby missions.')
+      // Nearby missions. Add markers.
       return
     } else {
       // No nearby missions. Add sample markers.
-      console.log('No nearby missions.')
       // First, detect whether to add the sample markers around user's location or default location.
       var baseLatitude
       var baseLongitude
       if (userLocation.latitude) {
         // Location is shared. Set sample markers around user's location.
-        console.log('user location known')
         baseLatitude = userLocation.latitude
         baseLongitude = userLocation.longitude
       } else {
         // Location not shared. Set sample markers around default location.
-        console.log('user location unknown')
         baseLatitude = defaultLocation.latitude
         baseLongitude = defaultLocation.longitude
       }
@@ -553,7 +543,7 @@ function addSampleMarkers() {
           new google.maps.LatLng(baseLatitude + Number(sampleMission.location.latitudeOffset), baseLongitude + Number(sampleMission.location.longitudeOffset)),
           miniheroMap,
           {
-            marker_id: i + 1,
+            marker_id: sampleMission.missionId,
             avatar: sampleMission.creator.imageUrl
           }
         )
@@ -563,7 +553,9 @@ function addSampleMarkers() {
   }
 }
 
-function clearSampleMarkers() {
+function clearAllMarkers() {
+  // Clears all markers including sample mission and mission pins, on individual mission pages and on /missions.
+  // This is the simplest way of ensuring that we never add a duplicate pin.
   while(pins[0]) {
     pins.pop().setMap(null)
   }
@@ -571,7 +563,8 @@ function clearSampleMarkers() {
 
 function addMissionMarker() {
   var mission = document.getElementById('mission')
-  if (mission && !missionPin) {
+  if (mission) {
+    clearAllMarkers()
     var overlay = new CustomMarker(
       new google.maps.LatLng(missionLocation.latitude, missionLocation.longitude),
       miniheroMap,
@@ -580,19 +573,20 @@ function addMissionMarker() {
         avatar: document.getElementById('creator-avatar').getAttribute('src')
       }
     )
-    missionPin = overlay
+    pins.push(overlay)
   }
 }
 
 exports.setUserPosition = function(lat, lng) {
   userLocation.latitude = lat
   userLocation.longitude = lng
-  new UserMarker(
-    new google.maps.LatLng(lat, lng),
-    miniheroMap
-  )
-  // Redraw the sample markers
-  clearSampleMarkers()
+  if (!userPin) {
+    userPin = new UserMarker(
+      new google.maps.LatLng(lat, lng),
+      miniheroMap
+    )
+  }
+  // Redraw the sample markers now that we have the user's location.
   addSampleMarkers()
   if (!missionLocation.latitude) {
     // Only initiate a pan if the user isn't looking at a mission
@@ -616,8 +610,19 @@ exports.updateIfNeeded = function() {
   // rendering the map.
   var mission = document.querySelector('.mission')
   if (mission) {
-    missionLocation.latitude = Number(mission.getAttribute('data-location-latitude'))
-    missionLocation.longitude = Number(mission.getAttribute('data-location-longitude'))
+    if (mission.getAttribute('data-is-sample-mission') === "yes") {
+      // For sample missions.
+      missionLocation.latitude = (userLocation.latitude || defaultLocation.latitude) + Number(mission.getAttribute('data-location-latitude-offset'))
+      missionLocation.longitude = (userLocation.longitude || defaultLocation.longitude) + Number(mission.getAttribute('data-location-longitude-offset'))
+    } else {
+      // For real missions.
+      missionLocation.latitude = Number(mission.getAttribute('data-location-latitude'))
+      missionLocation.longitude = Number(mission.getAttribute('data-location-longitude'))
+    }
+  } else {
+    // Remove any previous reference to missionLocation.
+    // In case a user navigates away form a mmission using Turbolinks.
+    missionLocation = {}
   }
   if (miniheroMap) {
     // console.log('about to update')
@@ -630,6 +635,7 @@ exports.updateIfNeeded = function() {
       } else {
         // console.log('show default location')
         // Show missions around the default location.
+        addSampleMarkers()
         panMapToCenter(null, defaultLocation.latitude, defaultLocation.longitude)
       }
     }

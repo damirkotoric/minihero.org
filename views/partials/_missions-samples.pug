@@ -1,0 +1,10 @@
+.missions__samples
+  label Below are some sample Missions to give you a taste of what's to come on Minihero:
+  ul
+    each sampleMission in sampleMissions
+      li
+        a.mission__header(href='/mission/'+sampleMission.missionId)
+          img.avatar(src=sampleMission.creator.imageUrl)
+          div
+            h2= sampleMission.title
+            span by #{sampleMission.creator.fb.firstName} #{sampleMission.creator.fb.lastName}

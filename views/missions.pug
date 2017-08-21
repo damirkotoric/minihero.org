@@ -3,19 +3,20 @@ extends _map-template
 block vars
   - var title= "Volunteering Missions"
 
-block sidebarContent 
-  if !nearbyMissions
-    script.
-      window.sampleMissions = !{JSON.stringify(sampleMissions)}
-      window.defaultLocation = !{JSON.stringify(defaultLocation)}
+//- See /src/js/modules/map.js for details of logic behind rendering.
+block sidebarContent
+  script.
+    window.missions = !{JSON.stringify(missions)}
+    window.sampleMissions = !{JSON.stringify(sampleMissions)}
+    window.defaultLocation = !{JSON.stringify(defaultLocation)}
   .panel.--visible#missions
     .missions
       .missions__new
         span Got a blissful idea for the good of humankind?
         a.button(href='/mission/new' data-mission-create) Create a Mission
-      if user
-        //- User is signed in. Show user's created missions.
-        if user.createdMissionIds.length > 0
+      if cookies.latitude
+        //- 1. Location is known.
+        if createdMissions
           .missions__my
             label Minihero Missions I created:
             ul
@@ -26,22 +27,18 @@ block sidebarContent
                     div
                       h2= createdMission.title
                       span by #{user.fb.firstName} #{user.fb.lastName}
-        //- No nearby missions. Show empty state.
-        .missions__empty
-          .modal
-            div
-              img(src='/img/icon-gandhi.svg' alt='')
-              h1 Be the change#[br] you wish to see in the world.
-              p Currently there are no Minihero missions near you, but you can kick things off by creating one yourself. #[a(href='/mission/new') Create a Mission.]
+        if missions
+          //- 1a. If missions nearby user's location.
+          include partials/_missions-nearby
+        else
+          //- 1b. If no missions nearby user's location.
+          include partials/_missions-empty
+          include partials/_missions-samples
       else
-        //- User is not signed in. Show sample missions.
-        .missions__samples
-          label Below are some sample Missions to give you a taste of what's to come on Minihero:
-          ul
-            each sampleMission in sampleMissions.missions
-              li
-                a.mission__header(href='/mission/'+sampleMission.missionId)
-                  img.avatar(src=sampleMission.creator.imageUrl)
-                  div
-                    h2= sampleMission.title
-                    span by #{sampleMission.creator.fb.firstName} #{sampleMission.creator.fb.lastName}
+        //- 2. Location not known.
+        if missions
+          //- 2a. If missions nearby default location.
+          include partials/_missions-nearby
+        else
+          //- 2b. If no missions nearby default location.
+          include partials/_missions-samples

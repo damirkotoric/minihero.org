@@ -5,7 +5,7 @@ const locator = require('../utilities/locator')
 const Helper = require('../utilities/helper')
 
 exports.init = function() {
-  // https://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
+  // A fix for https://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
   if (window.location.hash == '#_=_') {
     window.location.hash = ''
     history.pushState('', document.title, window.location.pathname)

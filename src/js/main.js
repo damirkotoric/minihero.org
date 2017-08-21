@@ -22,6 +22,7 @@ document.addEventListener('turbolinks:load', init)
 function init() {
   Turbolinks.start()
   gallery.init()
+  Locator.init()
   panel.init()
   mission.init()
   datepicker.init()

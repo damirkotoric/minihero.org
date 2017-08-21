@@ -1,18 +1,22 @@
 extends _map-template
 
 block vars
-  if mission
-    - var title= mission.title
+  - var title= mission.title
 
 block sidebarContent
+  script.
+    window.defaultLocation = !{JSON.stringify(defaultLocation)}
   .panel.--visible(id='mission' data-mission-id=mission.missionId)
-    .mission(data-location-latitude=mission.location.latitude data-location-longitude=mission.location.longitude)
+    .mission(data-is-sample-mission=(isSampleMission ? 'yes' : 'no') data-location-latitude=mission.location.latitude data-location-longitude=mission.location.longitude data-location-latitude-offset=mission.location.latitudeOffset data-location-longitude-offset=mission.location.longitudeOffset)
       .back
         a(href='/missions')
           i.material-icons arrow_back
           | Show all missions near me
       .mission__header
-        img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + creator.fb.facebookId + '/picture?type=large' alt='')
+        if isSampleMission
+          img#creator-avatar.avatar.--current(src=creator.imageUrl)
+        else  
+          img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + creator.fb.facebookId + '/picture?type=large' alt='')
         div
           h2= mission.title
           if mission.participants.length === 0

@@ -48,71 +48,160 @@ module.exports = function(passport) {
 	// GET /missions
 	// See /src/js/modules/map.js for documentation on the logic for fetching missions.
 	router.get('/missions', function(req, res, next) {
-		// TODO figure out how to detect nearby missions
-		var nearbyMissionsArray = []
-		var sampleMissionsObject = {}
-		var createdMissionsArray = []
 
-		if (req.cookies.latitude) {
-			// User location is known.
-			// TODO check for nearby missions and append to nearbyMissionsArray.
-
-			if (nearbyMissionsArray.length > 0) {
-				// Missions nearby the user's location.
-				// TODO retrieve the nearby missions and assign to nearbyMissionsArray.
-
+		var populateMissionsPromise = new Promise(function (resolve, reject) {
+			// Find nearby missions.
+			var coordinatesToLookFor = {}
+			if (req.cookies.latitude) {
+				// User location known.
+				coordinatesToLookFor = { latitude: req.cookies.latitude, longitude: req.cookies.longitude }
 			} else {
-				// Retrieve the sample missions.
-				sampleMissionsObject = JSON.parse(fs.readFileSync(__dirname + '/../data/sample-missions.json', 'utf8'))
+				// User location unknown.
+				coordinatesToLookFor = { latitude: config.defaultLocation.latitude, longitude: config.defaultLocation.longitude }
 			}
+			// Todo: Find missions near to coordinatesToLookFor.
+
+			var thereAreMissionsNearby = false
+			if (thereAreMissionsNearby) {
+				// Populate nearbyMissionsArray.
+				// resolve(nearbyMissionsArray)
+			} else {
+				// No missions nearby. Populate sampleMissionsObject.
+				var sampleMissionsObject = JSON.parse(fs.readFileSync(__dirname + '/../data/sample-missions.json', 'utf8'))
+				resolve(sampleMissionsObject)
+			}
+		})
+		.catch(function(error) {
+			console.log(error)
+		})
+
+		var populateCreatedMissionsPromise = new Promise(function (resolve, reject) {
 			if (req.user) {
-				// User signed in.
-				// Retrieve list of user's created missions including all the mission fields.
-				for (let createdMissionId of req.user.createdMissionIds) {
-					createdMissionsArray = []
-					// Fetch all created missions.
-					Mission.findOne(
-						{
-							_id: createdMissionId
-						},
-						function (err, mission) {
-							if (err) { throw err }
-							if (mission) {
-								res.status(200)
-								createdMissionsArray.push(mission)
-								if (createdMissionsArray.length === req.user.createdMissionIds.length) {
-									// User location is known, user is signed in.
-									return res.render('missions', { cookies: req.cookies, user: req.user, defaultLocation: config.defaultLocation, createdMissions: createdMissionsArray, sampleMissions: sampleMissionsObject, nearbyMissions: nearbyMissionsArray })
+				if (req.user.createdMissionIds.length > 0) {
+					// User signed in.
+					// Retrieve list of user's created missions including all the mission fields.
+					var createdMissionsArray = []
+					for (let createdMissionId of req.user.createdMissionIds) {
+						// Fetch all created missions.
+						Mission.findOne(
+							{
+								_id: createdMissionId
+							},
+							function (err, mission) {
+								if (err) { reject(err) }
+								if (mission) {
+									res.status(200)
+									createdMissionsArray.push(mission)
+									if (createdMissionsArray.length === req.user.createdMissionIds.length) {
+										resolve(createdMissionsArray)
+									}
+								} else {
+									resolve()
 								}
-							} else {
-								next()
 							}
-						}
-					)
+						)
+					}
+				} else {
+					resolve()
 				}
 			} else {
-				// User location is known, user not signed in.
-				return res.render('missions', { cookies: req.cookies, user: false, defaultLocation: config.defaultLocation, createdMissions: false, sampleMissions: sampleMissionsObject, nearbyMissions: nearbyMissionsArray })
+				resolve()
 			}
-		} else {
-			// User location not known.
-			if(nearbyMissionsArray.length > 0) {
-				// Missions nearby the default location.
-				// TODO retrieve the nearby missions and assign to nearbyMissionsArray.
+		})
+		.catch(function(error) {
+			console.log(error)
+		})
 
+		var populateJoinedMissionsPromise = new Promise(function (resolve, reject) {
+			if (req.user) {
+				var joinedMissionsArray = []
+				resolve()
 			} else {
-				// No missions nearby the default location.
-				// Retrieve the sample missions.
-				sampleMissionsObject = JSON.parse(fs.readFileSync(__dirname + '/../data/sample-missions.json', 'utf8'))
-				// User location not known, no nearby missions. Show sample missions around default location.
-				return res.render('missions', { cookies: req.cookies, user: false, defaultLocation: config.defaultLocation, createdMissions: false, sampleMissions: sampleMissionsObject, nearbyMissions: false })
+				resolve()
 			}
-		}
+		})
+		.catch(function(error) {
+			console.log(error)
+		})
+
+		Promise.all([
+			populateMissionsPromise,
+			populateCreatedMissionsPromise,
+			populateJoinedMissionsPromise
+		])
+		.then(function (returnedPromiseValues) {
+			return res.render(
+				'missions',
+				{
+					cookies: req.cookies,
+					user: req.user,
+					defaultLocation: config.defaultLocation,
+					missions: returnedPromiseValues[0].missions,
+					sampleMissions: returnedPromiseValues[0].sampleMissions,
+					createdMissions: returnedPromiseValues[1],
+					joinedMissions: returnedPromiseValues[2]
+				}
+			)
+		})
+		.catch(function(error) {
+		  console.log(error); // some coding error in handling happened
+		})
+	})
+
+	// GET Forwarding /missions/id to /mission/id
+	router.get('/missions/:id', function(req, res, next) {
+		res.redirect('/mission/'+req.params.id)
 	})
 
 	// GET /mission/new
 	router.get('/mission/new', function(req, res, next) {
 		return res.render('mission-new', { cookies: req.cookies, user: req.user })
+	})
+
+	// GET /mission/id
+	router.get('/mission/:id', function(req, res, next) {
+		if (req.params.id.includes('sample-')) {
+			// Sample mission. Grab the JSON data.
+			var sampleMissionsObject = JSON.parse(fs.readFileSync(__dirname + '/../data/sample-missions.json', 'utf8'))
+			var missionId = Number(req.params.id.replace('sample-', ''))
+			var sampleMission = sampleMissionsObject.sampleMissions[missionId - 1]
+			return res.render('mission', {
+				user: req.user,
+				defaultLocation: config.defaultLocation,
+				mission: sampleMission,
+				creator: sampleMission.creator,
+				isSampleMission: true
+			})
+		} else {
+			// Real mission. Retrieve it from the database.
+			Mission.findOne({ 'missionId': req.params.id }, function(err, mission) {
+				if (err) { throw err }
+				if (mission) {
+					var mission = mission.toObject() // https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
+					// Get info about the creator.
+					User.findOne({ '_id': mission.creatorId }, function(err, creator) {
+						if (err) { throw err }
+						if (creator) {
+							// Render it.
+							res.status(200)
+							// Format date.
+							mission.date = moment(mission.date).format('dddd, Do MMMM [at] HH:mm')
+						  return res.render('mission',
+								{
+									user: req.user,
+									defaultLocation: config.defaultLocation,
+									mission: mission,
+									creator: creator
+								})
+						} else {
+							next()
+						}
+					})
+				} else {
+					next()
+				}
+			})
+		}
 	})
 
 	// POST /mission/new
@@ -149,45 +238,6 @@ module.exports = function(passport) {
 			var err = new Error('You need to be logged in to create Missions.')
 			return next(err)
 		}
-	})
-
-	// GET /mission/id
-	router.get('/mission/:id', function(req, res, next) {
-		if (req.params.id.includes('sample-')) {
-			// Sample mission. Grab the JSON data.
-			var sampleMissions = JSON.parse(fs.readFileSync(__dirname + '/../data/sample-missions.json', 'utf8'))
-			var missionId = Number(req.params.id.replace('sample-', ''))
-			var sampleMission = sampleMissions.missions[missionId - 1]
-			return res.render('mission', { mission: sampleMission, creator: sampleMission.creator, isSampleMission: true })
-		} else {
-			// Real mission. Retrieve it from the database.
-			Mission.findOne({ 'missionId': req.params.id }, function(err, mission) {
-				if (err) { throw err }
-				if (mission) {
-					var mission = mission.toObject() // https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
-					// Get info about the creator.
-					User.findOne({ '_id': mission.creatorId }, function(err, creator) {
-						if (err) { throw err }
-						if (creator) {
-							// Render it.
-							res.status(200)
-							// Format date.
-							mission.date = moment(mission.date).format('dddd, Do MMMM [at] HH:mm')
-						  return res.render('mission', { user: req.user, mission: mission, creator: creator, isSampleMission: false })
-						} else {
-							next()
-						}
-					})
-				} else {
-					next()
-				}
-			})
-		}
-	})
-
-	// GET Forwarding /missions/id to /mission/id
-	router.get('/missions/:id', function(req, res, next) {
-		res.redirect('/mission/'+req.params.id)
 	})
 
 	// POST /agree

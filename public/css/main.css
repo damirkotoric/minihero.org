@@ -430,31 +430,6 @@ table {
   .sidebar > div {
     position: relative; }
 
-.sidebar__preloader {
-  background: white;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.5s; }
-  .sidebar__preloader > div {
-    height: 150px;
-    width: 150px;
-    border-radius: 100%;
-    border: 5px solid #A54E79;
-    animation: ball-scale-ripple 1s 0s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
-    animation-delay: 0.5s;
-    opacity: 0; }
-  .--ready .sidebar__preloader {
-    opacity: 0; }
-  .sidebar__preloader.--hidden {
-    display: none; }
-
 .sidebar__footer {
   color: white;
   font-size: 0.9rem;
@@ -660,228 +635,129 @@ table {
     border-color: white; }
 
 .map__pin:nth-child(1) {
-<<<<<<< Updated upstream
+  animation-delay: -6s; }
+  .map__pin:nth-child(1) .avatar {
+    animation-delay: -6s; }
+
+.map__pin:nth-child(2) {
   animation-delay: -11s; }
-  .map__pin:nth-child(1) .avatar {
+  .map__pin:nth-child(2) .avatar {
     animation-delay: -11s; }
-
-.map__pin:nth-child(2) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(2) .avatar {
-    animation-delay: -15s; }
-=======
-  animation-delay: -7s; }
-  .map__pin:nth-child(1) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(2) {
-  animation-delay: -7s; }
-  .map__pin:nth-child(2) .avatar {
-    animation-delay: -7s; }
->>>>>>> Stashed changes
 
 .map__pin:nth-child(3) {
-  animation-delay: -5s; }
+  animation-delay: -12s; }
   .map__pin:nth-child(3) .avatar {
-    animation-delay: -5s; }
+    animation-delay: -12s; }
 
 .map__pin:nth-child(4) {
-<<<<<<< Updated upstream
-  animation-delay: -10s; }
-  .map__pin:nth-child(4) .avatar {
-    animation-delay: -10s; }
-
-.map__pin:nth-child(5) {
-  animation-delay: -12s; }
-  .map__pin:nth-child(5) .avatar {
-    animation-delay: -12s; }
-
-.map__pin:nth-child(6) {
-  animation-delay: -7s; }
-  .map__pin:nth-child(6) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(7) {
-  animation-delay: -10s; }
-  .map__pin:nth-child(7) .avatar {
-    animation-delay: -10s; }
-
-.map__pin:nth-child(8) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(8) .avatar {
-    animation-delay: -15s; }
-
-.map__pin:nth-child(9) {
-  animation-delay: -7s; }
-  .map__pin:nth-child(9) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(10) {
-  animation-delay: -12s; }
-  .map__pin:nth-child(10) .avatar {
-    animation-delay: -12s; }
-=======
   animation-delay: -9s; }
   .map__pin:nth-child(4) .avatar {
     animation-delay: -9s; }
 
 .map__pin:nth-child(5) {
-  animation-delay: -8s; }
+  animation-delay: -15s; }
   .map__pin:nth-child(5) .avatar {
-    animation-delay: -8s; }
+    animation-delay: -15s; }
 
 .map__pin:nth-child(6) {
-  animation-delay: -13s; }
+  animation-delay: -11s; }
   .map__pin:nth-child(6) .avatar {
-    animation-delay: -13s; }
+    animation-delay: -11s; }
 
 .map__pin:nth-child(7) {
-  animation-delay: -13s; }
+  animation-delay: -4s; }
   .map__pin:nth-child(7) .avatar {
-    animation-delay: -13s; }
+    animation-delay: -4s; }
 
 .map__pin:nth-child(8) {
-  animation-delay: -6s; }
+  animation-delay: -2s; }
   .map__pin:nth-child(8) .avatar {
-    animation-delay: -6s; }
+    animation-delay: -2s; }
 
 .map__pin:nth-child(9) {
-  animation-delay: -6s; }
+  animation-delay: -11s; }
   .map__pin:nth-child(9) .avatar {
-    animation-delay: -6s; }
+    animation-delay: -11s; }
 
 .map__pin:nth-child(10) {
-  animation-delay: -3s; }
+  animation-delay: -1s; }
   .map__pin:nth-child(10) .avatar {
-    animation-delay: -3s; }
->>>>>>> Stashed changes
+    animation-delay: -1s; }
 
 .map__pin:nth-child(11) {
-  animation-delay: -14s; }
+  animation-delay: -1s; }
   .map__pin:nth-child(11) .avatar {
-    animation-delay: -14s; }
+    animation-delay: -1s; }
 
 .map__pin:nth-child(12) {
-<<<<<<< Updated upstream
-  animation-delay: -9s; }
+  animation-delay: -2s; }
   .map__pin:nth-child(12) .avatar {
-    animation-delay: -9s; }
+    animation-delay: -2s; }
 
 .map__pin:nth-child(13) {
-  animation-delay: -14s; }
+  animation-delay: -10s; }
   .map__pin:nth-child(13) .avatar {
-    animation-delay: -14s; }
+    animation-delay: -10s; }
 
 .map__pin:nth-child(14) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(14) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(15) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(15) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(16) {
-  animation-delay: -1s; }
-  .map__pin:nth-child(16) .avatar {
-    animation-delay: -1s; }
-
-.map__pin:nth-child(17) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(17) .avatar {
-    animation-delay: -15s; }
-
-.map__pin:nth-child(18) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(18) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(19) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(19) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(20) {
-  animation-delay: -8s; }
-  .map__pin:nth-child(20) .avatar {
-    animation-delay: -8s; }
-
-.map__pin:nth-child(21) {
-  animation-delay: -12s; }
-  .map__pin:nth-child(21) .avatar {
-    animation-delay: -12s; }
-=======
-  animation-delay: -6s; }
-  .map__pin:nth-child(12) .avatar {
-    animation-delay: -6s; }
-
-.map__pin:nth-child(13) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(13) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(14) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(14) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(15) {
-  animation-delay: -14s; }
-  .map__pin:nth-child(15) .avatar {
-    animation-delay: -14s; }
-
-.map__pin:nth-child(16) {
-  animation-delay: -8s; }
-  .map__pin:nth-child(16) .avatar {
-    animation-delay: -8s; }
-
-.map__pin:nth-child(17) {
-  animation-delay: -1s; }
-  .map__pin:nth-child(17) .avatar {
-    animation-delay: -1s; }
-
-.map__pin:nth-child(18) {
-  animation-delay: -12s; }
-  .map__pin:nth-child(18) .avatar {
-    animation-delay: -12s; }
-
-.map__pin:nth-child(19) {
   animation-delay: -11s; }
-  .map__pin:nth-child(19) .avatar {
+  .map__pin:nth-child(14) .avatar {
     animation-delay: -11s; }
 
-.map__pin:nth-child(20) {
+.map__pin:nth-child(15) {
+  animation-delay: -12s; }
+  .map__pin:nth-child(15) .avatar {
+    animation-delay: -12s; }
+
+.map__pin:nth-child(16) {
+  animation-delay: -9s; }
+  .map__pin:nth-child(16) .avatar {
+    animation-delay: -9s; }
+
+.map__pin:nth-child(17) {
+  animation-delay: -11s; }
+  .map__pin:nth-child(17) .avatar {
+    animation-delay: -11s; }
+
+.map__pin:nth-child(18) {
   animation-delay: -4s; }
-  .map__pin:nth-child(20) .avatar {
+  .map__pin:nth-child(18) .avatar {
     animation-delay: -4s; }
 
+.map__pin:nth-child(19) {
+  animation-delay: -4s; }
+  .map__pin:nth-child(19) .avatar {
+    animation-delay: -4s; }
+
+.map__pin:nth-child(20) {
+  animation-delay: -8s; }
+  .map__pin:nth-child(20) .avatar {
+    animation-delay: -8s; }
+
 .map__pin:nth-child(21) {
-  animation-delay: -7s; }
+  animation-delay: -9s; }
   .map__pin:nth-child(21) .avatar {
-    animation-delay: -7s; }
->>>>>>> Stashed changes
+    animation-delay: -9s; }
 
 .map__pin:nth-child(22) {
-  animation-delay: -2s; }
+  animation-delay: -14s; }
   .map__pin:nth-child(22) .avatar {
-    animation-delay: -2s; }
+    animation-delay: -14s; }
 
 .map__pin:nth-child(23) {
-  animation-delay: -15s; }
+  animation-delay: -9s; }
   .map__pin:nth-child(23) .avatar {
-    animation-delay: -15s; }
+    animation-delay: -9s; }
 
 .map__pin:nth-child(24) {
-<<<<<<< Updated upstream
-  animation-delay: -1s; }
+  animation-delay: -5s; }
   .map__pin:nth-child(24) .avatar {
-    animation-delay: -1s; }
+    animation-delay: -5s; }
 
 .map__pin:nth-child(25) {
-  animation-delay: -9s; }
+  animation-delay: -1s; }
   .map__pin:nth-child(25) .avatar {
-    animation-delay: -9s; }
+    animation-delay: -1s; }
 
 .map__pin:nth-child(26) {
   animation-delay: -4s; }
@@ -889,359 +765,194 @@ table {
     animation-delay: -4s; }
 
 .map__pin:nth-child(27) {
-  animation-delay: -5s; }
+  animation-delay: -2s; }
   .map__pin:nth-child(27) .avatar {
-    animation-delay: -5s; }
-=======
-  animation-delay: -8s; }
-  .map__pin:nth-child(24) .avatar {
-    animation-delay: -8s; }
-
-.map__pin:nth-child(25) {
-  animation-delay: -12s; }
-  .map__pin:nth-child(25) .avatar {
-    animation-delay: -12s; }
-
-.map__pin:nth-child(26) {
-  animation-delay: -14s; }
-  .map__pin:nth-child(26) .avatar {
-    animation-delay: -14s; }
-
-.map__pin:nth-child(27) {
-  animation-delay: -6s; }
-  .map__pin:nth-child(27) .avatar {
-    animation-delay: -6s; }
->>>>>>> Stashed changes
+    animation-delay: -2s; }
 
 .map__pin:nth-child(28) {
-  animation-delay: -13s; }
+  animation-delay: -2s; }
   .map__pin:nth-child(28) .avatar {
-    animation-delay: -13s; }
+    animation-delay: -2s; }
 
 .map__pin:nth-child(29) {
-<<<<<<< Updated upstream
-  animation-delay: -13s; }
-  .map__pin:nth-child(29) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(30) {
-  animation-delay: -4s; }
-  .map__pin:nth-child(30) .avatar {
-    animation-delay: -4s; }
-
-.map__pin:nth-child(31) {
-  animation-delay: -7s; }
-  .map__pin:nth-child(31) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(32) {
-  animation-delay: -6s; }
-  .map__pin:nth-child(32) .avatar {
-    animation-delay: -6s; }
-
-.map__pin:nth-child(33) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(33) .avatar {
-    animation-delay: -15s; }
-
-.map__pin:nth-child(34) {
-  animation-delay: -10s; }
-  .map__pin:nth-child(34) .avatar {
-    animation-delay: -10s; }
-
-.map__pin:nth-child(35) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(35) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(36) {
-  animation-delay: -3s; }
-  .map__pin:nth-child(36) .avatar {
-    animation-delay: -3s; }
-
-.map__pin:nth-child(37) {
-  animation-delay: -10s; }
-  .map__pin:nth-child(37) .avatar {
-    animation-delay: -10s; }
-
-.map__pin:nth-child(38) {
-  animation-delay: -4s; }
-  .map__pin:nth-child(38) .avatar {
-    animation-delay: -4s; }
-
-.map__pin:nth-child(39) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(39) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(40) {
-  animation-delay: -10s; }
-  .map__pin:nth-child(40) .avatar {
-    animation-delay: -10s; }
-
-.map__pin:nth-child(41) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(41) .avatar {
-    animation-delay: -5s; }
-
-.map__pin:nth-child(42) {
-  animation-delay: -11s; }
-  .map__pin:nth-child(42) .avatar {
-    animation-delay: -11s; }
-
-.map__pin:nth-child(43) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(43) .avatar {
-    animation-delay: -15s; }
-
-.map__pin:nth-child(44) {
-  animation-delay: -11s; }
-  .map__pin:nth-child(44) .avatar {
-    animation-delay: -11s; }
-
-.map__pin:nth-child(45) {
-  animation-delay: -3s; }
-  .map__pin:nth-child(45) .avatar {
-    animation-delay: -3s; }
-=======
-  animation-delay: -7s; }
-  .map__pin:nth-child(29) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(30) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(30) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(31) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(31) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(32) {
-  animation-delay: -14s; }
-  .map__pin:nth-child(32) .avatar {
-    animation-delay: -14s; }
-
-.map__pin:nth-child(33) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(33) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(34) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(34) .avatar {
-    animation-delay: -5s; }
-
-.map__pin:nth-child(35) {
-  animation-delay: -4s; }
-  .map__pin:nth-child(35) .avatar {
-    animation-delay: -4s; }
-
-.map__pin:nth-child(36) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(36) .avatar {
-    animation-delay: -15s; }
-
-.map__pin:nth-child(37) {
-  animation-delay: -6s; }
-  .map__pin:nth-child(37) .avatar {
-    animation-delay: -6s; }
-
-.map__pin:nth-child(38) {
   animation-delay: -1s; }
-  .map__pin:nth-child(38) .avatar {
+  .map__pin:nth-child(29) .avatar {
     animation-delay: -1s; }
 
-.map__pin:nth-child(39) {
+.map__pin:nth-child(30) {
+  animation-delay: -14s; }
+  .map__pin:nth-child(30) .avatar {
+    animation-delay: -14s; }
+
+.map__pin:nth-child(31) {
+  animation-delay: -14s; }
+  .map__pin:nth-child(31) .avatar {
+    animation-delay: -14s; }
+
+.map__pin:nth-child(32) {
+  animation-delay: -6s; }
+  .map__pin:nth-child(32) .avatar {
+    animation-delay: -6s; }
+
+.map__pin:nth-child(33) {
+  animation-delay: -12s; }
+  .map__pin:nth-child(33) .avatar {
+    animation-delay: -12s; }
+
+.map__pin:nth-child(34) {
   animation-delay: -13s; }
-  .map__pin:nth-child(39) .avatar {
+  .map__pin:nth-child(34) .avatar {
     animation-delay: -13s; }
 
-.map__pin:nth-child(40) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(40) .avatar {
-    animation-delay: -15s; }
+.map__pin:nth-child(35) {
+  animation-delay: -1s; }
+  .map__pin:nth-child(35) .avatar {
+    animation-delay: -1s; }
 
-.map__pin:nth-child(41) {
-  animation-delay: -11s; }
-  .map__pin:nth-child(41) .avatar {
-    animation-delay: -11s; }
+.map__pin:nth-child(36) {
+  animation-delay: -4s; }
+  .map__pin:nth-child(36) .avatar {
+    animation-delay: -4s; }
 
-.map__pin:nth-child(42) {
-  animation-delay: -3s; }
-  .map__pin:nth-child(42) .avatar {
-    animation-delay: -3s; }
-
-.map__pin:nth-child(43) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(43) .avatar {
-    animation-delay: -5s; }
-
-.map__pin:nth-child(44) {
+.map__pin:nth-child(37) {
   animation-delay: -7s; }
-  .map__pin:nth-child(44) .avatar {
+  .map__pin:nth-child(37) .avatar {
     animation-delay: -7s; }
 
+.map__pin:nth-child(38) {
+  animation-delay: -14s; }
+  .map__pin:nth-child(38) .avatar {
+    animation-delay: -14s; }
+
+.map__pin:nth-child(39) {
+  animation-delay: -4s; }
+  .map__pin:nth-child(39) .avatar {
+    animation-delay: -4s; }
+
+.map__pin:nth-child(40) {
+  animation-delay: -9s; }
+  .map__pin:nth-child(40) .avatar {
+    animation-delay: -9s; }
+
+.map__pin:nth-child(41) {
+  animation-delay: -2s; }
+  .map__pin:nth-child(41) .avatar {
+    animation-delay: -2s; }
+
+.map__pin:nth-child(42) {
+  animation-delay: -6s; }
+  .map__pin:nth-child(42) .avatar {
+    animation-delay: -6s; }
+
+.map__pin:nth-child(43) {
+  animation-delay: -1s; }
+  .map__pin:nth-child(43) .avatar {
+    animation-delay: -1s; }
+
+.map__pin:nth-child(44) {
+  animation-delay: -9s; }
+  .map__pin:nth-child(44) .avatar {
+    animation-delay: -9s; }
+
 .map__pin:nth-child(45) {
-  animation-delay: -8s; }
+  animation-delay: -9s; }
   .map__pin:nth-child(45) .avatar {
-    animation-delay: -8s; }
->>>>>>> Stashed changes
+    animation-delay: -9s; }
 
 .map__pin:nth-child(46) {
-  animation-delay: -7s; }
+  animation-delay: -10s; }
   .map__pin:nth-child(46) .avatar {
-    animation-delay: -7s; }
+    animation-delay: -10s; }
 
 .map__pin:nth-child(47) {
-<<<<<<< Updated upstream
-  animation-delay: -7s; }
+  animation-delay: -6s; }
   .map__pin:nth-child(47) .avatar {
-    animation-delay: -7s; }
+    animation-delay: -6s; }
 
 .map__pin:nth-child(48) {
-  animation-delay: -11s; }
+  animation-delay: -3s; }
   .map__pin:nth-child(48) .avatar {
-    animation-delay: -11s; }
-=======
-  animation-delay: -4s; }
-  .map__pin:nth-child(47) .avatar {
-    animation-delay: -4s; }
-
-.map__pin:nth-child(48) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(48) .avatar {
-    animation-delay: -5s; }
->>>>>>> Stashed changes
+    animation-delay: -3s; }
 
 .map__pin:nth-child(49) {
-  animation-delay: -6s; }
+  animation-delay: -13s; }
   .map__pin:nth-child(49) .avatar {
-    animation-delay: -6s; }
+    animation-delay: -13s; }
 
 .map__pin:nth-child(50) {
-<<<<<<< Updated upstream
-  animation-delay: -4s; }
+  animation-delay: -1s; }
   .map__pin:nth-child(50) .avatar {
-    animation-delay: -4s; }
-=======
-  animation-delay: -8s; }
-  .map__pin:nth-child(50) .avatar {
-    animation-delay: -8s; }
->>>>>>> Stashed changes
+    animation-delay: -1s; }
 
 .map__pin:nth-child(51) {
-  animation-delay: -11s; }
+  animation-delay: -7s; }
   .map__pin:nth-child(51) .avatar {
-    animation-delay: -11s; }
+    animation-delay: -7s; }
 
 .map__pin:nth-child(52) {
-<<<<<<< Updated upstream
-  animation-delay: -11s; }
-  .map__pin:nth-child(52) .avatar {
-    animation-delay: -11s; }
-
-.map__pin:nth-child(53) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(53) .avatar {
-    animation-delay: -15s; }
-
-.map__pin:nth-child(54) {
-  animation-delay: -8s; }
-  .map__pin:nth-child(54) .avatar {
-    animation-delay: -8s; }
-
-.map__pin:nth-child(55) {
-  animation-delay: -11s; }
-  .map__pin:nth-child(55) .avatar {
-    animation-delay: -11s; }
-
-.map__pin:nth-child(56) {
-  animation-delay: -1s; }
-  .map__pin:nth-child(56) .avatar {
-    animation-delay: -1s; }
-
-.map__pin:nth-child(57) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(57) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(58) {
   animation-delay: -4s; }
-  .map__pin:nth-child(58) .avatar {
+  .map__pin:nth-child(52) .avatar {
     animation-delay: -4s; }
 
-.map__pin:nth-child(59) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(59) .avatar {
-    animation-delay: -5s; }
-=======
-  animation-delay: -9s; }
-  .map__pin:nth-child(52) .avatar {
-    animation-delay: -9s; }
-
 .map__pin:nth-child(53) {
-  animation-delay: -14s; }
+  animation-delay: -11s; }
   .map__pin:nth-child(53) .avatar {
-    animation-delay: -14s; }
+    animation-delay: -11s; }
 
 .map__pin:nth-child(54) {
-  animation-delay: -2s; }
+  animation-delay: -5s; }
   .map__pin:nth-child(54) .avatar {
-    animation-delay: -2s; }
+    animation-delay: -5s; }
 
 .map__pin:nth-child(55) {
-  animation-delay: -5s; }
+  animation-delay: -9s; }
   .map__pin:nth-child(55) .avatar {
-    animation-delay: -5s; }
+    animation-delay: -9s; }
 
 .map__pin:nth-child(56) {
-  animation-delay: -14s; }
+  animation-delay: -15s; }
   .map__pin:nth-child(56) .avatar {
-    animation-delay: -14s; }
+    animation-delay: -15s; }
 
 .map__pin:nth-child(57) {
-  animation-delay: -10s; }
+  animation-delay: -6s; }
   .map__pin:nth-child(57) .avatar {
-    animation-delay: -10s; }
+    animation-delay: -6s; }
 
 .map__pin:nth-child(58) {
-  animation-delay: -5s; }
+  animation-delay: -6s; }
   .map__pin:nth-child(58) .avatar {
-    animation-delay: -5s; }
+    animation-delay: -6s; }
 
 .map__pin:nth-child(59) {
-  animation-delay: -10s; }
+  animation-delay: -7s; }
   .map__pin:nth-child(59) .avatar {
-    animation-delay: -10s; }
->>>>>>> Stashed changes
+    animation-delay: -7s; }
 
 .map__pin:nth-child(60) {
-  animation-delay: -6s; }
+  animation-delay: -11s; }
   .map__pin:nth-child(60) .avatar {
-    animation-delay: -6s; }
+    animation-delay: -11s; }
 
 .map__pin:nth-child(61) {
-<<<<<<< Updated upstream
-  animation-delay: -4s; }
+  animation-delay: -9s; }
   .map__pin:nth-child(61) .avatar {
-    animation-delay: -4s; }
+    animation-delay: -9s; }
 
 .map__pin:nth-child(62) {
-  animation-delay: -15s; }
+  animation-delay: -14s; }
   .map__pin:nth-child(62) .avatar {
-    animation-delay: -15s; }
+    animation-delay: -14s; }
 
 .map__pin:nth-child(63) {
-  animation-delay: -2s; }
+  animation-delay: -4s; }
   .map__pin:nth-child(63) .avatar {
-    animation-delay: -2s; }
+    animation-delay: -4s; }
 
 .map__pin:nth-child(64) {
-  animation-delay: -1s; }
+  animation-delay: -4s; }
   .map__pin:nth-child(64) .avatar {
-    animation-delay: -1s; }
+    animation-delay: -4s; }
 
 .map__pin:nth-child(65) {
   animation-delay: -5s; }
@@ -1249,34 +960,34 @@ table {
     animation-delay: -5s; }
 
 .map__pin:nth-child(66) {
-  animation-delay: -13s; }
+  animation-delay: -14s; }
   .map__pin:nth-child(66) .avatar {
-    animation-delay: -13s; }
+    animation-delay: -14s; }
 
 .map__pin:nth-child(67) {
-  animation-delay: -12s; }
+  animation-delay: -5s; }
   .map__pin:nth-child(67) .avatar {
-    animation-delay: -12s; }
+    animation-delay: -5s; }
 
 .map__pin:nth-child(68) {
-  animation-delay: -6s; }
+  animation-delay: -1s; }
   .map__pin:nth-child(68) .avatar {
-    animation-delay: -6s; }
+    animation-delay: -1s; }
 
 .map__pin:nth-child(69) {
-  animation-delay: -11s; }
+  animation-delay: -10s; }
   .map__pin:nth-child(69) .avatar {
-    animation-delay: -11s; }
+    animation-delay: -10s; }
 
 .map__pin:nth-child(70) {
-  animation-delay: -13s; }
+  animation-delay: -8s; }
   .map__pin:nth-child(70) .avatar {
-    animation-delay: -13s; }
+    animation-delay: -8s; }
 
 .map__pin:nth-child(71) {
-  animation-delay: -12s; }
+  animation-delay: -6s; }
   .map__pin:nth-child(71) .avatar {
-    animation-delay: -12s; }
+    animation-delay: -6s; }
 
 .map__pin:nth-child(72) {
   animation-delay: -9s; }
@@ -1284,314 +995,144 @@ table {
     animation-delay: -9s; }
 
 .map__pin:nth-child(73) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(73) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(74) {
-  animation-delay: -11s; }
-  .map__pin:nth-child(74) .avatar {
-    animation-delay: -11s; }
-
-.map__pin:nth-child(75) {
-  animation-delay: -8s; }
-  .map__pin:nth-child(75) .avatar {
-    animation-delay: -8s; }
-
-.map__pin:nth-child(76) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(76) .avatar {
-    animation-delay: -5s; }
-
-.map__pin:nth-child(77) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(77) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(78) {
-  animation-delay: -14s; }
-  .map__pin:nth-child(78) .avatar {
-    animation-delay: -14s; }
-=======
-  animation-delay: -7s; }
-  .map__pin:nth-child(61) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(62) {
-  animation-delay: -8s; }
-  .map__pin:nth-child(62) .avatar {
-    animation-delay: -8s; }
-
-.map__pin:nth-child(63) {
-  animation-delay: -12s; }
-  .map__pin:nth-child(63) .avatar {
-    animation-delay: -12s; }
-
-.map__pin:nth-child(64) {
-  animation-delay: -12s; }
-  .map__pin:nth-child(64) .avatar {
-    animation-delay: -12s; }
-
-.map__pin:nth-child(65) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(65) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(66) {
   animation-delay: -6s; }
-  .map__pin:nth-child(66) .avatar {
+  .map__pin:nth-child(73) .avatar {
     animation-delay: -6s; }
 
-.map__pin:nth-child(67) {
-  animation-delay: -4s; }
-  .map__pin:nth-child(67) .avatar {
-    animation-delay: -4s; }
-
-.map__pin:nth-child(68) {
-  animation-delay: -7s; }
-  .map__pin:nth-child(68) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(69) {
-  animation-delay: -2s; }
-  .map__pin:nth-child(69) .avatar {
-    animation-delay: -2s; }
-
-.map__pin:nth-child(70) {
-  animation-delay: -12s; }
-  .map__pin:nth-child(70) .avatar {
-    animation-delay: -12s; }
-
-.map__pin:nth-child(71) {
-  animation-delay: -11s; }
-  .map__pin:nth-child(71) .avatar {
-    animation-delay: -11s; }
-
-.map__pin:nth-child(72) {
-  animation-delay: -3s; }
-  .map__pin:nth-child(72) .avatar {
-    animation-delay: -3s; }
-
-.map__pin:nth-child(73) {
-  animation-delay: -10s; }
-  .map__pin:nth-child(73) .avatar {
-    animation-delay: -10s; }
-
 .map__pin:nth-child(74) {
-  animation-delay: -10s; }
+  animation-delay: -13s; }
   .map__pin:nth-child(74) .avatar {
-    animation-delay: -10s; }
+    animation-delay: -13s; }
 
 .map__pin:nth-child(75) {
-  animation-delay: -11s; }
+  animation-delay: -13s; }
   .map__pin:nth-child(75) .avatar {
-    animation-delay: -11s; }
+    animation-delay: -13s; }
 
 .map__pin:nth-child(76) {
-  animation-delay: -12s; }
+  animation-delay: -8s; }
   .map__pin:nth-child(76) .avatar {
-    animation-delay: -12s; }
+    animation-delay: -8s; }
 
 .map__pin:nth-child(77) {
-  animation-delay: -10s; }
+  animation-delay: -9s; }
   .map__pin:nth-child(77) .avatar {
-    animation-delay: -10s; }
+    animation-delay: -9s; }
 
 .map__pin:nth-child(78) {
-  animation-delay: -4s; }
+  animation-delay: -13s; }
   .map__pin:nth-child(78) .avatar {
-    animation-delay: -4s; }
->>>>>>> Stashed changes
+    animation-delay: -13s; }
 
 .map__pin:nth-child(79) {
-  animation-delay: -6s; }
+  animation-delay: -5s; }
   .map__pin:nth-child(79) .avatar {
-    animation-delay: -6s; }
+    animation-delay: -5s; }
 
 .map__pin:nth-child(80) {
-<<<<<<< Updated upstream
+  animation-delay: -4s; }
+  .map__pin:nth-child(80) .avatar {
+    animation-delay: -4s; }
+
+.map__pin:nth-child(81) {
   animation-delay: -14s; }
-  .map__pin:nth-child(80) .avatar {
+  .map__pin:nth-child(81) .avatar {
     animation-delay: -14s; }
-
-.map__pin:nth-child(81) {
-  animation-delay: -3s; }
-  .map__pin:nth-child(81) .avatar {
-    animation-delay: -3s; }
-=======
-  animation-delay: -15s; }
-  .map__pin:nth-child(80) .avatar {
-    animation-delay: -15s; }
-
-.map__pin:nth-child(81) {
-  animation-delay: -11s; }
-  .map__pin:nth-child(81) .avatar {
-    animation-delay: -11s; }
->>>>>>> Stashed changes
 
 .map__pin:nth-child(82) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(82) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(83) {
-  animation-delay: -7s; }
-  .map__pin:nth-child(83) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(84) {
-<<<<<<< Updated upstream
-  animation-delay: -7s; }
-  .map__pin:nth-child(84) .avatar {
-    animation-delay: -7s; }
-=======
-  animation-delay: -5s; }
-  .map__pin:nth-child(84) .avatar {
-    animation-delay: -5s; }
->>>>>>> Stashed changes
-
-.map__pin:nth-child(85) {
-  animation-delay: -9s; }
-  .map__pin:nth-child(85) .avatar {
-    animation-delay: -9s; }
-
-.map__pin:nth-child(86) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(86) .avatar {
-    animation-delay: -5s; }
-
-.map__pin:nth-child(87) {
-<<<<<<< Updated upstream
-  animation-delay: -12s; }
-  .map__pin:nth-child(87) .avatar {
-    animation-delay: -12s; }
-
-.map__pin:nth-child(88) {
-  animation-delay: -6s; }
-  .map__pin:nth-child(88) .avatar {
-    animation-delay: -6s; }
-
-.map__pin:nth-child(89) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(89) .avatar {
-    animation-delay: -5s; }
-
-.map__pin:nth-child(90) {
-  animation-delay: -15s; }
-  .map__pin:nth-child(90) .avatar {
-    animation-delay: -15s; }
-
-.map__pin:nth-child(91) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(91) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(92) {
-  animation-delay: -11s; }
-  .map__pin:nth-child(92) .avatar {
-    animation-delay: -11s; }
-
-.map__pin:nth-child(93) {
-  animation-delay: -8s; }
-  .map__pin:nth-child(93) .avatar {
-    animation-delay: -8s; }
-
-.map__pin:nth-child(94) {
-  animation-delay: -1s; }
-  .map__pin:nth-child(94) .avatar {
-    animation-delay: -1s; }
-=======
-  animation-delay: -14s; }
-  .map__pin:nth-child(87) .avatar {
-    animation-delay: -14s; }
-
-.map__pin:nth-child(88) {
-  animation-delay: -5s; }
-  .map__pin:nth-child(88) .avatar {
-    animation-delay: -5s; }
-
-.map__pin:nth-child(89) {
-  animation-delay: -13s; }
-  .map__pin:nth-child(89) .avatar {
-    animation-delay: -13s; }
-
-.map__pin:nth-child(90) {
-  animation-delay: -8s; }
-  .map__pin:nth-child(90) .avatar {
-    animation-delay: -8s; }
-
-.map__pin:nth-child(91) {
-  animation-delay: -1s; }
-  .map__pin:nth-child(91) .avatar {
-    animation-delay: -1s; }
-
-.map__pin:nth-child(92) {
-  animation-delay: -4s; }
-  .map__pin:nth-child(92) .avatar {
-    animation-delay: -4s; }
-
-.map__pin:nth-child(93) {
-  animation-delay: -7s; }
-  .map__pin:nth-child(93) .avatar {
-    animation-delay: -7s; }
-
-.map__pin:nth-child(94) {
-  animation-delay: -4s; }
-  .map__pin:nth-child(94) .avatar {
-    animation-delay: -4s; }
->>>>>>> Stashed changes
-
-.map__pin:nth-child(95) {
-  animation-delay: -1s; }
-  .map__pin:nth-child(95) .avatar {
-    animation-delay: -1s; }
-
-.map__pin:nth-child(96) {
-<<<<<<< Updated upstream
-  animation-delay: -1s; }
-  .map__pin:nth-child(96) .avatar {
-    animation-delay: -1s; }
-
-.map__pin:nth-child(97) {
-  animation-delay: -10s; }
-  .map__pin:nth-child(97) .avatar {
-    animation-delay: -10s; }
-
-.map__pin:nth-child(98) {
-  animation-delay: -7s; }
-  .map__pin:nth-child(98) .avatar {
-    animation-delay: -7s; }
-=======
-  animation-delay: -5s; }
-  .map__pin:nth-child(96) .avatar {
-    animation-delay: -5s; }
-
-.map__pin:nth-child(97) {
   animation-delay: -2s; }
-  .map__pin:nth-child(97) .avatar {
+  .map__pin:nth-child(82) .avatar {
     animation-delay: -2s; }
 
-.map__pin:nth-child(98) {
-  animation-delay: -1s; }
-  .map__pin:nth-child(98) .avatar {
-    animation-delay: -1s; }
->>>>>>> Stashed changes
-
-.map__pin:nth-child(99) {
+.map__pin:nth-child(83) {
   animation-delay: -14s; }
-  .map__pin:nth-child(99) .avatar {
+  .map__pin:nth-child(83) .avatar {
     animation-delay: -14s; }
 
-.map__pin:nth-child(100) {
-<<<<<<< Updated upstream
+.map__pin:nth-child(84) {
+  animation-delay: -15s; }
+  .map__pin:nth-child(84) .avatar {
+    animation-delay: -15s; }
+
+.map__pin:nth-child(85) {
+  animation-delay: -13s; }
+  .map__pin:nth-child(85) .avatar {
+    animation-delay: -13s; }
+
+.map__pin:nth-child(86) {
   animation-delay: -9s; }
-  .map__pin:nth-child(100) .avatar {
+  .map__pin:nth-child(86) .avatar {
     animation-delay: -9s; }
-=======
+
+.map__pin:nth-child(87) {
+  animation-delay: -10s; }
+  .map__pin:nth-child(87) .avatar {
+    animation-delay: -10s; }
+
+.map__pin:nth-child(88) {
   animation-delay: -1s; }
-  .map__pin:nth-child(100) .avatar {
+  .map__pin:nth-child(88) .avatar {
     animation-delay: -1s; }
->>>>>>> Stashed changes
+
+.map__pin:nth-child(89) {
+  animation-delay: -12s; }
+  .map__pin:nth-child(89) .avatar {
+    animation-delay: -12s; }
+
+.map__pin:nth-child(90) {
+  animation-delay: -3s; }
+  .map__pin:nth-child(90) .avatar {
+    animation-delay: -3s; }
+
+.map__pin:nth-child(91) {
+  animation-delay: -5s; }
+  .map__pin:nth-child(91) .avatar {
+    animation-delay: -5s; }
+
+.map__pin:nth-child(92) {
+  animation-delay: -12s; }
+  .map__pin:nth-child(92) .avatar {
+    animation-delay: -12s; }
+
+.map__pin:nth-child(93) {
+  animation-delay: -8s; }
+  .map__pin:nth-child(93) .avatar {
+    animation-delay: -8s; }
+
+.map__pin:nth-child(94) {
+  animation-delay: -8s; }
+  .map__pin:nth-child(94) .avatar {
+    animation-delay: -8s; }
+
+.map__pin:nth-child(95) {
+  animation-delay: -10s; }
+  .map__pin:nth-child(95) .avatar {
+    animation-delay: -10s; }
+
+.map__pin:nth-child(96) {
+  animation-delay: -7s; }
+  .map__pin:nth-child(96) .avatar {
+    animation-delay: -7s; }
+
+.map__pin:nth-child(97) {
+  animation-delay: -3s; }
+  .map__pin:nth-child(97) .avatar {
+    animation-delay: -3s; }
+
+.map__pin:nth-child(98) {
+  animation-delay: -11s; }
+  .map__pin:nth-child(98) .avatar {
+    animation-delay: -11s; }
+
+.map__pin:nth-child(99) {
+  animation-delay: -8s; }
+  .map__pin:nth-child(99) .avatar {
+    animation-delay: -8s; }
+
+.map__pin:nth-child(100) {
+  animation-delay: -14s; }
+  .map__pin:nth-child(100) .avatar {
+    animation-delay: -14s; }
 
 .map__logo {
   position: absolute;
@@ -1647,6 +1188,9 @@ table {
   padding-bottom: 1rem; }
   .missions__my ul {
     list-style: none; }
+
+.missions__empty {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
 
 .missions__samples {
   padding-bottom: 1rem; }
@@ -1805,7 +1349,7 @@ table {
 body.onboarding .missions, body.onboarding .mission, body.onboarding .map, body.onboarding .map__pin {
   pointer-events: none; }
 
-body.onboarding .map__pin {
+body.onboarding .map, body.onboarding .map__pin {
   opacity: 0.5; }
 
 body.onboarding .missions, body.onboarding .mission {
