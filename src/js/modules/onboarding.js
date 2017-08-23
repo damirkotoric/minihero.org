@@ -64,6 +64,8 @@ function agreeToTerms(button) {
 }
 
 exports.start = function(step = 'onboarding-welcome') {
-  Helper.addClass(document.body, 'onboarding')
+  if (step === 'onboarding-synched') {
+    Helper.addClass(document.body, 'onboarding')
+  }
   panel.showPanel(step)
 }

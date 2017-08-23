@@ -5,10 +5,12 @@ block vars
 
 //- See /src/js/modules/map.js for details of logic behind rendering.
 block sidebarContent
-  script.
-    window.missions = !{JSON.stringify(missions)}
-    window.sampleMissions = !{JSON.stringify(sampleMissions)}
-    window.defaultLocation = !{JSON.stringify(defaultLocation)}
+  if missions
+    script window.missionsData = !{JSON.stringify(missions)}
+  if sampleMissions
+    script window.sampleMissionsData = !{JSON.stringify(sampleMissions)}
+  if defaultLocation
+    script window.defaultLocation = !{JSON.stringify(defaultLocation)}
   .panel.--visible#missions
     .missions
       .missions__new
@@ -18,7 +20,7 @@ block sidebarContent
         //- 1. Location is known.
         if createdMissions
           .missions__my
-            label Minihero Missions I created:
+            label Minihero Missions you created:
             ul
               each createdMission in createdMissions
                 li
@@ -29,8 +31,13 @@ block sidebarContent
                       span by #{user.fb.firstName} #{user.fb.lastName}
         if missions
           //- 1a. If missions nearby user's location.
-          include partials/_missions-nearby
-        else
+          if allMissionsBelongToUser
+            //- This state is possible if the user is signed in and the only nearby missions are their own.
+            include partials/_missions-alone
+          else
+            //- There's a mix of user's missions and other people's missions.
+            include partials/_missions-nearby
+        if sampleMissions
           //- 1b. If no missions nearby user's location.
           include partials/_missions-empty
           include partials/_missions-samples
@@ -39,6 +46,6 @@ block sidebarContent
         if missions
           //- 2a. If missions nearby default location.
           include partials/_missions-nearby
-        else
+        if sampleMissions
           //- 2b. If no missions nearby default location.
           include partials/_missions-samples

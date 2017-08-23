@@ -415,8 +415,7 @@ exports.drawMap = function() {
     })
     // set theme
     miniheroMap.setOptions({styles: styles['minihero']})
-    addSampleMarkers()
-    addMissionMarker()
+    addMarkers()
     window.onresize = panMapToCenter
     panMapToCenter()
   }
@@ -516,19 +515,31 @@ function UserMarker(latlng, map, args) {
 	this.setMap(map)
 }
 
-function addSampleMarkers() {
+function addMarkers() {
   var missions = document.getElementById('missions')
   if (missions) {
     clearAllMarkers()
-    var nearbyMissions = false
-    if (nearbyMissions) {
-      // Nearby missions. Add markers.
-      return
-    } else {
-      // No nearby missions. Add sample markers.
-      // First, detect whether to add the sample markers around user's location or default location.
-      var baseLatitude
-      var baseLongitude
+    // First, detect whether to add the markers around user's location or default location.
+    var baseLatitude
+    var baseLongitude
+    // Next, render the appropriate markers.
+    if (window.missionsData) {
+      // Nearby missions. Add mission markers.
+      // No nearby missions. Add sample mission markers.
+      Array.prototype.forEach.call(window.missionsData, function(mission, i) {
+        var overlay = new CustomMarker(
+          new google.maps.LatLng(mission.location.latitude, mission.location.longitude),
+          miniheroMap,
+          {
+            marker_id: mission.missionId,
+            avatar: 'https://graph.facebook.com/' + mission.creator.fb.facebookId + '/picture?type=large'
+          }
+        )
+        pins.push(overlay)
+      })
+    }
+    if (window.sampleMissionsData) {
+      // No nearby missions. Add sample mission markers.
       if (userLocation.latitude) {
         // Location is shared. Set sample markers around user's location.
         baseLatitude = userLocation.latitude
@@ -538,7 +549,7 @@ function addSampleMarkers() {
         baseLatitude = defaultLocation.latitude
         baseLongitude = defaultLocation.longitude
       }
-      Array.prototype.forEach.call(window.sampleMissions, function(sampleMission, i) {
+      Array.prototype.forEach.call(window.sampleMissionsData, function(sampleMission, i) {
         var overlay = new CustomMarker(
           new google.maps.LatLng(baseLatitude + Number(sampleMission.location.latitudeOffset), baseLongitude + Number(sampleMission.location.longitudeOffset)),
           miniheroMap,
@@ -551,17 +562,6 @@ function addSampleMarkers() {
       })
     }
   }
-}
-
-function clearAllMarkers() {
-  // Clears all markers including sample mission and mission pins, on individual mission pages and on /missions.
-  // This is the simplest way of ensuring that we never add a duplicate pin.
-  while(pins[0]) {
-    pins.pop().setMap(null)
-  }
-}
-
-function addMissionMarker() {
   var mission = document.getElementById('mission')
   if (mission) {
     clearAllMarkers()
@@ -577,6 +577,14 @@ function addMissionMarker() {
   }
 }
 
+function clearAllMarkers() {
+  // Clears all markers including sample mission and mission pins, on individual mission pages and on /missions.
+  // This is the simplest way of ensuring that we never add a duplicate pin.
+  while(pins[0]) {
+    pins.pop().setMap(null)
+  }
+}
+
 exports.setUserPosition = function(lat, lng) {
   userLocation.latitude = lat
   userLocation.longitude = lng
@@ -587,7 +595,7 @@ exports.setUserPosition = function(lat, lng) {
     )
   }
   // Redraw the sample markers now that we have the user's location.
-  addSampleMarkers()
+  addMarkers()
   if (!missionLocation.latitude) {
     // Only initiate a pan if the user isn't looking at a mission
     panMapToCenter()
@@ -630,19 +638,19 @@ exports.updateIfNeeded = function() {
       if (Locator.getLocationCookie()) {
         // console.log('show user location')
         // Show missions around the user location.
-        addSampleMarkers()
+        addMarkers()
         panMapToCenter(null, userLocation.latitude, userLocation.longitude)
       } else {
         // console.log('show default location')
         // Show missions around the default location.
-        addSampleMarkers()
+        addMarkers()
         panMapToCenter(null, defaultLocation.latitude, defaultLocation.longitude)
       }
     }
     if (document.getElementById('mission')) {
       // console.log('show mission location')
       // Show the mission.
-      addMissionMarker()
+      addMarkers()
       panMapToCenter(null, missionLocation.latitude, missionLocation.longitude)
     }
   } else {

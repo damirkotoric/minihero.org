@@ -62,11 +62,9 @@ function createMission(e) {
   mission.title = missionTitle.value.trim()
   mission.description = missionDescription.value.trim()
   mission.location = {}
-  mission.location.latitude = 39.0392
-  mission.location.longitude = 125.7625
+  mission.location.latitude = 44.76
+  mission.location.longitude = 18.02
   mission.date = missionDate.value.trim() + 'T' + missionTime.value + ':00.000Z'
-
-  console.log('mission' + mission)
 
   var request = new XMLHttpRequest()
   request.open('POST', '/mission/new', true)

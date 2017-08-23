@@ -11,7 +11,7 @@ block sidebarContent
       .back
         a(href='/missions')
           i.material-icons arrow_back
-          | Show all missions near me
+          | Show all missions #{user ? 'near me' : ''}
       .mission__header
         if isSampleMission
           img#creator-avatar.avatar.--current(src=creator.imageUrl)

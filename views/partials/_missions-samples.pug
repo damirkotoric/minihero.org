@@ -3,7 +3,7 @@
   ul
     each sampleMission in sampleMissions
       li
-        a.mission__header(href='/mission/'+sampleMission.missionId)
+        a.mission__header(href='/mission/' + sampleMission.missionId)
           img.avatar(src=sampleMission.creator.imageUrl)
           div
             h2= sampleMission.title

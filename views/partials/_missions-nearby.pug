@@ -1,10 +1,11 @@
 .missions__nearby
-  label Missions nearby:
+  label Minihero Missions nearby:
   ul
-    each sampleMission in sampleMissions
-      li
-        a.mission__header(href='/mission/'+sampleMission.missionId)
-          img.avatar(src=sampleMission.creator.imageUrl)
-          div
-            h2= sampleMission.title
-            span by #{sampleMission.creator.fb.firstName} #{sampleMission.creator.fb.lastName}
+    each mission in missions
+      if (user && mission.creator.id != user.id) || !user
+        li
+          a.mission__header(href='/mission/' + mission.missionId)
+            img(class='avatar' src='https://graph.facebook.com/' + mission.creator.fb.facebookId + '/picture?type=large')
+            div
+              h2= mission.title
+              span by #{mission.creator.fb.firstName} #{mission.creator.fb.lastName}

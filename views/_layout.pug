@@ -26,11 +26,10 @@ head
   script(src='/js/vendor/modernizr-custom.js')
   script(src='/js/main.js')
   
-  - var loggedIn= user ? 'user-logged-in' : ''
   if user
-    - var agreedToTerms= user.agreedToTerms ? 'user-agreed-terms' : ''
+    - var agreedToTerms= user.agreedToTerms
 
-  body(class=loggedIn + ' ' + agreedToTerms)
+  body(class=(user ? 'user-logged-in' : 'user-not-logged-in') + ' ' + (agreedToTerms ? 'user-agreed-terms' : 'user-not-agreed-terms'))
       
     block content
 

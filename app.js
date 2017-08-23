@@ -25,7 +25,6 @@ app.use(cookieParser())
 // use sessions for tracking logins
 app.use(session({
   secret: config.server.sessionSecret,
-  maxAge: null,
   resave: true, // force session to be saved in the sessions store whether anything changed in the request or not
   saveUninitialized: true,
   store: new MongoStore({
@@ -90,5 +89,5 @@ app.use(function(err, req, res, next) {
 })
 
 app.listen(port, function() {
-  console.log('Express app listening on port ' + config.server.port)
+  console.log('Express app listening on port ' + config.server.port + '\n\n\n\n\n')
 })
