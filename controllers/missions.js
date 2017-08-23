@@ -32,10 +32,13 @@ module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, c
           // Found nearby missions!
           var missionsObject = { 'missions': [] }
           for (let queriedMission of queriedMissions) {
-            var mission = queriedMission.toObject() // https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
+            // Important that the next variable is a 'let' because https://stackoverflow.com/a/43792519/964437
+            // Also: https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
+            let mission = queriedMission.toObject()
             // Format date.
             mission.date = moment(mission.date).format('dddd, Do MMMM [at] HH:mm')
             // Get info about the creator.
+            console.log(mission)
             User.findOne({ '_id': mission.creatorId }, function(err, creator) {
               if (err) { reject(err) }
               if (creator) {

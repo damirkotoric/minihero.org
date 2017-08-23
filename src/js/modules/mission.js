@@ -2,6 +2,7 @@
 
 const panel = require('../modules/panel')
 const Helper = require('../utilities/helper')
+var autocomplete
 
 exports.init = function() {
   var missionJoinLinks = document.querySelectorAll('a[data-mission-join]')
@@ -17,6 +18,11 @@ exports.init = function() {
   var missionCreateSendLink = document.querySelector('a[data-mission-create-send]')
   if (missionCreateSendLink) {
     missionCreateSendLink.addEventListener('click', createMission)
+  }
+
+  var input = document.getElementById('mission_location')
+  if (input) {
+    autocomplete = new google.maps.places.Autocomplete(input)
   }
 }
 
@@ -47,6 +53,11 @@ function createMission(e) {
   if (missionLocation.value === '') {
     return
   }
+  var place = autocomplete.getPlace()
+  if (!place || !place.geometry.location.lat() || !place.geometry.location.lng()) {
+    console.log('need to select a location')
+    return
+  }
   var missionDate = document.getElementById('mission_date')
   if (missionDate.value === '') {
     return
@@ -62,15 +73,14 @@ function createMission(e) {
   mission.title = missionTitle.value.trim()
   mission.description = missionDescription.value.trim()
   mission.location = {}
-  mission.location.latitude = 44.76
-  mission.location.longitude = 18.02
+  mission.location.latitude = place.geometry.location.lat()
+  mission.location.longitude = place.geometry.location.lng()
   mission.date = missionDate.value.trim() + 'T' + missionTime.value + ':00.000Z'
 
   var request = new XMLHttpRequest()
   request.open('POST', '/mission/new', true)
   request.setRequestHeader('Content-type', 'application/json')
   request.onload = function() {
-    console.log('response text' + request.responseText)
     var createdMission = JSON.parse(request.responseText)
     // Done
     if (request.readyState == 4 && request.status == 200) {
