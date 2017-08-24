@@ -38,5 +38,6 @@ function initMap() {
   map.init()
   panel.init()
   mission.init()
+  datepicker.init()
   onboarding.init()
 }

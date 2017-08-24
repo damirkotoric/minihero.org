@@ -21,7 +21,7 @@ exports.init = function() {
   }
 
   var input = document.getElementById('mission_location')
-  if (input) {
+  if (input && window.google) {
     autocomplete = new google.maps.places.Autocomplete(input)
   }
 }

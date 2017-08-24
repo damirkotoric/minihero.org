@@ -5749,6 +5749,7 @@ function initMap() {
   map.init()
   panel.init()
   mission.init()
+  datepicker.init()
   onboarding.init()
 }
 
@@ -6500,7 +6501,7 @@ exports.init = function() {
   }
 
   var input = document.getElementById('mission_location')
-  if (input) {
+  if (input && window.google) {
     autocomplete = new google.maps.places.Autocomplete(input)
   }
 }
