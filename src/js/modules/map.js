@@ -526,13 +526,13 @@ function addMarkers() {
     if (window.missionsData) {
       // Nearby missions. Add mission markers.
       // No nearby missions. Add sample mission markers.
-      Array.prototype.forEach.call(window.missionsData, function(mission, i) {
+      Array.prototype.forEach.call(window.missionsData, function(el, i) {
         var overlay = new CustomMarker(
-          new google.maps.LatLng(mission.location.latitude, mission.location.longitude),
+          new google.maps.LatLng(el.mission.location.latitude, el.mission.location.longitude),
           miniheroMap,
           {
-            marker_id: mission.missionId,
-            avatar: 'https://graph.facebook.com/' + mission.creator.fb.facebookId + '/picture?type=large'
+            marker_id: el.mission.missionId,
+            avatar: 'https://graph.facebook.com/' + el.creator.fb.facebookId + '/picture?type=large'
           }
         )
         pins.push(overlay)
@@ -563,7 +563,7 @@ function addMarkers() {
     }
   }
   var mission = document.getElementById('mission')
-  if (mission) {
+  if (mission && window.google) {
     clearAllMarkers()
     var overlay = new CustomMarker(
       new google.maps.LatLng(missionLocation.latitude, missionLocation.longitude),
@@ -588,7 +588,7 @@ function clearAllMarkers() {
 exports.setUserPosition = function(lat, lng) {
   userLocation.latitude = lat
   userLocation.longitude = lng
-  if (!userPin) {
+  if (!userPin && window.google) {
     userPin = new UserMarker(
       new google.maps.LatLng(lat, lng),
       miniheroMap

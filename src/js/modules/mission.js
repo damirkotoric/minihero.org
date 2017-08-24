@@ -5,10 +5,15 @@ const Helper = require('../utilities/helper')
 var autocomplete
 
 exports.init = function() {
-  var missionJoinLinks = document.querySelectorAll('a[data-mission-join]')
-  Array.prototype.forEach.call(missionJoinLinks, function(el, i) {
-    el.addEventListener('click', joinMission)
-  })
+  var missionJoin = document.querySelector('a[data-mission-join]')
+  if (missionJoin) {
+    missionJoin.addEventListener('click', joinMission)
+  }
+
+  var missionLeave = document.querySelector('a[data-mission-leave]')
+  if (missionLeave) {
+    missionLeave.addEventListener('click', leaveMission)
+  }
 
   var missionTitle = document.getElementById('mission_title')
   if (missionTitle) {
@@ -28,13 +33,24 @@ exports.init = function() {
 
 function joinMission(e) {
   e.preventDefault()
-  // Check authentication
-  if (document.body.classList.contains('user-logged-in')) {
-    // Join user to mission
-    Helper.addClass(e.currentTarget.closest('.mission'), '--joining')
-  } else {
-    window.location = '/login/facebook'
-  }
+  var href = e.currentTarget.href
+  var missionDiv = e.currentTarget.closest('.mission')
+  Helper.addClass(missionDiv, '--joining')
+  setTimeout(function() {
+    Helper.removeClass(missionDiv, '--joining')
+    Turbolinks.visit(href)
+  }, 1500)
+}
+
+function leaveMission(e) {
+  e.preventDefault()
+  var href = e.currentTarget.href
+  var missionDiv = e.currentTarget.closest('.mission')
+  Helper.addClass(missionDiv, '--leaving')
+  setTimeout(function() {
+    Helper.removeClass(missionDiv, '--leaving')
+    Turbolinks.visit(href)
+  }, 1500)
 }
 
 function createMission(e) {

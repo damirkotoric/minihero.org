@@ -1,11 +1,13 @@
 .missions__nearby
   label Minihero Missions nearby:
   ul
-    each mission in missions
+    each el in missions
       if (user && mission.creator.id != user.id) || !user
+        //- Not a mission the user is going to see in their created missions list (in case the user is signed in).
+        //- We don't want to duplicate it here.
         li
-          a.mission__header(href='/mission/' + mission.missionId)
-            img(class='avatar' src='https://graph.facebook.com/' + mission.creator.fb.facebookId + '/picture?type=large')
+          a.mission__header(href='/mission/' + el.mission.missionId)
+            img(class='avatar' src='https://graph.facebook.com/' + el.creator.fb.facebookId + '/picture?type=large')
             div
-              h2= mission.title
-              span by #{mission.creator.fb.firstName} #{mission.creator.fb.lastName}
+              h2= el.mission.title
+              span by #{el.creator.fb.firstName} #{el.creator.fb.lastName}

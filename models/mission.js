@@ -14,7 +14,7 @@ var MissionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  participants: Array
+  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 })
 
 MissionSchema.plugin(AutoIncrement, {inc_field: 'missionId'})

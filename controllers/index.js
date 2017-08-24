@@ -108,20 +108,60 @@ module.exports = function(passport) {
 					defaultLocation: config.defaultLocation,
 					mission: sampleMission,
 					creator: sampleMission.creator,
+					participants: sampleMission.participants,
 					isSampleMission: true
 				}
 			)
 		} else {
 			// Real mission. Retrieve it from the database.
-			missions.getMission(req.user, req.params.id, function (fetchedMission) {
-				return res.render('mission',
-					{
-						user: req.user,
-						defaultLocation: config.defaultLocation,
-						mission: fetchedMission.mission,
-						creator: fetchedMission.creator
-					})
+			missions.getMission(req.params.id, function(fetchedMission) {
+				if (fetchedMission) {
+					return res.render(
+						'mission',
+						{
+							user: req.user,
+							defaultLocation: config.defaultLocation,
+							mission: fetchedMission.mission,
+							creator: fetchedMission.creator,
+							participants: fetchedMission.participants
+						}
+					)
+				} else {
+					next()
+				}
 			})
+		}
+	})
+
+	// GET /mission/id/join
+	router.get('/mission/:id/join', function(req, res, next) {
+		if (req.user) {
+			missions.joinMission(req.user, req.params.id, function(updated) {
+				if (updated) {
+					res.redirect('/mission/' + req.params.id)
+				} else {
+					var err = new Error('Error joining mission.')
+					next(err)
+				}
+			})
+		} else {
+			res.redirect('/mission/' + req.params.id)
+		}
+	})
+
+	// GET /mission/id/leave
+	router.get('/mission/:id/leave', function(req, res, next) {
+		if (req.user) {
+			missions.leaveMission(req.user, req.params.id, function(updated) {
+				if (updated) {
+					res.redirect('/mission/' + req.params.id)
+				} else {
+					var err = new Error('Error leaving mission.')
+					next(err)
+				}
+			})
+		} else {
+			res.redirect('/mission/' + req.params.id)
 		}
 	})
 

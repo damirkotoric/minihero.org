@@ -13,20 +13,24 @@ block sidebarContent
           i.material-icons arrow_back
           | Show all missions #{user ? 'near me' : ''}
       .mission__header
-        if isSampleMission
-          img#creator-avatar.avatar.--current(src=creator.imageUrl)
-        else  
-          img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + creator.fb.facebookId + '/picture?type=large' alt='')
+        div
+          if isSampleMission
+            img#creator-avatar.avatar.--current(src=creator.imageUrl alt='')
+          else  
+            img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + creator.fb.facebookId + '/picture?type=large' alt='')
         div
           h2= mission.title
           if mission.participants.length === 0
             span created by #{creator.fb.firstName} #{creator.fb.lastName}
           else
             span #{mission.participants.length} joined, created by #{creator.fb.firstName} #{creator.fb.lastName}
-      if mission.participants.length > 0
+      if participants && participants.length > 0
         .mission__participants
-          each participant in mission.participants
-            img.avatar.--small(src=participant.imageUrl)
+          each participant in participants
+            if isSampleMission
+              img.avatar.--small(src=participant.imageUrl alt='')
+            else
+              img.avatar.--small(src='https://graph.facebook.com/' + participant.fb.facebookId + '/picture?type=large' alt=participant.fb.firstName + ' ' + participant.fb.lastName title=participant.fb.firstName + ' ' + participant.fb.lastName)
       .mission__description
         p= mission.description
       .mission__meta
@@ -35,24 +39,53 @@ block sidebarContent
           | #{mission.date}
         div
           i.material-icons location_on
-          | Join the Mission to reveal the exact location.
+          if user
+            if user.id === creator.id
+              | #{mission.location.latitude} #{mission.location.longitude}
+            else
+              if mission.participants.toString().includes(user.id.toString())
+                //- Current user is a participant.
+                | #{mission.location.latitude} #{mission.location.longitude}
+              else
+                | Join the Mission to reveal the exact location.
+          else
+            | Exact location is only shown to Minihero users.
       .mission__actions
+        if user
+          if user.id === creator.id 
+            //- Current user is the creator of the mission.
+            div
+              span Want to change something?
+              a.button.--secondary(href='/mission/' + mission.missionId + '/edit' data-mission-edit) Edit Mission
+          else
+            if mission.participants.toString().includes(user.id.toString())
+              //- Current user is a participant.
+              div
+                span Change your mind?
+                a.button.--secondary(href='/mission/' + mission.missionId + '/leave' data-mission-leave) Leave Mission
+            else
+              //- Current user is not yet a participant.
+              div
+                span Want to take part?
+                a.button(href='/mission/' + mission.missionId + '/join' data-mission-join) Join Mission
+        else
+          div
+            span Want to take part?
+            a.button(href='/login/facebook') Join Minihero
+          
+      .modal.--overlay.--joining
         div
-          span Want to take part?
-          a.button(href='/missions/'+mission.id+'/join' data-mission-join) Join Mission
-        div
-          span Change your mind?
-          a.button.--secondary(href='/missions/'+mission.id+'/leave' data-mission-leave) Leave Mission
-      .modal.--overlay
-        div.modal__loading
           img(src='/img/supercharged-karma-orange.svg' alt='')
           h1 Supercharging your karma...
-        div.modal__success
-          img(src='/img/happy-buddha.svg' alt='')
-          h1 Karma successfully supercharged!
-          p 
-            | Now, brave Minihero, complete your mission.
-        div.modal__error
-          img(src='/img/childs-pose.svg' alt='')
-          h1 Error supercharging your karma!
-          p Take five deep breaths and try again.
+      .modal.--overlay.--leaving
+        div
+          h1 Downgrading your karma...
+        //- div.modal__success
+        //-   img(src='/img/happy-buddha.svg' alt='')
+        //-   h1 Karma successfully supercharged!
+        //-   p Now, brave Minihero, complete your mission.
+        //- div.modal__error
+        //-   img(src='/img/childs-pose.svg' alt='')
+        //-   h1 Error supercharging your karma!
+        //-   p Take five deep breaths and try again.
+        

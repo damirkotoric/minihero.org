@@ -11,7 +11,15 @@
     transition: all .2s
 
   &.--joining
-    .modal
+    .modal.--joining
+      visibility: visible
+      opacity: 1
+      transform: scale(1)
+      img
+        animation: supercharge 0.1s infinite
+
+  &.--leaving
+    .modal.--leaving
       visibility: visible
       opacity: 1
       transform: scale(1)
@@ -26,14 +34,12 @@
   .avatar
     margin-right: 0.7rem
 
-  div
+  h2
+    margin-bottom: 0.5rem
+    margin-top: -0.3rem
 
-    h2
-      margin-bottom: 0.5rem
-      margin-top: -0.3rem
-
-    span
-      opacity: 0.5
+  span
+    opacity: 0.5
 
 .mission__participants
   padding: 1.2rem 1.2rem 0.5rem

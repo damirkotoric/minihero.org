@@ -1,12 +1,13 @@
 const Promise = require('es6-promise').Promise
 const fs = require('fs')
+const arraySort = require('array-sort')
 const User = require('../models/user')
 const moment = require('moment')
 const config = require('../config')
 const Mission = require('../models/mission')
 
 module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, callback) {
-  var populateMissionsPromise = new Promise(function (resolve, reject) {
+  var fetchMissions = new Promise(function (resolve, reject) {
     // Find nearby missions.
     var coordinatesToLookFor = {}
     if (cookiesLatitude) {
@@ -32,26 +33,21 @@ module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, c
           // Found nearby missions!
           var missionsObject = { 'missions': [] }
           for (let queriedMission of queriedMissions) {
-            // Important that the next variable is a 'let' because https://stackoverflow.com/a/43792519/964437
-            // Also: https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
-            let mission = queriedMission.toObject()
-            // Format date.
-            mission.date = moment(mission.date).format('dddd, Do MMMM [at] HH:mm')
-            // Get info about the creator.
-            console.log(mission)
-            User.findOne({ '_id': mission.creatorId }, function(err, creator) {
-              if (err) { reject(err) }
-              if (creator) {
-                mission.creator = creator
-                missionsObject.missions.push(mission)
+            fetchMissionAndRelatedData(
+              queriedMission.id,
+              {
+                fetchParticipantsData: false
+              },
+              function (fetchedMission) {
+                missionsObject.missions.push(fetchedMission)
                 if (missionsObject.missions.length === queriedMissions.length) {
                   // We've populated all the queried missions into the missionsObject.missions array.
+                  // Sort the missionObjects by the mission id, then sort that array descendingly to show newest on top.
+                  missionsObject.missions = arraySort(missionsObject.missions, 'mission._id', {reverse: true})
                   resolve(missionsObject)
                 }
-              } else {
-                reject(new Error('No creator for fetched mission. That cannot be right.'))
               }
-            })
+            )
           }
         } else {
           // No missions nearby. Populate sampleMissionsObject.
@@ -61,11 +57,8 @@ module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, c
       }
     )
   })
-  .catch(function(error) {
-    console.log(error)
-  })
 
-  var populateCreatedMissionsPromise = new Promise(function (resolve, reject) {
+  var fetchCreatedMissions = new Promise(function(resolve, reject) {
     if (user) {
       if (user.createdMissionIds.length > 0) {
         // User signed in.
@@ -73,19 +66,16 @@ module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, c
         var createdMissionsArray = []
         for (let createdMissionId of user.createdMissionIds) {
           // Fetch all created missions.
-          Mission.findOne(
+          fetchMissionAndRelatedData(
+            createdMissionId,
             {
-              _id: createdMissionId
+              fetchParticipantsData: false
             },
-            function (err, mission) {
-              if (err) { reject(err) }
-              if (mission) {
-                createdMissionsArray.push(mission)
-                if (createdMissionsArray.length === user.createdMissionIds.length) {
-                  resolve(createdMissionsArray)
-                }
-              } else {
-                reject(new Error('The user document is storing a value to an mission ID that cannot be found in the missions collection.'))
+            function (fetchedMission) {
+              createdMissionsArray.push(fetchedMission)
+              if (createdMissionsArray.length === user.createdMissionIds.length) {
+                createdMissionsArray = arraySort(createdMissionsArray, 'mission._id', {reverse: true})
+                resolve(createdMissionsArray)
               }
             }
           )
@@ -97,27 +87,39 @@ module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, c
       resolve()
     }
   })
-  .catch(function(error) {
-    console.log(error)
-  })
 
-  var populateJoinedMissionsPromise = new Promise(function (resolve, reject) {
+  var fetchJoinedMissions = new Promise(function (resolve, reject) {
     if (user) {
-      var joinedMissionsArray = []
-      var joinedMissionsObject = { 'joinedMissions': [] }
-      resolve(joinedMissionsObject)
+      if (user.joinedMissionIds.length > 0) {
+        // Retrieve list of user's joined missions including all the mission fields.
+        var joinedMissionsArray = []
+        for (let joinedMissionId of user.joinedMissionIds) {
+          fetchMissionAndRelatedData(
+            joinedMissionId,
+            {
+              fetchParticipantsData: false
+            },
+            function (fetchedMission) {
+              joinedMissionsArray.push(fetchedMission)
+              if (joinedMissionsArray.length === user.joinedMissionIds.length) {
+                joinedMissionsArray = arraySort(joinedMissionsArray, 'mission._id', {reverse: true})
+                resolve(joinedMissionsArray)
+              }
+            }
+          )
+        }
+      } else {
+        resolve()
+      }
     } else {
       resolve()
     }
   })
-  .catch(function(error) {
-    console.log(error)
-  })
 
   Promise.all([
-    populateMissionsPromise,
-    populateCreatedMissionsPromise,
-    populateJoinedMissionsPromise
+    fetchMissions,
+    fetchCreatedMissions,
+    fetchJoinedMissions
   ])
   .then(function (returnedPromiseValues) {
     // I have to do this messy checking of values because JS doesn't support optional chaining.
@@ -148,36 +150,119 @@ module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, c
     })
   })
   .catch(function(error) {
-    console.log(error); // some coding error in handling happened
+    console.log(error)
   })
 }
 
-module.exports.getMission = function (user, fetchMissionId, callback) {
-  Mission.findOne({ 'missionId': fetchMissionId }, function(err, mission) {
-    if (err) { throw err }
+module.exports.getMission = function(missionUrlId, callback) {
+  Mission.findOne({ 'missionId': Number(missionUrlId) }, function(err, mission) {
+    // Turn the mission URL ID (like '63') into the mission.id equivalent (like '599f322be9e5de08e5a04e32'),
+    // so that we can then send the query to fetch the mission.
+    if (err) { reject(err) }
     if (mission) {
-      var mission = mission.toObject() // https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
-      // Format date.
-      mission.date = moment(mission.date).format('dddd, Do MMMM [at] HH:mm')
-      // Get info about the creator.
-      User.findOne({ '_id': mission.creatorId }, function(err, creator) {
-        if (err) { throw err }
-        if (creator) {
-          callback ({
-            mission: mission,
-            creator: creator
-          })
-        } else {
-          next()
+      fetchMissionAndRelatedData(
+        mission.id,
+        null,
+        function (fetchedData) {
+          callback(fetchedData)
         }
-      })
+      )
     } else {
-      next()
+      reject('Could not find the mission with missionId: ' + missionUrlId)
     }
   })
 }
 
-module.exports.newMission = function (user, formData, callback) {
+function fetchMissionAndRelatedData(fetchMissionId, opt = {}, callback) {
+  // https://stackoverflow.com/questions/9602449/a-javascript-design-pattern-for-options-with-default-values
+  let defaults = {
+    humanReadable: true,
+    fetchCreatorData: true,
+    fetchParticipantsData: true
+  }
+  let options = Object.assign({}, defaults, opt)
+
+  new Promise(function(resolve, reject) {
+    // Fetch the mission.
+    Mission.findOne({ '_id': fetchMissionId }, function(err, mission) {
+      if (err) { reject(err) }
+      if (mission) {
+        // This creates a nicely formatted object with a human readable mission date and location.
+        // Then grabs data about the mission creator, and participants according to the options that were passed.
+        mission = mission.toObject() // https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
+        if (options.humanReadable) {
+          // Format date.
+          mission.date = moment(mission.date).format('dddd, Do MMMM [at] HH:mm')
+        }
+        resolve(mission)
+      } else {
+        reject('Could not find the mission: ' + fetchMissionId)
+      }
+    })
+  })
+  .then(function(mission) {
+    // Fetch creator data.
+    var fetchCreator = new Promise(function(resolve, reject) {
+      if (options.fetchCreatorData) {
+        User.findOne({ '_id': mission.creatorId }, function(err, creator) {
+          if (err) { reject(err) }
+          if (creator) {
+            resolve(creator)
+          } else {
+            reject('Could not find the creator: ' + mission.creatorId)
+          }
+        })
+      } else {
+        resolve()
+      }
+    })
+    // Fetch participants data.
+    var fetchParticipants = new Promise(function(resolve, reject) {
+      if (options.fetchParticipantsData) {
+        var participantsArray = []
+        if (mission.participants.length > 0) {
+          for (let participant of mission.participants) {
+            User.findOne({ '_id': participant }, function(err, retrievedParticipant) {
+              if (err) { reject(err) }
+              if (retrievedParticipant) {
+                participantsArray.push(retrievedParticipant)
+                if (participantsArray.length === mission.participants.length) {
+                  resolve(participantsArray)
+                }
+              }
+            })
+          }
+        } else {
+          resolve()
+        }
+      } else {
+        resolve()
+      }
+    })
+    Promise.all([
+      fetchCreator,
+      fetchParticipants
+    ])
+    .then(function (returnedPromiseValues) {
+      // Return the mission and relevant fetched data.
+      callback(
+        {
+          mission: mission,
+          creator: returnedPromiseValues[0],
+          participants: returnedPromiseValues[1]
+        }
+      )
+    })
+    .catch(function(error) {
+      console.log(error)
+    })
+  })
+  .catch(function(error) {
+    console.log(error)
+  })
+}
+
+module.exports.newMission = function(user, formData, callback) {
   if (user) {
     // Create a new mission.
     var newMission = new Mission()
@@ -207,5 +292,55 @@ module.exports.newMission = function (user, formData, callback) {
   } else {
     var err = new Error('You need to be logged in to create Missions.')
     return next(err)
+  }
+}
+
+module.exports.joinMission = function(user, missionId, callback) {
+  if (user) {
+    Mission.findOneAndUpdate(
+      { missionId: missionId },
+      { $addToSet: { participants: user._id } },
+      { new: true },
+      function(err, updatedMission) {
+        if (err || !updatedMission) { throw err }
+        if (updatedMission) {
+          User.findOneAndUpdate(
+            { _id: user._id },
+            { $addToSet: { joinedMissionIds: updatedMission._id } },
+            { new: true },
+            function(err, updatedUser) {
+              if (err || !updatedUser) { throw err }
+              if (updatedUser) {
+                callback(true)
+              }
+            }
+          )
+        } else {
+          callback(false)
+        }
+      }
+    )
+  } else {
+    callback(false)
+  }
+}
+
+module.exports.leaveMission = function(user, missionId, callback) {
+  if (user) {
+    Mission.findOneAndUpdate(
+      { missionId: missionId },
+      { $pull: { participants: user._id } },
+      { new: true },
+      function(err, updatedMission) {
+        if (err || !updatedMission) { throw err }
+        if (updatedMission) {
+          callback(true)
+        } else {
+          callback(false)
+        }
+      }
+    )
+  } else {
+    callback(false)
   }
 }

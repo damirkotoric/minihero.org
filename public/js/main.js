@@ -6345,13 +6345,13 @@ function addMarkers() {
     if (window.missionsData) {
       // Nearby missions. Add mission markers.
       // No nearby missions. Add sample mission markers.
-      Array.prototype.forEach.call(window.missionsData, function(mission, i) {
+      Array.prototype.forEach.call(window.missionsData, function(el, i) {
         var overlay = new CustomMarker(
-          new google.maps.LatLng(mission.location.latitude, mission.location.longitude),
+          new google.maps.LatLng(el.mission.location.latitude, el.mission.location.longitude),
           miniheroMap,
           {
-            marker_id: mission.missionId,
-            avatar: 'https://graph.facebook.com/' + mission.creator.fb.facebookId + '/picture?type=large'
+            marker_id: el.mission.missionId,
+            avatar: 'https://graph.facebook.com/' + el.creator.fb.facebookId + '/picture?type=large'
           }
         )
         pins.push(overlay)
@@ -6382,7 +6382,7 @@ function addMarkers() {
     }
   }
   var mission = document.getElementById('mission')
-  if (mission) {
+  if (mission && window.google) {
     clearAllMarkers()
     var overlay = new CustomMarker(
       new google.maps.LatLng(missionLocation.latitude, missionLocation.longitude),
@@ -6407,7 +6407,7 @@ function clearAllMarkers() {
 exports.setUserPosition = function(lat, lng) {
   userLocation.latitude = lat
   userLocation.longitude = lng
-  if (!userPin) {
+  if (!userPin && window.google) {
     userPin = new UserMarker(
       new google.maps.LatLng(lat, lng),
       miniheroMap
@@ -6485,10 +6485,15 @@ const Helper = require('../utilities/helper')
 var autocomplete
 
 exports.init = function() {
-  var missionJoinLinks = document.querySelectorAll('a[data-mission-join]')
-  Array.prototype.forEach.call(missionJoinLinks, function(el, i) {
-    el.addEventListener('click', joinMission)
-  })
+  var missionJoin = document.querySelector('a[data-mission-join]')
+  if (missionJoin) {
+    missionJoin.addEventListener('click', joinMission)
+  }
+
+  var missionLeave = document.querySelector('a[data-mission-leave]')
+  if (missionLeave) {
+    missionLeave.addEventListener('click', leaveMission)
+  }
 
   var missionTitle = document.getElementById('mission_title')
   if (missionTitle) {
@@ -6508,13 +6513,24 @@ exports.init = function() {
 
 function joinMission(e) {
   e.preventDefault()
-  // Check authentication
-  if (document.body.classList.contains('user-logged-in')) {
-    // Join user to mission
-    Helper.addClass(e.currentTarget.closest('.mission'), '--joining')
-  } else {
-    window.location = '/login/facebook'
-  }
+  var href = e.currentTarget.href
+  var missionDiv = e.currentTarget.closest('.mission')
+  Helper.addClass(missionDiv, '--joining')
+  setTimeout(function() {
+    Helper.removeClass(missionDiv, '--joining')
+    Turbolinks.visit(href)
+  }, 1500)
+}
+
+function leaveMission(e) {
+  e.preventDefault()
+  var href = e.currentTarget.href
+  var missionDiv = e.currentTarget.closest('.mission')
+  Helper.addClass(missionDiv, '--leaving')
+  setTimeout(function() {
+    Helper.removeClass(missionDiv, '--leaving')
+    Turbolinks.visit(href)
+  }, 1500)
 }
 
 function createMission(e) {

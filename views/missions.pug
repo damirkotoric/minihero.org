@@ -22,13 +22,24 @@ block sidebarContent
           .missions__my
             label Minihero Missions you created:
             ul
-              each createdMission in createdMissions
+              each obj in createdMissions
                 li
-                  a.mission__header(href='/mission/'+createdMission.missionId)
-                    img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + user.fb.facebookId + '/picture?type=large' alt='')
+                  a.mission__header(href='/mission/'+obj.mission.missionId)
+                    img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + obj.creator.fb.facebookId + '/picture?type=large' alt='')
                     div
-                      h2= createdMission.title
-                      span by #{user.fb.firstName} #{user.fb.lastName}
+                      h2= obj.mission.title
+                      span by #{obj.creator.fb.firstName} #{obj.creator.fb.lastName}
+      if joinedMissions
+        .missions__joined
+          label Minihero Missions you joined:
+          ul
+            each obj in joinedMissions
+              li
+                a.mission__header(href='/mission/'+obj.mission.missionId)
+                  img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + obj.creator.fb.facebookId + '/picture?type=large' alt='')
+                  div
+                    h2= obj.mission.title
+                    span by #{obj.creator.fb.firstName} #{obj.creator.fb.lastName}
         if missions
           //- 1a. If missions nearby user's location.
           if allMissionsBelongToUser
