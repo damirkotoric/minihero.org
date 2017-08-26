@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/damirkotoric/miniheroapp.com#readme",
   "dependencies": {
+    "@google/maps": "^0.4.3",
     "array-sort": "^0.1.3",
     "body-parser": "^1.17.2",
     "browserify": "^14.4.0",

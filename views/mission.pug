@@ -6,12 +6,55 @@ block vars
 block sidebarContent
   script.
     window.defaultLocation = !{JSON.stringify(defaultLocation)}
+  script(type='text/javascript').
+    //- Plugin for 'add to calendar' feature from https://addtocalendar.com/
+    (function () {
+      if (window.addtocalendar)if(typeof window.addtocalendar.start == "function")return;
+      if (window.ifaddtocalendar == undefined) { window.ifaddtocalendar = 1;
+      var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+      s.type = 'text/javascript';s.charset = 'UTF-8';s.async = true;
+      s.src = ('https:' == window.location.protocol ? 'https' : 'http')+'://addtocalendar.com/atc/1.5/atc.min.js';
+      var h = d[g]('body')[0];h.appendChild(s); }})();
   .panel.--visible(id='mission' data-mission-id=mission.missionId)
     .mission(data-is-sample-mission=(isSampleMission ? 'yes' : 'no') data-location-latitude=mission.location.latitude data-location-longitude=mission.location.longitude data-location-latitude-offset=mission.location.latitudeOffset data-location-longitude-offset=mission.location.longitudeOffset)
       .back
         a(href='/missions')
           i.material-icons arrow_back
           | Show all missions #{user ? 'near me' : ''}
+      if user
+        if mission.participants.toString().includes(user.id.toString())
+          //- Current user is a participant.
+          .mission__notice
+            div
+              img(src='/img/icon-happy-buddha-orange.svg' alt='')
+              p Bliss! You're going on a mission. The following links will guide you. Now, go young Minihero.
+              a.button.--light(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') View in Google Maps
+              span.addtocalendar(data-calendars='iCalendar, Google Calendar, Outlook')
+                a.button.atcb-link Add to Calendar
+                var.atc_event
+                  var.atc_date_start #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{mission.formattedDate.hour}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
+                  var.atc_date_end #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{Number(mission.formattedDate.hour) + 1}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
+                  var.atc_timezone #{mission.location.timeZoneId}
+                  var.atc_title #{mission.title}
+                  var.atc_description #{mission.description}
+                  var.atc_location #{mission.location.humanReadableLocation}
+                  var.atc_organizer Minihero Mission organiser: #{creator.fb.firstName} #{creator.fb.lastName}
+        if user.id === creator.id
+          .mission__notice
+            div
+              img(src='/img/icon-buddha-meditating.svg' alt='')
+              p Enthusiasm. Drive. That's what the world needs. Lead the way, brave Minihero.
+              a.button.--light(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') View in Google Maps
+              span.addtocalendar(data-calendars='iCalendar, Google Calendar, Outlook')
+                a.button.atcb-link Add to Calendar
+                var.atc_event
+                  var.atc_date_start #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{mission.formattedDate.hour}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
+                  var.atc_date_end #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{Number(mission.formattedDate.hour) + 1}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
+                  var.atc_timezone #{mission.location.timeZoneId}
+                  var.atc_title #{mission.title}
+                  var.atc_description #{mission.description}
+                  var.atc_location #{mission.location.humanReadableLocation}
+                  var.atc_organizer Minihero Mission organiser: #{creator.fb.firstName} #{creator.fb.lastName}
       .mission__header
         div
           if isSampleMission
@@ -36,16 +79,16 @@ block sidebarContent
       .mission__meta
         div
           i.material-icons access_time
-          | #{mission.date}
+          | #{mission.formattedDate.readableDate}
         div
           i.material-icons location_on
           if user
             if user.id === creator.id
-              | #{mission.location.latitude} #{mission.location.longitude}
+              a(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') #{mission.location.humanReadableLocation}
             else
               if mission.participants.toString().includes(user.id.toString())
                 //- Current user is a participant.
-                | #{mission.location.latitude} #{mission.location.longitude}
+                a(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') #{mission.location.humanReadableLocation}
               else
                 | Join the Mission to reveal the exact location.
           else
@@ -75,17 +118,17 @@ block sidebarContent
           
       .modal.--overlay.--joining
         div
-          img(src='/img/supercharged-karma-orange.svg' alt='')
+          img(src='/img/icon-supercharged-karma-orange.svg' alt='')
           h1 Supercharging your karma...
       .modal.--overlay.--leaving
         div
           h1 Downgrading your karma...
         //- div.modal__success
-        //-   img(src='/img/happy-buddha.svg' alt='')
+        //-   img(src='/img/icon-happy-buddha.svg' alt='')
         //-   h1 Karma successfully supercharged!
         //-   p Now, brave Minihero, complete your mission.
         //- div.modal__error
-        //-   img(src='/img/childs-pose.svg' alt='')
+        //-   img(src='/img/icon-childs-pose.svg' alt='')
         //-   h1 Error supercharging your karma!
         //-   p Take five deep breaths and try again.
         

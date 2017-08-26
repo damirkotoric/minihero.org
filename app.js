@@ -46,6 +46,9 @@ app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'pug')
 app.set('views', __dirname + '/views')
 
+// set locals that are accessible from the view engine
+app.locals.googleMapsApi = config.apiKeys.google
+
 // Using the flash middleware provided by connect-flash to store messages in session
 // and displaying in templates
 app.use(flash())

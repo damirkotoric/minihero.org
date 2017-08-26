@@ -1,0 +1,44 @@
+.addtocalendar
+  position: relative
+
+.atc_event
+  display: none
+
+.atcb-link
+  @extend .button
+  @extend .--light
+  &:active, &:focus
+    opacity: 1
+    outline: none
+    ~ul
+      visibility: visible
+
+.atcb-list
+  background: white
+  border-color: $primary
+  border-style: solid
+  border-left-width: 1px
+  border-right-width: 1px
+  border-bottom-width: 1px
+  border-radius: 0 0 10px 10px
+  box-shadow: 0 2px 1px rgba(black, 0.1)
+  visibility: hidden
+  padding: 20px 10px
+  position: absolute
+  top: 100%
+  left: 50%
+  width: 200px
+  transform: translateX(-50%)
+  z-index: 10
+  &:hover
+    visibility: visible
+
+.atcb-item-link
+  color: $secondary
+  display: block
+  padding: 10px 0
+  text-decoration: none
+  &:hover
+    color: darken($secondary, 20%)
+  &:active
+    color: black

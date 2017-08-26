@@ -1,8 +1,8 @@
 .mission
   position: relative
 
-  .back
-    margin-bottom: 1rem
+  > .mission__header
+    padding-top: 1.7rem
 
   .modal
     visibility: hidden
@@ -24,6 +24,24 @@
       opacity: 1
       transform: scale(1)
 
+.mission__notice
+  align-items: center
+  background: rgba(black, 0.03)
+  border-bottom: 1px solid rgba(black, 0.1)
+  display: flex
+  padding: 2rem
+  text-align: center
+
+  img
+    height: 120px
+
+  .button
+    background: white
+    color: $primary
+    line-height: 1.5
+    margin: 0.5rem
+    width: 200px
+
 .mission__header
   align-items: center
   color: black
@@ -32,6 +50,7 @@
   text-decoration: none
 
   .avatar
+    display: block
     margin-right: 0.7rem
 
   h2
@@ -58,6 +77,10 @@
   div
     margin-bottom: 1rem
 
+  a
+    color: black
+    text-decoration: none
+
   i
     padding-right: 0.5rem
     position: relative
@@ -73,11 +96,8 @@
 
   div
     align-items: center
+    display: flex
     justify-content: space-between
-    &:nth-child(1)
-      display: flex
-    &:nth-child(2)
-      display: none
 
     .--joined
       &:nth-child(1)

@@ -154,8 +154,14 @@ function getLocationCookie() {
 exports.getLocationCookie = getLocationCookie
 
 exports.init = function() {
-  document.getElementById('allow-location-access').addEventListener('click', getLocation)
-  document.getElementById('retry-location-access').addEventListener('click', getLocation)
+  var allowLocationAccessLink = document.getElementById('allow-location-access')
+  if (allowLocationAccessLink) {
+    allowLocationAccessLink.addEventListener('click', getLocation)
+  }
+  var retryLocationAccessLink = document.getElementById('retry-location-access')
+  if (retryLocationAccessLink) {
+    retryLocationAccessLink.addEventListener('click', getLocation)
+  }
   if (getLocationCookie()) {
     Helper.addClass(document.body, 'user-allowed-location')
     // User has a location cookie already set

@@ -5,6 +5,7 @@ const router = express.Router()
 const fs = require('fs')
 const config = require('../config')
 const missions = require('./missions')
+const users = require('./users')
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
@@ -165,23 +166,17 @@ module.exports = function(passport) {
 		}
 	})
 
-	// POST /agree
-	router.post('/agree', function(req, res, next) {
+	// GET /agree
+	router.get('/agree', function(req, res, next) {
+		if (req.user.agreedToTerms === true) {
+			var err = new Error('You already agreed to the terms.')
+	    err.status = 401
+	    return next(err)
+		}
 		if (req.user) {
-			User.update(
-				{
-					_id: req.user.id
-				},
-				{
-					agreedToTerms: true,
-					agreedToTermsDate: Date.now()
-				},
-				function(err, result) {
-			    if(err) { throw err }
-					res.status(200)
-			    res.end()
-			  }
-			)
+			users.markAsAgreedToTerms(req.user, function(updated) {
+				res.redirect('/missions#user-agreed-terms')
+			})
 		} else {
 	    var err = new Error('You need to be logged in to agree to terms.')
 	    err.status = 401

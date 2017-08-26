@@ -21,4 +21,8 @@ config.defaultLocation = {
   longitude: 4.895168
 }
 
+config.apiKeys = {
+  google: 'AIzaSyA4vKjKRLNIZ829rfFvz9m_-OFhiORB5Q8'
+}
+
 module.exports = config

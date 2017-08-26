@@ -1,9 +1,10 @@
 const Promise = require('es6-promise').Promise
 const fs = require('fs')
 const arraySort = require('array-sort')
+const config = require('../config')
+const googleMapsClient = require('@google/maps').createClient({ key: config.apiKeys.google })
 const User = require('../models/user')
 const moment = require('moment')
-const config = require('../config')
 const Mission = require('../models/mission')
 
 module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, callback) {
@@ -158,7 +159,7 @@ module.exports.getMission = function(missionUrlId, callback) {
   Mission.findOne({ 'missionId': Number(missionUrlId) }, function(err, mission) {
     // Turn the mission URL ID (like '63') into the mission.id equivalent (like '599f322be9e5de08e5a04e32'),
     // so that we can then send the query to fetch the mission.
-    if (err) { reject(err) }
+    if (err) { callback(err) }
     if (mission) {
       fetchMissionAndRelatedData(
         mission.id,
@@ -168,7 +169,8 @@ module.exports.getMission = function(missionUrlId, callback) {
         }
       )
     } else {
-      reject('Could not find the mission with missionId: ' + missionUrlId)
+      var err = new Error('Could not find the mission with missionId: ' + missionUrlId)
+      callback(err)
     }
   })
 }
@@ -187,16 +189,54 @@ function fetchMissionAndRelatedData(fetchMissionId, opt = {}, callback) {
     Mission.findOne({ '_id': fetchMissionId }, function(err, mission) {
       if (err) { reject(err) }
       if (mission) {
-        // This creates a nicely formatted object with a human readable mission date and location.
-        // Then grabs data about the mission creator, and participants according to the options that were passed.
-        mission = mission.toObject() // https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
         if (options.humanReadable) {
+          // This creates a nicely formatted object with a human readable mission date and location.
+          // Then grabs data about the mission creator, and participants according to the options that were passed.
+          mission = mission.toObject() // https://stackoverflow.com/questions/14504385/why-cant-you-modify-the-data-returned-by-a-mongoose-query-ex-findbyid
           // Format date.
-          mission.date = moment(mission.date).format('dddd, Do MMMM [at] HH:mm')
+          mission.formattedDate = {}
+          // http://blog.skylight.io/bringing-sanity-to-javascript-utc-dates-with-moment-js-and-ember-data/
+          mission.formattedDate.readableDate = moment.utc(mission.date).format('dddd, Do MMMM [at] HH:mm')
+          mission.formattedDate.year = moment.utc(mission.date).format('YYYY')
+          mission.formattedDate.month = moment.utc(mission.date).format('MM')
+          mission.formattedDate.day = moment.utc(mission.date).format('DD')
+          mission.formattedDate.hour = moment.utc(mission.date).format('HH')
+          mission.formattedDate.minute = moment.utc(mission.date).format('mm')
+          mission.formattedDate.second = moment.utc(mission.date).format('ss')
+          googleMapsClient.reverseGeocode({
+            latlng: {
+              latitude: mission.location.latitude,
+              longitude: mission.location.longitude
+            }
+          }, function(err, response) {
+            if (!err) {
+              var reverseGeoData = response.json.results
+              // Add human readable address to location object.
+              mission.location.humanReadableLocation = reverseGeoData[0].formatted_address
+              // Fetch the timezone name for this location.
+              // Todo: this code could be performed on creation of the Mission instead. Saves calling it
+              // every time the mission is called. Code refactor material for the future.
+              googleMapsClient.timezone({
+                location: {
+                  latitude: mission.location.latitude,
+                  longitude: mission.location.longitude
+                },
+                timestamp: mission.date,
+                language: 'en'
+              }, function(err, response) {
+                if (!err) {
+                  mission.location.timeZoneId = response.json.timeZoneId
+                  resolve(mission)
+                }
+              })
+            }
+          })
+        } else {
+          resolve(mission)
         }
-        resolve(mission)
       } else {
-        reject('Could not find the mission: ' + fetchMissionId)
+        var err = new Error('Could not find the creator.')
+        reject(err)
       }
     })
   })
@@ -209,7 +249,8 @@ function fetchMissionAndRelatedData(fetchMissionId, opt = {}, callback) {
           if (creator) {
             resolve(creator)
           } else {
-            reject('Could not find the creator: ' + mission.creatorId)
+            var err = new Error('Could not find the creator: ' + mission.creatorId)
+            reject(err)
           }
         })
       } else {
