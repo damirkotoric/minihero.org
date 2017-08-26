@@ -43,7 +43,9 @@ block sidebarContent
           .mission__notice
             div
               img(src='/img/icon-buddha-meditating.svg' alt='')
-              p Enthusiasm. Drive. That's what the world needs. Lead the way, brave Minihero.
+              p Enthusiasm. Drive. That's what the world needs. Lead the way, brave Minihero and share this mission link with your friends:
+                br
+                a(href='/mission/'+mission.missionId) https://minihero.org/mission/#{mission.missionId} 
               a.button.--light(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') View in Google Maps
               span.addtocalendar(data-calendars='iCalendar, Google Calendar, Outlook')
                 a.button.atcb-link Add to Calendar
