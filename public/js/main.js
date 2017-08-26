@@ -5738,6 +5738,7 @@ function init() {
   mission.init()
   datepicker.init()
   map.updateIfNeeded()
+  addtocalendar.load()
 }
 
 // Need to expose initMap to global namespace for
