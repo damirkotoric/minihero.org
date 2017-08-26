@@ -29,16 +29,7 @@ block sidebarContent
               img(src='/img/icon-happy-buddha-orange.svg' alt='')
               p Bliss! You're going on a mission. The following links will guide you. Now, go young Minihero.
               a.button.--light(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') View in Google Maps
-              span.addtocalendar(data-calendars='iCalendar, Google Calendar, Outlook')
-                a.button.atcb-link Add to Calendar
-                var.atc_event
-                  var.atc_date_start #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{mission.formattedDate.hour}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
-                  var.atc_date_end #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{Number(mission.formattedDate.hour) + 1}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
-                  var.atc_timezone #{mission.location.timeZoneId}
-                  var.atc_title #{mission.title}
-                  var.atc_description #{mission.description}
-                  var.atc_location #{mission.location.humanReadableLocation}
-                  var.atc_organizer Minihero Mission organiser: #{creator.fb.firstName} #{creator.fb.lastName}
+              include partials/_addtocalendar.pug
         if user.id === creator.id
           .mission__notice
             div
@@ -47,16 +38,7 @@ block sidebarContent
                 br
                 a(href='/mission/'+mission.missionId) https://minihero.org/mission/#{mission.missionId} 
               a.button.--light(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') View in Google Maps
-              span.addtocalendar(data-calendars='iCalendar, Google Calendar, Outlook')
-                a.button.atcb-link Add to Calendar
-                var.atc_event
-                  var.atc_date_start #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{mission.formattedDate.hour}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
-                  var.atc_date_end #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{Number(mission.formattedDate.hour) + 1}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
-                  var.atc_timezone #{mission.location.timeZoneId}
-                  var.atc_title #{mission.title}
-                  var.atc_description #{mission.description}
-                  var.atc_location #{mission.location.humanReadableLocation}
-                  var.atc_organizer Minihero Mission organiser: #{creator.fb.firstName} #{creator.fb.lastName}
+              include partials/_addtocalendar.pug
       .mission__header
         div
           if isSampleMission
