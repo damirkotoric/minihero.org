@@ -13,7 +13,7 @@
     "url": "git+https://github.com/damirkotoric/miniheroapp.com.git"
   },
   "author": "Damir Kotorić",
-  "license": "ISC",
+  "license": "AGPL-3.0+",
   "bugs": {
     "url": "https://github.com/damirkotoric/miniheroapp.com/issues"
   },
