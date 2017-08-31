@@ -110,6 +110,7 @@ module.exports = function(passport) {
 			return res.render(
 				'mission',
 				{
+					cookies: req.cookies,
 					user: req.user,
 					defaultLocation: config.defaultLocation,
 					mission: sampleMission,
@@ -125,6 +126,7 @@ module.exports = function(passport) {
 					return res.render(
 						'mission',
 						{
+							cookies: req.cookies,
 							user: req.user,
 							defaultLocation: config.defaultLocation,
 							mission: fetchedMission.mission,
