@@ -21,6 +21,7 @@ block sidebarContent
     .mission
       .back
         a(href='/missions')
+          //- Todo: Replace the icon font with SVG for better performance.
           i.material-icons arrow_back
           | Show all missions #{user ? 'near me' : ''}
       if user

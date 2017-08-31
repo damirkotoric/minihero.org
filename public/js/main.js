@@ -6924,7 +6924,7 @@ function displayError(error) {
     2: 'Position unavailable',
     3: 'Request timeout'
   }
-  console.log("Location Access Error: " + errors[error.code])
+  console.log('Location Access Error: ' + errors[error.code])
   if (error.code == 1) {
     panel.hidePanel('location-access-needed')
     panel.hidePanel('location-matching')
@@ -6937,8 +6937,8 @@ function displayError(error) {
 }
 
 function setLocationCookie(latitude, longitude) {
-  document.cookie = "latitude=" + latitude
-  document.cookie = "longitude=" + longitude
+  document.cookie = 'latitude=' + latitude
+  document.cookie = 'longitude=' + longitude
 }
 exports.setLocationCookie = setLocationCookie
 

@@ -126,6 +126,7 @@ module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, c
     // I have to do this messy checking of values because JS doesn't support optional chaining.
     // So it can't be done in the assignments below by writing 'missions: returnedPromiseValues[0]?.missions'
     var returnedMissions
+    // debugger
     if (returnedPromiseValues[0] && returnedPromiseValues[0].missions) {
       returnedMissions = returnedPromiseValues[0].missions
       // We don't want to add user's missions into the 'nearby missions' column.

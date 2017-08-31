@@ -2,7 +2,7 @@
   label Minihero Missions nearby:
   ul
     each el in missions
-      if (user && mission.creator.id != user.id) || !user
+      if (user && el.creator.id != user.id) || !user
         //- Not a mission the user is going to see in their created missions list (in case the user is signed in).
         //- We don't want to duplicate it here.
         li
