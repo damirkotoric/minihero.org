@@ -27,7 +27,7 @@ function init() {
   mission.init()
   datepicker.init()
   map.updateIfNeeded()
-  addtocalendar.load()
+  if (window.addtocalendar) { addtocalendar.load() }
 }
 
 // Need to expose initMap to global namespace for

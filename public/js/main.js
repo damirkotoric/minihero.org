@@ -5738,7 +5738,7 @@ function init() {
   mission.init()
   datepicker.init()
   map.updateIfNeeded()
-  addtocalendar.load()
+  if (window.addtocalendar) { addtocalendar.load() }
 }
 
 // Need to expose initMap to global namespace for
@@ -6348,7 +6348,7 @@ function addMarkers() {
       // No nearby missions. Add sample mission markers.
       Array.prototype.forEach.call(window.missionsData, function(el, i) {
         var overlay = new CustomMarker(
-          new google.maps.LatLng(el.mission.location.latitude, el.mission.location.longitude),
+          new google.maps.LatLng(el.mission.place.geometry.location.lat, el.mission.place.geometry.location.lng),
           miniheroMap,
           {
             marker_id: el.mission.missionId,
@@ -6436,20 +6436,19 @@ exports.updateIfNeeded = function() {
   // Check if we're on a mission page with its own geocoordinates.
   // Mission location takes precedence over user location when
   // rendering the map.
-  var mission = document.querySelector('.mission')
-  if (mission) {
-    if (mission.getAttribute('data-is-sample-mission') === "yes") {
+  if (window.missionData) {
+    if (window.missionData.missionId.toString().startsWith('sample-')) {
       // For sample missions.
-      missionLocation.latitude = (userLocation.latitude || defaultLocation.latitude) + Number(mission.getAttribute('data-location-latitude-offset'))
-      missionLocation.longitude = (userLocation.longitude || defaultLocation.longitude) + Number(mission.getAttribute('data-location-longitude-offset'))
+      missionLocation.latitude = (userLocation.latitude || defaultLocation.latitude) + Number(window.missionData.location.latitudeOffset)
+      missionLocation.longitude = (userLocation.longitude || defaultLocation.longitude) + Number(window.missionData.location.longitudeOffset)
     } else {
       // For real missions.
-      missionLocation.latitude = Number(mission.getAttribute('data-location-latitude'))
-      missionLocation.longitude = Number(mission.getAttribute('data-location-longitude'))
+      missionLocation.latitude = window.missionData.place.geometry.location.lat
+      missionLocation.longitude = window.missionData.place.geometry.location.lng
     }
   } else {
     // Remove any previous reference to missionLocation.
-    // In case a user navigates away form a mmission using Turbolinks.
+    // In case a user navigates away form a mission using Turbolinks.
     missionLocation = {}
   }
   if (miniheroMap) {
@@ -6499,11 +6498,22 @@ exports.init = function() {
   var missionTitle = document.getElementById('mission_title')
   if (missionTitle) {
     missionTitle.focus()
+    missionTitle.select()
   }
 
   var missionCreateSendLink = document.querySelector('a[data-mission-create-send]')
   if (missionCreateSendLink) {
-    missionCreateSendLink.addEventListener('click', createMission)
+    missionCreateSendLink.addEventListener('click', saveMission)
+  }
+
+  var missionCreateSendLink = document.querySelector('a[data-mission-create-send]')
+  if (missionCreateSendLink) {
+    missionCreateSendLink.addEventListener('click', saveMission)
+  }
+
+  var missionUpdateSendLink = document.querySelector('a[data-mission-update-send]')
+  if (missionUpdateSendLink) {
+    missionUpdateSendLink.addEventListener('click', saveMission)
   }
 
   var input = document.getElementById('mission_location')
@@ -6534,7 +6544,8 @@ function leaveMission(e) {
   }, 1500)
 }
 
-function createMission(e) {
+// For both new missions and updating missions.
+function saveMission(e) {
   e.preventDefault()
 
   // Check that all form elements have been properly entered
@@ -6550,11 +6561,6 @@ function createMission(e) {
   if (missionLocation.value === '') {
     return
   }
-  var place = autocomplete.getPlace()
-  if (!place || !place.geometry.location.lat() || !place.geometry.location.lng()) {
-    console.log('need to select a location')
-    return
-  }
   var missionDate = document.getElementById('mission_date')
   if (missionDate.value === '') {
     return
@@ -6564,31 +6570,62 @@ function createMission(e) {
     return
   }
 
-  // Send AJAX request.
-  Helper.addClass(e.currentTarget, '--loading')
-  var mission = {}
-  mission.title = missionTitle.value.trim()
-  mission.description = missionDescription.value.trim()
-  mission.location = {}
-  mission.location.latitude = place.geometry.location.lat()
-  mission.location.longitude = place.geometry.location.lng()
-  mission.date = missionDate.value.trim() + 'T' + missionTime.value + ':00.000Z'
-
-  var request = new XMLHttpRequest()
-  request.open('POST', '/mission/new', true)
-  request.setRequestHeader('Content-type', 'application/json')
-  request.onload = function() {
-    var createdMission = JSON.parse(request.responseText)
-    // Done
-    if (request.readyState == 4 && request.status == 200) {
-      window.location = '/mission/' + createdMission.missionId
+  new Promise(function(resolve, reject) {
+    // Get the place info.
+    var place = autocomplete.getPlace()
+    if (place) {
+      // User selected a place.
+      resolve(place)
+    } else {
+      if (window.missionData) {
+        // An existing location has already been chosen previously, set 'place' to that one.
+        autocomplete.set('place', window.missionData.place)
+        resolve(window.missionData.place)
+      } else {
+        reject('need to select a location')
+      }
     }
-  }
-  request.onerror = function() {
-    // There was a connection error of some sort
-    console.log('connection error')
-  }
-  request.send(JSON.stringify(mission))
+  }).then(
+    function(place) {
+      // Successful promise.
+      // Send AJAX request.
+      Helper.addClass(e.currentTarget, '--loading')
+      var mission = {}
+      mission.title = missionTitle.value.trim()
+      mission.description = missionDescription.value.trim()
+      mission.place = place
+      mission.date = missionDate.value.trim() + 'T' + missionTime.value + ':00.000Z'
+      var request = new XMLHttpRequest()
+      if (e.currentTarget.getAttribute('data-mission-create-send')) {
+        request.open('POST', '/mission/new', true)
+      }
+      if (e.currentTarget.getAttribute('data-mission-update-send')) {
+        mission.missionId = window.missionData.missionId
+        request.open('POST', '/mission/' + mission.missionId + '/update', true)
+      }
+      request.setRequestHeader('Content-type', 'application/json')
+      request.onload = function() {
+        var returnedMission = JSON.parse(request.responseText)
+        // Done
+        if (request.readyState == 4 && request.status == 200) {
+          debugger
+          window.location = '/mission/' + returnedMission.missionId
+        }
+      }
+      request.onerror = function() {
+        // There was a connection error of some sort
+        console.log('connection error')
+      }
+      request.send(JSON.stringify(mission))
+    },
+    function(reason) {
+      // Rejected promise.
+      console.log(reason)
+    }
+  )
+  .catch(function(error) {
+    console.log(error)
+  })
 }
 
 },{"../modules/panel":10,"../utilities/helper":11}],9:[function(require,module,exports){

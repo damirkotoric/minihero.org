@@ -1,0 +1,21 @@
+extends _map-template
+
+block vars
+  - var title= "Edit your Mission"
+
+block sidebarContent
+  .panel.--visible#mission-edit(data-mission-id=mission.missionId)
+    script.
+      window.missionData = !{JSON.stringify(mission)}
+    .mission-admin
+      .back
+        a(href='/mission/'+mission.missionId)
+          i.material-icons arrow_back
+          | Back to Mission Overview
+      .mission-admin__content
+        h1 Make your changes...
+        include partials/_mission-form
+      div.mission-admin__actions
+        span 
+          | 
+        a.button(href='/mission/update' data-mission-update-send) Update Mission

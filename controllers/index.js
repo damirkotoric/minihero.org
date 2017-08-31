@@ -88,11 +88,16 @@ module.exports = function(passport) {
 
 	// POST /mission/new
 	router.post('/mission/new', function(req, res, next) {
-	  missions.newMission(req.user, req.body, function (newMissionData) {
-			res.writeHead(200, {'Content-Type': 'text/json'})
-			res.write(JSON.stringify(newMissionData))
-			res.end()
-		})
+		if (req.user) {
+			missions.newMission(req.user, req.body, function (newMissionData) {
+				res.writeHead(200, {'Content-Type': 'text/json'})
+				res.write(JSON.stringify(newMissionData))
+				res.end()
+			})
+		} else {
+			var err = new Error('You need to signup to a free Minihero account to create missions.')
+			next(err)
+		}
 	})
 
 	// GET /mission/id
@@ -164,6 +169,50 @@ module.exports = function(passport) {
 		} else {
 			res.redirect('/mission/' + req.params.id)
 		}
+	})
+
+	// GET /mission/id/edit
+	router.get('/mission/:id/edit', function(req, res, next) {
+		if (req.user) {
+			missions.getMission(req.params.id, function(fetchedMission) {
+				if (fetchedMission && req.user.id === fetchedMission.creator.id) {
+					return res.render(
+						'mission-edit',
+						{
+							user: req.user,
+							defaultLocation: config.defaultLocation,
+							mission: fetchedMission.mission,
+							creator: fetchedMission.creator
+						}
+					)
+				} else {
+					var err = new Error('The mission could not be edited.')
+					next(err)
+				}
+			})
+		} else {
+			var err = new Error('You can\'t edit that mission since you are not the creator.')
+			next(err)
+		}
+	})
+
+	// POST /mission/id/update
+	router.post('/mission/:id/update', function(req, res, next) {
+		if (req.user) {
+			missions.updateMission(req.user, req.body, function (updatedMissionData) {
+				res.writeHead(200, {'Content-Type': 'text/json'})
+				res.write(JSON.stringify(updatedMissionData))
+				res.end()
+			})
+		} else {
+			var err = new Error('You can\'t update that mission since you are not the creator.')
+			next(err)
+		}
+	})
+
+	// Todo: Implement
+	// GET /mission/id/delete
+	router.get('/mission/:id/delete', function(req, res, next) {
 	})
 
 	// GET /agree

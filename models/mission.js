@@ -5,10 +5,7 @@ var MissionSchema = new mongoose.Schema({
   missionId: Number,
   title: String,
   description: String,
-  location: {
-    latitude: Number,
-    longitude: Number
-  },
+  place: Object,
   date: Date,
   creatorId: {
     type: mongoose.Schema.Types.ObjectId,

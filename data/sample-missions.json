@@ -4,7 +4,9 @@
       "missionId": "sample-1",
       "title": "Volunteer at the dog shelter",
       "description": "Come play with some of the cats, or take some of our puppies for a walk.",
-      "date": "Sunday, September 3 at 10:00",
+      "formattedDate": {
+        "readableDate": "Sunday, September 3 at 10:00"
+      },
       "participants": [
         {
           "imageUrl": "/img/temp-yasmin.jpg"
@@ -41,7 +43,9 @@
       "missionId": "sample-2",
       "title": "Help your local soup kitchen",
       "description": "Come and enjoy being bossed around by yours-truly, and helping those less priviliged.",
-      "date": "Saturday, September 9 at 8:00",
+      "formattedDate": {
+        "readableDate": "Saturday, September 9 at 8:00"
+      },
       "participants": [
         {
           "imageUrl": "/img/temp-jim.jpg"
@@ -75,7 +79,9 @@
       "missionId": "sample-3",
       "title": "Paint the senior people's home",
       "description": "Okay, so here's how we need your help: We need Miniheroes ready to help us paint the senior people's home. The place has received a government grant for an expension that it desperately needs. But, in turn the maintenance budget has been cut, and we need your help to put some warmth back in the place. More than anything it's to show the senior citizens that their community is thinking of them and that we care. So whatcha waiting for? Roll up your sleeves and come along. There will be a free lunch served to all participating Miniheroes.",
-      "date": "Sunday, September 10 at 10:00",
+      "formattedDate": {
+        "readableDate": "Sunday, September 10 at 10:00"
+      },
       "participants": [
         {
           "imageUrl": "/img/temp-5.jpg"
@@ -115,7 +121,9 @@
       "missionId": "sample-4",
       "title": "Clean up our neighbourhood",
       "description": "Hoooooowwdyy!!! Would you believe it? Our place needs some cleaning up. Get out of your lazy shorts and help us clean it up! I'll bring the plastic gloves. Feel free to bring a stick, spear or whatever else you have lying around. Much love, Jim 😙",
-      "date": "Wednesday, September 13 at 17:00",
+      "formattedDate": {
+        "readableDate": "Wednesday, September 13 at 17:00"
+      },
       "participants": [
         {
           "imageUrl": "/img/temp-ibra.jpg"
@@ -152,7 +160,9 @@
       "missionId": "sample-5",
       "title": "Help new immigrants settle in",
       "description": "Hello Miniheroes! We're hosting a meet-n-greet with newly immigrated families and people who can help them out. You can help people pay bills, explain documents they received and help them with questions they have. It's a pretty casual affair and you can stay as long as you feel like. There's free drinks and snacks provided. There will be a sign at the bottom of the building guiding you to the space where either I or one of my assistants will be waiting to greet you.",
-      "date": "Thursday, September 14 at 19:00",
+      "formattedDate": {
+        "readableDate": "Thursday, September 14 at 19:00"
+      },
       "participants": [
         {
           "imageUrl": "/img/temp-tim.jpg"
@@ -186,7 +196,9 @@
       "missionId": "sample-6",
       "title": "Football for Syrian refugees",
       "description": "Let's get together and play a friendly match to welcome refugees into our community. Everyone welcome. I'll bring the goals and a ball. Just bring your shoes and your best skills. See you there!",
-      "date": "Saturday, September 2 at 11:00",
+      "formattedDate": {
+        "readableDate": "Saturday, September 2 at 11:00"
+      },
       "participants": [
         {
           "imageUrl": "/img/temp-yasmin.jpg"
@@ -253,7 +265,9 @@
       "missionId": "sample-7",
       "title": "Rock for peace and luuuv 🤘",
       "description": "Musicians! There's too much tension in the air. Let's clear it up with some music. My band will play a little bit at the start, and then it's open mic night. We need at least 20 musicians to count on making this happen. If you're not a musician that's cool too. Come along and tell everyone about it!",
-      "date": "Saturday, September 2 at 19:00",
+      "formattedDate": {
+        "readableDate": "Saturday, September 2 at 19:00"
+      },
       "participants": [
         {
           "imageUrl": "/img/temp-yasmin.jpg"
@@ -317,7 +331,9 @@
       "missionId": "sample-8",
       "title": "Let's take a walk together",
       "description": "No huge agenda. Just a little walk between strangers and sharing some stories. We'll just pick any random direction and see where we end up.",
-      "date": "Monday, September 11 at 14:00",
+      "formattedDate": {
+        "readableDate": "Monday, September 11 at 14:00"
+      },
       "participants": [
         {
           "imageUrl": "/img/temp-2.jpg"

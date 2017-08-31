@@ -1,0 +1,23 @@
+form.mission-admin__form
+  label Give your Mission a short and witty title.
+    input(type='text' id='mission_title' name='mission_title' placeholder='Mission Title' value=mission ? mission.title : "")
+    //- span.--default 100 characters left
+    //- span.--error 20 characters too many
+  label So, what's the plan? Tell people about this Mission.
+    textarea(id='mission_description' name='mission_description' placeholder="What's the plan for the day? How will participants recognise you at the meetup location? Anything else people should know?")= mission ? mission.description : ""
+    //- span.--default 200 characters left
+    //- span.--error Give a little more info. 30 characters to go.
+  label Mission start location
+    input(type='text' id='mission_location' name='mission_location' placeholder='Find a place by address or name' value=mission ? mission.place.formatted_address : '')
+    //- span.--default Where will people meet up?
+    //- span.--error Sorry, that location wasn't found
+  label Date
+    input(type='date' class='datepicker' id='mission_date' name='mission_date' placeholder='Choose a date' value=mission ? mission.formattedDate.year+'-'+mission.formattedDate.month+'-'+mission.formattedDate.day : '')
+  label Time
+    select(id='mission_time' name='mission_time')
+      option Choose a time
+      each time in ['06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30']
+        if mission && time === mission.formattedDate.hour + ':' + mission.formattedDate.minute
+          option(selected) #{time}
+        else
+          option= time

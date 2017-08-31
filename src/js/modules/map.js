@@ -528,7 +528,7 @@ function addMarkers() {
       // No nearby missions. Add sample mission markers.
       Array.prototype.forEach.call(window.missionsData, function(el, i) {
         var overlay = new CustomMarker(
-          new google.maps.LatLng(el.mission.location.latitude, el.mission.location.longitude),
+          new google.maps.LatLng(el.mission.place.geometry.location.lat, el.mission.place.geometry.location.lng),
           miniheroMap,
           {
             marker_id: el.mission.missionId,
@@ -616,20 +616,19 @@ exports.updateIfNeeded = function() {
   // Check if we're on a mission page with its own geocoordinates.
   // Mission location takes precedence over user location when
   // rendering the map.
-  var mission = document.querySelector('.mission')
-  if (mission) {
-    if (mission.getAttribute('data-is-sample-mission') === "yes") {
+  if (window.missionData) {
+    if (window.missionData.missionId.toString().startsWith('sample-')) {
       // For sample missions.
-      missionLocation.latitude = (userLocation.latitude || defaultLocation.latitude) + Number(mission.getAttribute('data-location-latitude-offset'))
-      missionLocation.longitude = (userLocation.longitude || defaultLocation.longitude) + Number(mission.getAttribute('data-location-longitude-offset'))
+      missionLocation.latitude = (userLocation.latitude || defaultLocation.latitude) + Number(window.missionData.location.latitudeOffset)
+      missionLocation.longitude = (userLocation.longitude || defaultLocation.longitude) + Number(window.missionData.location.longitudeOffset)
     } else {
       // For real missions.
-      missionLocation.latitude = Number(mission.getAttribute('data-location-latitude'))
-      missionLocation.longitude = Number(mission.getAttribute('data-location-longitude'))
+      missionLocation.latitude = window.missionData.place.geometry.location.lat
+      missionLocation.longitude = window.missionData.place.geometry.location.lng
     }
   } else {
     // Remove any previous reference to missionLocation.
-    // In case a user navigates away form a mmission using Turbolinks.
+    // In case a user navigates away form a mission using Turbolinks.
     missionLocation = {}
   }
   if (miniheroMap) {

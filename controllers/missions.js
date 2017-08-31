@@ -22,10 +22,10 @@ module.exports.getMissions = function(user, cookiesLatitude, cookiesLongitude, c
     Mission.find(
       {
         $and: [
-          { 'location.latitude': { $gte: coordinatesToLookFor.latitude - 1 } },
-          { 'location.latitude': { $lte: coordinatesToLookFor.latitude + 1 } },
-          { 'location.longitude': { $gte: coordinatesToLookFor.longitude - 1 } },
-          { 'location.longitude': { $lte: coordinatesToLookFor.longitude + 1 } }
+          { 'place.geometry.location.lat': { $gte: coordinatesToLookFor.latitude - 1 } },
+          { 'place.geometry.location.lat': { $lte: coordinatesToLookFor.latitude + 1 } },
+          { 'place.geometry.location.lng': { $gte: coordinatesToLookFor.longitude - 1 } },
+          { 'place.geometry.location.lng': { $lte: coordinatesToLookFor.longitude + 1 } }
         ]
       },
       function(err, queriedMissions) {
@@ -203,34 +203,7 @@ function fetchMissionAndRelatedData(fetchMissionId, opt = {}, callback) {
           mission.formattedDate.hour = moment.utc(mission.date).format('HH')
           mission.formattedDate.minute = moment.utc(mission.date).format('mm')
           mission.formattedDate.second = moment.utc(mission.date).format('ss')
-          googleMapsClient.reverseGeocode({
-            latlng: {
-              latitude: mission.location.latitude,
-              longitude: mission.location.longitude
-            }
-          }, function(err, response) {
-            if (!err) {
-              var reverseGeoData = response.json.results
-              // Add human readable address to location object.
-              mission.location.humanReadableLocation = reverseGeoData[0].formatted_address
-              // Fetch the timezone name for this location.
-              // Todo: this code could be performed on creation of the Mission instead. Saves calling it
-              // every time the mission is called. Code refactor material for the future.
-              googleMapsClient.timezone({
-                location: {
-                  latitude: mission.location.latitude,
-                  longitude: mission.location.longitude
-                },
-                timestamp: mission.date,
-                language: 'en'
-              }, function(err, response) {
-                if (!err) {
-                  mission.location.timeZoneId = response.json.timeZoneId
-                  resolve(mission)
-                }
-              })
-            }
-          })
+          resolve(mission)
         } else {
           resolve(mission)
         }
@@ -309,30 +282,81 @@ module.exports.newMission = function(user, formData, callback) {
     var newMission = new Mission()
     newMission.title = formData.title
     newMission.description = formData.description
-    newMission.location.latitude = formData.location.latitude
-    newMission.location.longitude = formData.location.longitude
+    newMission.place = formData.place
     newMission.date = formData.date
     newMission.creatorId = user.id
-    newMission.save(function(err) {
+    // Fetch the timezone name for this location.
+    googleMapsClient.timezone({
+      location: {
+        latitude: newMission.place.geometry.location.lat,
+        longitude: newMission.place.geometry.location.lng
+      },
+      timestamp: newMission.date,
+      language: 'en'
+    }, function(err, response) {
       if (err)
-        return next(err)
-      User.update(
-        // Store the mission ID in the user's createdMissionsIds property.
+        return callback(err)
+      newMission.place.timeZoneId = response.json.timeZoneId
+      newMission.save(function(err) {
+        // Save the mission.
+        if (err)
+          return callback(err)
+        User.findOneAndUpdate(
+          // Store the mission ID in the user's createdMissionsIds property.
+          {
+            _id: user.id
+          },
+          {
+            "$push": { "createdMissionIds": newMission._id }
+          },
+          function(err, user) {
+            if (err || !user) { throw err }
+            callback(newMission)
+          }
+        )
+      })
+    })
+  } else {
+    var err = new Error('You need to be logged in to create Missions.')
+    return callback(err)
+  }
+}
+
+module.exports.updateMission = function(user, formData, callback) {
+  if (user) {
+    // Fetch the timezone name for this location.
+    googleMapsClient.timezone({
+      location: {
+        latitude: formData.place.geometry.location.lat,
+        longitude: formData.place.geometry.location.lng
+      },
+      timestamp: moment(formData.date).unix(),
+      language: 'en'
+    }, function(err, response) {
+      if (err)
+        return callback(err)
+      formData.place.timeZoneId = response.json.timeZoneId
+      // Update the mission.
+      Mission.findOneAndUpdate(
         {
-          _id: user.id
+          missionId: Number(formData.missionId)
         },
         {
-          "$push": { "createdMissionIds": newMission._id }
+          title: formData.title,
+          description: formData.description,
+          place: formData.place,
+          date: formData.date
         },
-        function(err, user) {
-          if (err || !user) { throw err }
-          callback(newMission)
+        { new: true },
+        function(err, updatedMission) {
+          if (err || !updatedMission) { throw err }
+          callback(updatedMission)
         }
       )
     })
   } else {
-    var err = new Error('You need to be logged in to create Missions.')
-    return next(err)
+    var err = new Error('You need to be logged in to update Missions.')
+    return callback(err)
   }
 }
 

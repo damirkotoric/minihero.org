@@ -3,8 +3,8 @@ span.addtocalendar(data-calendars='iCalendar, Google Calendar, Outlook')
   var.atc_event
     var.atc_date_start #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{mission.formattedDate.hour}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
     var.atc_date_end #{mission.formattedDate.year}-#{mission.formattedDate.month}-#{mission.formattedDate.day} #{Number(mission.formattedDate.hour) + 1}:#{mission.formattedDate.minute}:#{mission.formattedDate.second}
-    var.atc_timezone #{mission.location.timeZoneId}
+    var.atc_timezone #{mission.place.timeZoneId}
     var.atc_title #{mission.title}
     var.atc_description #{mission.description}
-    var.atc_location #{mission.location.humanReadableLocation}
+    var.atc_location #{mission.place.formatted_address}
     var.atc_organizer Minihero Mission organiser: #{creator.fb.firstName} #{creator.fb.lastName}

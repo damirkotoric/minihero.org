@@ -6,6 +6,8 @@ block vars
 block sidebarContent
   script.
     window.defaultLocation = !{JSON.stringify(defaultLocation)}
+    window.missionData = !{JSON.stringify(mission)}
+    window.isSampleMission = !{isSampleMission ? true : false}
   script(type='text/javascript').
     //- Plugin for 'add to calendar' feature from https://addtocalendar.com/
     (function () {
@@ -16,7 +18,7 @@ block sidebarContent
       s.src = ('https:' == window.location.protocol ? 'https' : 'http')+'://addtocalendar.com/atc/1.5/atc.min.js';
       var h = d[g]('body')[0];h.appendChild(s); }})();
   .panel.--visible(id='mission' data-mission-id=mission.missionId)
-    .mission(data-is-sample-mission=(isSampleMission ? 'yes' : 'no') data-location-latitude=mission.location.latitude data-location-longitude=mission.location.longitude data-location-latitude-offset=mission.location.latitudeOffset data-location-longitude-offset=mission.location.longitudeOffset)
+    .mission
       .back
         a(href='/missions')
           i.material-icons arrow_back
@@ -28,7 +30,7 @@ block sidebarContent
             div
               img(src='/img/icon-happy-buddha-orange.svg' alt='')
               p Bliss! You're going on a mission. The following links will guide you. Now, go young Minihero.
-              a.button.--light(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') View in Google Maps
+              a.button.--light(href='https://www.google.com/maps/?q='+mission.place.geometry.location.lat+','+mission.place.geometry.location.lng target='_blank') View in Google Maps
               include partials/_addtocalendar.pug
         if user.id === creator.id
           .mission__notice
@@ -37,7 +39,7 @@ block sidebarContent
               p Enthusiasm. Drive. That's what the world needs. Lead the way, brave Minihero and share this mission link with your friends:
                 br
                 a(href='/mission/'+mission.missionId) https://minihero.org/mission/#{mission.missionId} 
-              a.button.--light(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') View in Google Maps
+              a.button.--light(href='https://www.google.com/maps/?q='+mission.place.geometry.location.lat+','+mission.place.geometry.location.lng target='_blank') View in Google Maps
               include partials/_addtocalendar.pug
       .mission__header
         div
@@ -68,11 +70,11 @@ block sidebarContent
           i.material-icons location_on
           if user
             if user.id === creator.id
-              a(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') #{mission.location.humanReadableLocation}
+              a(href='https://www.google.com/maps/?q='+mission.place.geometry.location.lat+','+mission.place.geometry.location.lng target='_blank') #{mission.place.formatted_address}
             else
               if mission.participants.toString().includes(user.id.toString())
                 //- Current user is a participant.
-                a(href='https://www.google.com/maps/?q='+mission.location.latitude+','+mission.location.longitude target='_blank') #{mission.location.humanReadableLocation}
+                a(href='https://www.google.com/maps/?q='+mission.place.geometry.location.lat+','+mission.place.geometry.location.lng target='_blank') #{mission.place.formatted_address}
               else
                 | Join the Mission to reveal the exact location.
           else
