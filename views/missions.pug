@@ -25,7 +25,8 @@ block sidebarContent
               each obj in createdMissions
                 li
                   a.mission__header(href='/mission/'+obj.mission.missionId)
-                    img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + obj.creator.fb.facebookId + '/picture?type=large' alt='')
+                    div
+                      img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + obj.creator.fb.facebookId + '/picture?type=large' alt='')
                     div
                       h2= obj.mission.title
                       span by #{obj.creator.fb.firstName} #{obj.creator.fb.lastName}
@@ -36,7 +37,8 @@ block sidebarContent
               each obj in joinedMissions
                 li
                   a.mission__header(href='/mission/'+obj.mission.missionId)
-                    img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + obj.creator.fb.facebookId + '/picture?type=large' alt='')
+                    div
+                      img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + obj.creator.fb.facebookId + '/picture?type=large' alt='')
                     div
                       h2= obj.mission.title
                       span by #{obj.creator.fb.firstName} #{obj.creator.fb.lastName}
