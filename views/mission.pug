@@ -41,6 +41,12 @@ block sidebarContent
                 a(href='/mission/'+mission.missionId) https://minihero.org/mission/#{mission.missionId} 
               a.button.--light(href='https://www.google.com/maps/?q='+mission.place.geometry.location.lat+','+mission.place.geometry.location.lng target='_blank') View in Google Maps
               include partials/_addtocalendar.pug
+      if isSampleMission
+        .mission__notice
+          if user
+            p Below is an example of a Minihero mission you can create. Why not kickstart Minihero in your area? #[a(href='/mission/new') Create a mission].
+          else
+            p There are no Minihero missions in you area yet, but below is an example of one you can create. #[a(href='/login/facebook') Join using your Facebook account] to create a mission in your area.
       .mission__header
         div
           if isSampleMission
@@ -79,28 +85,29 @@ block sidebarContent
                 | Join the Mission to reveal the exact location.
           else
             | Exact location is only shown to Minihero users.
-      .mission__actions
-        if user
-          if user.id === creator.id 
-            //- Current user is the creator of the mission.
-            div
-              span Want to change something?
-              a.button.--secondary(href='/mission/' + mission.missionId + '/edit' data-mission-edit) Edit Mission
-          else
-            if mission.participants.toString().includes(user.id.toString())
-              //- Current user is a participant.
+      if !isSampleMission
+        .mission__actions
+          if user
+            if user.id === creator.id 
+              //- Current user is the creator of the mission.
               div
-                span Change your mind?
-                a.button.--secondary(href='/mission/' + mission.missionId + '/leave' data-mission-leave) Leave Mission
+                span Want to change something?
+                a.button.--secondary(href='/mission/' + mission.missionId + '/edit' data-mission-edit) Edit Mission
             else
-              //- Current user is not yet a participant.
-              div
-                span Want to take part?
-                a.button(href='/mission/' + mission.missionId + '/join' data-mission-join) Join Mission
-        else
-          div
-            span Want to take part?
-            a.button(href='/login/facebook') Join Minihero
+              if mission.participants.toString().includes(user.id.toString())
+                //- Current user is a participant.
+                div
+                  span Change your mind?
+                  a.button.--secondary(href='/mission/' + mission.missionId + '/leave' data-mission-leave) Leave Mission
+              else
+                //- Current user is not yet a participant.
+                div
+                  span Want to take part?
+                  a.button(href='/mission/' + mission.missionId + '/join' data-mission-join) Join Mission
+          else
+            div
+              span Want to take part?
+              a.button(href='/login/facebook') Join Minihero
           
       .modal.--overlay.--joining
         div
