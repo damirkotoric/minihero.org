@@ -48,8 +48,15 @@ gulp.task('favicon', function () {
     .pipe(gulp.dest('./public'))
 });
 
+gulp.task('static', function () {
+  return gulp
+    .src('static/**')
+    .on('error', gutil.log)
+    .pipe(gulp.dest('./public'));
+});
+
 gulp.task('livereload', function () {
   livereload({ start: true })
 })
 
-gulp.task('default', ['livereload', 'sass', 'js', 'favicon', 'watch'])
+gulp.task('default', ['livereload', 'static', 'sass', 'js', 'favicon', 'watch'])
