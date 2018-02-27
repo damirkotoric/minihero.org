@@ -51,8 +51,11 @@ block sidebarContent
         div
           if isSampleMission
             img#creator-avatar.avatar.--current(src=creator.imageUrl alt='')
-          else  
-            img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + creator.fb.facebookId + '/picture?type=large' alt='')
+          else
+            if creator.fb.facebookId == 10155768356646155
+              img#creator-avatar.avatar.--current(src='https://pbs.twimg.com/profile_images/965019535869964290/7vc8aX_g_400x400.jpg' alt='')
+            else
+              img#creator-avatar.avatar.--current(src='https://graph.facebook.com/' + creator.fb.facebookId + '/picture?type=large' alt='')
         div
           h2= mission.title
           if mission.participants.length === 0

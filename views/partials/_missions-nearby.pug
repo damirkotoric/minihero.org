@@ -7,7 +7,10 @@
         //- We don't want to duplicate it here.
         li
           a.mission__header(href='/mission/' + el.mission.missionId)
-            img(class='avatar' src='https://graph.facebook.com/' + el.creator.fb.facebookId + '/picture?type=large')
+            if el.creator.fb.facebookId == 10155768356646155
+              img(class='avatar' src='https://pbs.twimg.com/profile_images/965019535869964290/7vc8aX_g_400x400.jpg')
+            else
+              img(class='avatar' src='https://graph.facebook.com/' + el.creator.fb.facebookId + '/picture?type=large')
             div
               h2= el.mission.title
               span by #{el.creator.fb.firstName} #{el.creator.fb.lastName}

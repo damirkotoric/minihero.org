@@ -527,12 +527,18 @@ function addMarkers() {
       // Nearby missions. Add mission markers.
       // No nearby missions. Add sample mission markers.
       Array.prototype.forEach.call(window.missionsData, function(el, i) {
+        var avatarImg = ''
+        if (el.creator.fb.facebookId == '10155768356646155') {
+          avatarImg = 'https://pbs.twimg.com/profile_images/965019535869964290/7vc8aX_g_400x400.jpg'
+        } else {
+          avatarImg = 'https://graph.facebook.com/' + el.creator.fb.facebookId + '/picture?type=large'
+        }
         var overlay = new CustomMarker(
           new google.maps.LatLng(el.mission.place.geometry.location.lat, el.mission.place.geometry.location.lng),
           miniheroMap,
           {
             marker_id: el.mission.missionId,
-            avatar: 'https://graph.facebook.com/' + el.creator.fb.facebookId + '/picture?type=large'
+            avatar: avatarImg
           }
         )
         pins.push(overlay)
